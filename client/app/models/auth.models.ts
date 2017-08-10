@@ -11,6 +11,4 @@ export class AuthModels extends UserModels {
     constructor(public auth: IAuth) {
         super(null);
     }
-
-
 }

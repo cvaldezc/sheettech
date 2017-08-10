@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Router } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,7 +18,8 @@ import { PageNotFoundComponent } from './utils/not-found.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    AuthModule
+    AuthModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
