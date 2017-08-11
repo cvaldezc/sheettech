@@ -1,18 +1,21 @@
 // Import theming functions
 @import '~@angular/material/theming';
 
-.mat-input-placeholder
-    color: mat-color(mat-palette($mat-blue))
+/* /deep/ .mat-input-placeholder
+     color: mat-color(mat-palette($mat-blue, A100)) !important */
+
+/deep/ .mat-card
+    background-color: rgba(255, 255, 255, 0.97)
 
 
 section
     background-attachment: fixed
     background-color: rgba(80, 80 ,80, 0.3)
+    background-image: url('../../assets/images/library.jpg')
     background-position: center center
     background-repeat: no-repeat
     background-size: cover
-    background-image: url('../../assets/images/library.jpg')
     height: 100vh
-    .transparent
+    .effect-opacity
         background-color: rgba(255, 255 ,255, 0.3)
         height: 100vh

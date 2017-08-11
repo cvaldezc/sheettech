@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import {
-  MdInputModule,
-  MdCheckboxModule
+  MdCardModule,
+  MdButtonModule,
+  MdCheckboxModule,
+  MdInputModule
 } from '@angular/material';
 
 import { AuthRoutingModule } from './auth-routing.module';
@@ -14,8 +17,11 @@ import { LoginComponent } from './login.component';
   imports: [
     CommonModule,
     AuthRoutingModule,
+    FlexLayoutModule,
     MdInputModule,
-    MdCheckboxModule
+    MdCheckboxModule,
+    MdCardModule,
+    MdButtonModule
   ],
   declarations: [
     AuthComponent,
