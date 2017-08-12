@@ -11,12 +11,14 @@
                     <md-input-container fxFlex="100">
                         <i mdPrefix class="material-icons">face</i>
                         <span mdPrefix>&nbsp;&nbsp;</span>
+                        <!-- <input mdInput type="text" placeholder="Username" [(ngModel)]="auth.user" value=""> -->
                         <input mdInput type="text" placeholder="Username" value="">
                     </md-input-container>
                     <md-input-container fxFlex="100">
                         <i mdPrefix class="material-icons">lock</i>
                         <span mdPrefix>&nbsp;&nbsp;</span>
-                        <input mdInput type="password" placeholder="Password">
+                        <!-- <input mdInput type="password" placeholder="Password" [(ngModel)]="auth.passwd" value=""> -->
+                        <input mdInput type="password" placeholder="Password" value="">
                     </md-input-container>
                 </md-card-content>
                 <md-card-actions>
@@ -24,7 +26,7 @@
                     <!-- <button md-button (click)="onAction(event)">Action2</button> -->
                     <button md-raised-button (click)="onAction(event)" class="right light-blue white-text">
                         <i class="material-icons">input</i>
-                        INGRESAR
+                        <span>INGRESAR</span>
                     </button>
                 </md-card-actions>
                 <!-- <md-card-footer></md-card-footer> -->
