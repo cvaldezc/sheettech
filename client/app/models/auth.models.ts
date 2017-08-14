@@ -1,14 +1,8 @@
-import { UserModels } from './user.models';
+import { IAuthModel } from '../../../server/apps/restful/models/auth.models';
 
-interface IAuth {
-    password: string;
-    lastLogin: Date;
-    accountregister: Date;
-}
 
-export class AuthModels extends UserModels {
+export class AuthModels {
 
-    constructor(public auth: IAuth) {
-        super(null);
-    }
+    constructor(private _auth: IAuthModel) { }
+
 }

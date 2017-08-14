@@ -1,6 +1,8 @@
 import * as fetch from 'node-fetch';
-import * as moment from 'moment';
+import * as FormData from 'form-data';
 import * as jwt from 'jsonwebtoken';
+import * as moment from 'moment';
+
 
 import { config } from '../../../config.server';
 
@@ -58,15 +60,23 @@ export class TokenServices {
         // tslint:disable-next-line:prefer-const
         let verify = new Promise( (resolve, reject) => {
             try {
+                const data = new FormData();
+                // tslint:disable-next-line
+                for (let key in auth) {
+                    data.append(key, auth[key]);
+                }
                 fetch(config.servicesAuth, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    // headers: {
+                    //     'Content-Type': 'multipart/form-data', // application/x-www-form-urlencoded
+                    //     'Accept': 'application/json'},
                     compress: true,
-                    body: auth
+                    body: data
                 })
                 .then( res => res.json())
                 .then( response => {
                     console.log(response);
+                    resolve(response);
                 }).catch( err => {
                     reject({
                         code: 406,

@@ -4,7 +4,8 @@ import {
     CanActivate,
     Router,
     RouterStateSnapshot,
-    NavigationExtras } from '@angular/router';
+    NavigationExtras,
+    Route } from '@angular/router';
 
 import { AuthServices } from '../services/auth/auth.service';
 
@@ -20,16 +21,30 @@ export class AuthGuardLoign implements CanActivate {
         return this.checkLogin(url);
     }
 
+    cantActiveteChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+        return this.canActivate(route, state);
+    }
+
+    canLoad(route: Route): boolean {
+        // tslint:disable-next-line
+        let url = `/${route.path}`;
+        return this.checkLogin(url);
+    }
+
     private checkLogin(url: string): boolean {
-        if (this.authService.isLoggedIn) { return true; }
+        if (localStorage.getItem('token') !== null) {
+            // fetch()
+            return true;
+        } else {
+            // if (this.authService.isLoggedIn) { return true; }
+            // Create a dummy session id
+            return this.redirectLogin();
+        }
+    }
 
-        // Store the attempted URL for redirecting
-        // this.authService.redirectUrl = url;
-
-        // Create a dummy session id
-        let sessionId: number;
-        sessionId = 123456789;
-
+    private redirectLogin(): boolean {
+        // tslint:disable-next-line
+        let sessionId: number = Date.now();
         // Set our navigation extras object
         // that contains our global query params and fragment
         let navigationExtras: NavigationExtras;

@@ -1,8 +1,25 @@
-import * as mongoose from 'mongoose';
+import { Document, Schema, Model, model } from 'mongoose';
 import * as crypto from 'crypto';
 import { config } from '../../../config.server';
 
-const AuthSchema = new mongoose.Schema({
+interface IPermission {
+    write: boolean;
+    reader: boolean;
+    delete: boolean;
+}
+
+export interface IAuthModel extends Document, IPermission {
+    auth: string;
+    email: string;
+    avatar: string;
+    signupDate?: Date;
+    lastLogin?: Date;
+    permission: IPermission;
+    charge: string;
+    isactive: boolean;
+}
+
+const AuthSchema: Schema = new Schema({
     auth: { type: String, unique: true, trim: true, maxlength: 8 },
     email: { type: String, trim: true },
     avatar: { type: String },
@@ -13,6 +30,7 @@ const AuthSchema = new mongoose.Schema({
         reader: { type: Boolean, default: false },
         delete: { type: Boolean, default: false }
     },
+    charge: { type: String },
     isactive: { type: Boolean, default: true }
 });
 
@@ -24,36 +42,6 @@ AuthSchema.methods.gravatar = () => {
     return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
 };
 
-// AuthSchema.methods.verifyPassword = (auth: any | object) => {
-//     // tslint:disable-next-line:prefer-const
-//     let verify = new Promise( (resolve, reject) => {
-//         try {
-//             fetch(`${config.servicesAuth}wjson/auth`, {
-//                 method: 'get',
-//                 body: auth
-//             })
-//             .then( res => res.json())
-//             .then( response => {
-//                 console.log(response);
-//             }).catch( err => {
-//                 reject({
-//                     code: 406,
-//                     status: false,
-//                     raise: err
-//                 });
-//                 console.log(err);
-//             });
-//         } catch (error) {
-//             reject({
-//                 code: 500,
-//                 status: false,
-//                 raise: error
-//             });
-//         }
-//     });
-//     return verify;
-// };
-
-const Auth = mongoose.model('Auth', AuthSchema);
+const Auth: Model<IAuthModel> = model<IAuthModel>('Auth', AuthSchema);
 
 export { Auth };

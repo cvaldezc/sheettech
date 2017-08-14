@@ -1,11 +1,7 @@
-interface IUsers {
-    firstname: string;
-    lastname: string;
-    email: string;
-}
+import { IAuthModel } from '../../../server/apps/restful/models/auth.models';
 
 export class UserModels {
 
-    constructor(public user: IUsers) { }
+    constructor(public user: IAuthModel) { }
 
 }
