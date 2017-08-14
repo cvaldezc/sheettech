@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-// import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MdCardModule,
@@ -12,13 +12,13 @@ import {
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login.component';
-import { UserServices } from '../services/auth/user.services';
+import { UserServices } from '../services/auth/user.service';
 
 
 @NgModule({
   imports: [
     CommonModule,
-    // FormsModule,
+    FormsModule,
     AuthRoutingModule,
     FlexLayoutModule,
     MdInputModule,

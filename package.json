@@ -7,7 +7,7 @@
     "serve": "ng serve",
     "start": "nodemon dist/server/index.js",
     "predev": "tsc -p server",
-    "dev": "concurrently \"mongod\" \"ng serve -pc proxy.conf.json --open\" \"tsc -w -p server\" \"nodemon dist/server/app.js\"",
+    "dev": "concurrently \"ng serve -pc proxy.conf.json --open\" \"tsc -w -p server\" \"nodemon dist/server/app.js\"",
     "prod": "concurrently \"mongod\" \"ng build -aot -prod && tsc -p server && node dist/server/app.js\"",
     "build": "ng build",
     "test": "ng test",
