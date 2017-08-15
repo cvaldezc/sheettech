@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { BaseController } from '../services/base.services';
+// import { BaseController } from '../services/base.services';
 import { Auth } from '../models/auth.models';
 import { TokenServices } from '../services/auth.services';
 
@@ -51,8 +51,28 @@ export class AuthController {
             }
         })
         .catch( err => {
-            res.status(401).send({status: false, valid: 'auth fail verify', err});
+            res.status(401).json({status: false, valid: 'auth fail verify', raise: `${err.code} ${err.raise.message}`});
         });
+    }
+
+
+    /**
+     * decodeToken
+     */
+    public decodeToken(req: Request, res: Response) {
+        console.log(req.body);
+        if (!req.body.token) {
+            return res.status(403).json({status: false, raise: 'No tienes Autorización'});
+        }
+        // tslint:disable-next-line
+        let token = req.body.token.split(' ')[1];
+        TokenServices.verifyToken(token)
+            .then( response => {
+                // req['user'] = response;
+                res.status(200).json(response);
+            }).catch( error => {
+                res.status(error.scode).json(error);
+            });
     }
 
 }

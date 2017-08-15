@@ -13,6 +13,7 @@ import {
 import { AuthRoutingModule } from './auth-routing.module';
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login.component';
+import { LogoutComponent } from './logout.component';
 import { AuthServices } from '../services/auth/auth.service';
 
 
@@ -30,7 +31,8 @@ import { AuthServices } from '../services/auth/auth.service';
   ],
   declarations: [
     AuthComponent,
-    LoginComponent
+    LoginComponent,
+    LogoutComponent
   ],
   providers: [AuthServices],
   exports: [AuthComponent, MdInputModule]

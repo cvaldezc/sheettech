@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit, ILoginComponent {
 
     ngOnInit(): void {
         console.log('Status logged');
-        console.log(this.authService.isLoggedIn);
-     }
+        console.log(AuthServices.isLoggedIn);
+    }
 
     submitAuth(): void {
         // tslint:disable-next-line
@@ -55,17 +55,17 @@ export class LoginComponent implements OnInit, ILoginComponent {
                     }
                     if (response.status === 200 && response._body.raise === 'Not register') {
                         // redirect to set permission by auth
-                        localStorage.setItem('token', `Beare ${response._body.token}`);
+                        localStorage.setItem('token', `Bearer ${response._body.token}`);
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
-                        this.authService.isAdmin = true;
-                        this.authService.isLoggedIn = true;
+                        AuthServices.isAdmin = true;
+                        AuthServices.isLoggedIn = true;
                         setTimeout( () => this.router.navigate([`/auth/permission/${response._body.response.auth}`]) , 2600);
                     } else if (response.status === 200) {
                         // redirect to Library
-                        localStorage.setItem('token', `Beare ${response._body.token}`);
+                        localStorage.setItem('token', `Bearer ${response._body.token}`);
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
-                        this.authService.isLoggedIn = true;
-                        setTimeout( () => this.router.navigate(['/']) , 2600);
+                        AuthServices.isLoggedIn = true;
+                        setTimeout( () => location.href = '/') , 2600);
                     }
                 },
                 err => {
