@@ -10,8 +10,8 @@ import { LogoutComponent } from './logout.component';
 
 const authroutes: Routes = [
   { path: '', component: AuthComponent, canActivate: [AuthGuardLoign] },
-  { path: 'login', component: LoginComponent, canActivate: [AuthGuardLoign] },
-  { path: 'logout', component: LogoutComponent }
+  { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent, canActivate: [AuthGuardLoign] }
 ];
 
 @NgModule({

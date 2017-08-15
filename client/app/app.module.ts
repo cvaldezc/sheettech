@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
+// import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 
 import { AuthModule } from './auth/auth.module';
 import { PageNotFoundComponent } from './utils/not-found.component';
+// import { HttpServices } from './services/http.Services';
 
 
 @NgModule({
@@ -18,7 +19,7 @@ import { PageNotFoundComponent } from './utils/not-found.component';
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    // HttpModule,
     AppRoutingModule,
     AuthModule,
     BrowserAnimationsModule

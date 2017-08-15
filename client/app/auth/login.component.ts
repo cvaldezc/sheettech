@@ -3,6 +3,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { Router } from '@angular/router';
 
 import { AuthServices } from '../services/auth/auth.service';
+import { AuthGuardLoign } from '../services/auth-guard-login.services';
 
 
 interface ILoginComponent {
@@ -21,8 +22,14 @@ export class LoginComponent implements OnInit, ILoginComponent {
 
     constructor(
         private authService: AuthServices,
+        private authGuard: AuthGuardLoign,
         private notify: NotificationsService,
-        private router: Router) { }
+        private router: Router) {
+            console.log(this.router.url);
+            this.authGuard.verifyToken().subscribe(res => {
+                console.log('STATUS OF PROMISES ', res);
+            });
+         }
 
     public options = {
         position: ['top', 'right'],
@@ -65,7 +72,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         localStorage.setItem('token', `Bearer ${response._body.token}`);
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
                         AuthServices.isLoggedIn = true;
-                        setTimeout( () => location.href = '/') , 2600);
+                        setTimeout( () => location.href = '/home' , 2600);
                     }
                 },
                 err => {
