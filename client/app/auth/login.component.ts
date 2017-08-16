@@ -26,8 +26,12 @@ export class LoginComponent implements OnInit, ILoginComponent {
         private notify: NotificationsService,
         private router: Router) {
             console.log(this.router.url);
-            this.authGuard.verifyToken().subscribe(res => {
+            this.authGuard.verifyToken().subscribe( res => {
                 console.log('STATUS OF PROMISES ', res);
+                if (res) {
+                    setTimeout( () => this.router.navigate(['/']), 4600);
+                    // setTimeout( () => location.href = '/home', 4600);
+                }
             });
          }
 
@@ -66,13 +70,13 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
                         AuthServices.isAdmin = true;
                         AuthServices.isLoggedIn = true;
-                        setTimeout( () => this.router.navigate([`/auth/permission/${response._body.response.auth}`]) , 2600);
+                        setTimeout( () => this.router.navigate([`/auth/permissions/${response._body.response.auth}`]) , 2600);
                     } else if (response.status === 200) {
                         // redirect to Library
                         localStorage.setItem('token', `Bearer ${response._body.token}`);
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
                         AuthServices.isLoggedIn = true;
-                        setTimeout( () => location.href = '/home' , 2600);
+                        setTimeout( () => location.href = '/' , 2600);
                     }
                 },
                 err => {

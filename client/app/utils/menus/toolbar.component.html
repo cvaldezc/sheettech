@@ -1,0 +1,25 @@
+<md-toolbar color="primary">
+    <button md-icon-button (click)="navOpen()">
+        <i class="material-icons md-24" >menu</i>
+    </button>
+    <span>Biblioteca de Hojas Tecnicas</span>
+    <span class="example-fill-remaining-space"></span>
+    <button md-icon-button [mdMenuTriggerFor]="appMenu" class="right">
+        <i class="material-icons md-28">account_circle</i>
+    </button>
+    <md-menu #appMenu="mdMenu" xPosition="before" yPosition="below">
+        <button md-menu-item>
+            <md-icon> face </md-icon>
+            <span> Redial </span>
+        </button>
+        <button md-menu-item disabled>
+            <md-icon> inbox </md-icon>
+            <span> Check voicemail </span>
+        </button>
+        <button md-menu-item>
+            <!-- <i class="material-icons">lock_outline</i> -->
+            <md-icon class="">lock_outline</md-icon>
+            <span>Cerrar Sessión</span>
+        </button>
+    </md-menu>
+</md-toolbar>

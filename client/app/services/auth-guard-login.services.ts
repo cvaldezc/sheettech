@@ -42,6 +42,7 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
     }
 
     checkLogin(url: string): boolean {
+        console.log('THIS IS URL IN CHECKLOGIN ', url);
         // tslint:disable-next-line
         let status: boolean;
         const prom: Observable<boolean> = Observable.create( (observer) => {
@@ -49,7 +50,7 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
                 if (localStorage.getItem('token') !== null) {
                     this.verifyToken().subscribe( response => {
                             console.log('response promise', response);
-                            if (this.router.url.startsWith('/login')) {
+                            if (url.startsWith('/login') && response) {
                                 console.log('redirect to home');
                                 this.router.navigate(['/']);
                             }
@@ -67,9 +68,17 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
             }
         });
         prom.map( res => res).subscribe( res => {
+            console.log('RESULT PROM IN CHECK LOGIN', res, 'STAR URL ', url.startsWith('/login'));
             status = res;
+            if ( !status && !url.startsWith('/login')) {
+                console.log('were redirect to login force ');
+               return this.redirectLogin();
+            } else {
+                return status = true;
+            }
         });
-        return status;
+        console.log('STATUS IS RETURN FOR CAN ', status);
+        return (status === undefined ? true : status);
     }
 
     private redirectLogin(): boolean {
@@ -91,30 +100,30 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
     public verifyToken(): Observable<any> {
         // tslint:disable-next-line
         let vtoken = Observable.create( (observer) => {
-            try {
-                // tslint:disable-next-line:prefer-const
-                let token = localStorage.getItem('token');
-                this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsHeaders)
-                    // .map( res => res.json() )
-                    .subscribe(
-                        (response: any)  => {
-                            // console.log(response);
-                            if (response._body.status) {
-                                observer.next(true);
-                                observer.complete();
-                            } else {
-                                observer.next(false);
-                                observer.complete();
-                            }
-                        },
-                        (err) => {
-                            observer.next(false);
-                            observer.complete();
-                        });
-            } catch (error) {
-                observer.next(false);
-                observer.complete();
-            }
+        // tslint:disable-next-line:prefer-const
+        let token = localStorage.getItem('token');
+        if (token !== null) {
+            this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsHeaders)
+            // .map( res => res.json() )
+            .subscribe(
+                (response: any)  => {
+                    // console.log(response);
+                    if (response._body.status) {
+                        observer.next(true);
+                        observer.complete();
+                    } else {
+                        observer.next(false);
+                        observer.complete();
+                    }
+                },
+                (err) => {
+                    observer.next(false);
+                    observer.complete();
+                });
+        } else {
+            observer.next(false);
+            observer.complete();
+        }
         });
         return vtoken;
     }

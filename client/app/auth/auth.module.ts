@@ -8,11 +8,13 @@ import {
   MdCardModule,
   MdButtonModule,
   MdCheckboxModule,
-  MdInputModule
+  MdInputModule,
+  MdSidenavModule,
+  MdListModule,
+  MdToolbarModule
 } from '@angular/material';
 
 import { AuthRoutingModule } from './auth-routing.module';
-import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login.component';
 import { LogoutComponent } from './logout.component';
 import { AuthServices } from '../services/auth/auth.service';
@@ -30,14 +32,16 @@ import { HttpServices } from '../services/http.Services';
     MdInputModule,
     MdCheckboxModule,
     MdCardModule,
-    MdButtonModule
+    MdButtonModule,
+    MdSidenavModule,
+    MdListModule,
+    MdToolbarModule
   ],
   declarations: [
-    AuthComponent,
     LoginComponent,
     LogoutComponent
   ],
   providers: [AuthServices, HttpServices],
-  exports: [AuthComponent, MdInputModule]
+  exports: []
 })
 export class AuthModule { }
