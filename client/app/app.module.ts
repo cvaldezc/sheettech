@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-// import { HttpModule } from '@angular/http';
+import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -16,32 +16,28 @@ import {
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
-import { AuthModule } from './auth/auth.module';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthModule } from './auth/auth.module';
 import { AppComponent } from './app.component';
+import { MainComponent } from './main.component';
 import { PageNotFoundComponent } from './utils/not-found.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { MenuComponent } from './utils/menus/menu.component';
 import { ToolBarComponent } from './utils/menus/toolbar.component';
-// import { HttpServices } from './services/http.Services';
+import { UsersComponent } from './users/users.component';
+// import { AuthComponent } from './auth/auth.component';
 
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ToolBarComponent,
-    MenuComponent,
-    PageNotFoundComponent,
-    PermissionsComponent
-  ],
+
   imports: [
     BrowserModule,
-    // HttpModule,
+    HttpModule,
+    AuthModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
     FlexLayoutModule,
     SimpleNotificationsModule,
-    AppRoutingModule,
-    AuthModule,
-    BrowserAnimationsModule,
     MdCardModule,
     MdButtonModule,
     MdCheckboxModule,
@@ -52,9 +48,18 @@ import { ToolBarComponent } from './utils/menus/toolbar.component';
     MdMenuModule,
     MdIconModule
   ],
+  declarations: [
+    AppComponent,
+    MainComponent,
+    ToolBarComponent,
+    MenuComponent,
+    PageNotFoundComponent,
+    PermissionsComponent,
+    UsersComponent,
+  ],
   providers: [],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  bootstrap: [AppComponent]
+  // schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  bootstrap: [ AppComponent ]
 })
 export class AppModule {
 

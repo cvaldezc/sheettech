@@ -3,7 +3,8 @@ import { MdSidenav } from '@angular/material';
 
 @Component({
     selector: 'app-menu',
-    templateUrl: './menu.component.html'
+    templateUrl: './menu.component.html',
+    styleUrls: ['./menu.component.sass']
 })
 export class MenuComponent {
 

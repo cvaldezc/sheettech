@@ -7,11 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
-  toogle = false;
-
-  test(): void {
-    this.toogle = !this.toogle;
-    console.log('Successful call function');
-  }
 
 }

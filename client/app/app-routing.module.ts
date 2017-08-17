@@ -3,21 +3,32 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { PageNotFoundComponent } from './utils/not-found.component';
 import { AppComponent } from './app.component';
+import { MainComponent } from './main.component';
 import { AuthGuardLoign } from './services/auth-guard-login.services';
+import { AuthComponent } from './auth/auth.component';
+import { PermissionsComponent } from './permissions/permissions.component';
+import { UsersComponent } from './users/users.component';
 
 const appRoutes: Routes = [
+  { path: '', redirectTo: '/home(content:/main)', pathMatch: 'full'},
   {
     path: '',
-    component: AppComponent,
-    canActivate: [AuthGuardLoign],
-    children: [
-      {
-        path: '',
-        loadChildren: 'app/auth/auth.module#AuthModule'
-      }
-    ],
+    loadChildren: 'app/auth/auth.module#AuthModule'
   },
-  // { path: '', redirectTo: '/home', pathMatch: 'full'},
+  {
+    path: 'home',
+    component: AuthComponent,
+  },
+  {
+    path: 'main',
+    component: MainComponent, outlet: 'content',
+    children: [
+      // { path: '', component: PageNotFoundComponent },
+      // { path: '**', component: PageNotFoundComponent },
+      { path: 'permission', component: PermissionsComponent, outlet: 'data' },
+      { path: 'users', component: UsersComponent, outlet: 'data' }
+    ]
+  },
   { path: '**', component: PageNotFoundComponent }
 ];
 
@@ -28,6 +39,7 @@ const appRoutes: Routes = [
       { enableTracing: true }
     )
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthGuardLoign]
 })
 export class AppRoutingModule { }

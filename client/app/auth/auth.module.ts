@@ -15,6 +15,7 @@ import {
 } from '@angular/material';
 
 import { AuthRoutingModule } from './auth-routing.module';
+import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login.component';
 import { LogoutComponent } from './logout.component';
 import { AuthServices } from '../services/auth/auth.service';
@@ -38,6 +39,7 @@ import { HttpServices } from '../services/http.Services';
     MdToolbarModule
   ],
   declarations: [
+    AuthComponent,
     LoginComponent,
     LogoutComponent
   ],
