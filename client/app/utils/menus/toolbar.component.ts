@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -9,9 +10,15 @@ import { Component, Output, EventEmitter } from '@angular/core';
 export class ToolBarComponent {
     // navToggle: EventEmitter<boolean>;
 
+    constructor(private router: Router) { }
+
     @Output() navToggle = new EventEmitter<boolean>();
     navOpen() {
         this.navToggle.emit(true);
       }
 
- }
+    sendLogout(): void {
+        this.router.navigate(['logout', { outlets: { 'data': null}}]);
+    }
+
+}

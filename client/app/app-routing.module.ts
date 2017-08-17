@@ -18,10 +18,11 @@ const appRoutes: Routes = [
   {
     path: 'home',
     component: AuthComponent,
+    canActivate: [AuthGuardLoign]
   },
   {
     path: 'main',
-    component: MainComponent, outlet: 'content',
+    component: MainComponent, outlet: 'content', canActivate: [AuthGuardLoign],
     children: [
       // { path: '', component: PageNotFoundComponent },
       // { path: '**', component: PageNotFoundComponent },

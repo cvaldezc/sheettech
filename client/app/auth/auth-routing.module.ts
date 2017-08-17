@@ -18,6 +18,7 @@ const authRoutes: Routes = [
   {
     path: 'logout',
     component: LogoutComponent,
+    canActivate: [AuthGuardLoign]
   }
 ];
 
