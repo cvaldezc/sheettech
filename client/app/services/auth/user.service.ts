@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-import { UserModels } from '../../models/user.models';
+// import { UserModels } from '../../models/user.models';
 
 @Injectable()
 export class UserServices {

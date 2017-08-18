@@ -18,7 +18,10 @@ const appRoutes: Routes = [
   {
     path: 'home',
     component: AuthComponent,
-    canActivate: [AuthGuardLoign]
+    canActivate: [AuthGuardLoign],
+    children: [
+      { path: 'logout', redirectTo: '/logout' }
+    ]
   },
   {
     path: 'main',
@@ -26,7 +29,7 @@ const appRoutes: Routes = [
     children: [
       // { path: '', component: PageNotFoundComponent },
       // { path: '**', component: PageNotFoundComponent },
-      { path: 'permission', component: PermissionsComponent, outlet: 'data' },
+      { path: 'permission/:auth', component: PermissionsComponent, outlet: 'data' },
       { path: 'users', component: UsersComponent, outlet: 'data' }
     ]
   },

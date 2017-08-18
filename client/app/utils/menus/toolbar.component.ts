@@ -8,7 +8,6 @@ import { Router } from '@angular/router';
     styleUrls: ['./toolbar.component.sass']
 })
 export class ToolBarComponent {
-    // navToggle: EventEmitter<boolean>;
 
     constructor(private router: Router) { }
 
@@ -18,7 +17,7 @@ export class ToolBarComponent {
       }
 
     sendLogout(): void {
-        this.router.navigate(['logout', { outlets: { 'data': null}}]);
+        location.href = '/home/logout';
     }
 
 }

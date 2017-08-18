@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MdCardModule,
@@ -12,7 +13,8 @@ import {
   MdListModule,
   MdToolbarModule,
   MdMenuModule,
-  MdIconModule } from '@angular/material';
+  MdIconModule,
+  MdSlideToggleModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 
@@ -25,7 +27,7 @@ import { PermissionsComponent } from './permissions/permissions.component';
 import { MenuComponent } from './utils/menus/menu.component';
 import { ToolBarComponent } from './utils/menus/toolbar.component';
 import { UsersComponent } from './users/users.component';
-// import { AuthComponent } from './auth/auth.component';
+import { PermissionService } from './services/main/permission.service';
 
 
 @NgModule({
@@ -33,6 +35,7 @@ import { UsersComponent } from './users/users.component';
   imports: [
     BrowserModule,
     HttpModule,
+    FormsModule,
     AuthModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -46,7 +49,8 @@ import { UsersComponent } from './users/users.component';
     MdListModule,
     MdToolbarModule,
     MdMenuModule,
-    MdIconModule
+    MdIconModule,
+    MdSlideToggleModule
   ],
   declarations: [
     AppComponent,
@@ -57,7 +61,7 @@ import { UsersComponent } from './users/users.component';
     PermissionsComponent,
     UsersComponent,
   ],
-  providers: [],
+  providers: [PermissionService],
   // schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [ AppComponent ]
 })

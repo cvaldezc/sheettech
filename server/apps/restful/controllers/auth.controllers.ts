@@ -75,5 +75,13 @@ export class AuthController {
             });
     }
 
+    /**
+     * getPermission
+     */
+    public getPermission(req: Request, res: Response) {
+        console.log(req.params)
+        console.log(req.body)
+    }
+
 }
 

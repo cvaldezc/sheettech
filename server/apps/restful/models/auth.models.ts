@@ -1,23 +1,12 @@
 import { Document, Schema, Model, model } from 'mongoose';
 import * as crypto from 'crypto';
+
+
 import { config } from '../../../config.server';
+import { IPermission } from '../interfaces/Permission.interface';
+import { IAuthModel } from '../interfaces/Auth.interface';
 
-interface IPermission {
-    write: boolean;
-    reader: boolean;
-    delete: boolean;
-}
-
-export interface IAuthModel extends Document, IPermission {
-    auth: string;
-    email: string;
-    avatar: string;
-    signupDate?: Date;
-    lastLogin?: Date;
-    permission: IPermission;
-    charge: string;
-    isactive: boolean;
-}
+interface IAuth extends IAuthModel, Document { }
 
 const AuthSchema: Schema = new Schema({
     auth: { type: String, unique: true, trim: true, maxlength: 8 },
@@ -42,6 +31,6 @@ AuthSchema.methods.gravatar = () => {
     return `https://gravatar.com/avatar/${md5}?s=200&d=retro`;
 };
 
-const Auth: Model<IAuthModel> = model<IAuthModel>('Auth', AuthSchema);
+export const Auth: Model<IAuth> = model<IAuth>('Auth', AuthSchema);
 
-export { Auth };
+// export { Auth, IAuthModel };

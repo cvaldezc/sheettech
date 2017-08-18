@@ -128,4 +128,27 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
         return vtoken;
     }
 
+    public decodeToken(): Observable<any> {
+        // tslint:disable-next-line
+        let vtoken = Observable.create( (observer) => {
+        // tslint:disable-next-line:prefer-const
+            let token = localStorage.getItem('token');
+            if (token !== null) {
+                this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsHeaders)
+                .map( (res: any) => res.json() )
+                .subscribe(
+                    (response: any)  => {
+                        observer.next(response);
+                    },
+                    (err) => {
+                        observer.next({status: false, err});
+                    });
+            } else {
+                observer.next({status: false});
+            }
+            observer.complete();
+        });
+        return vtoken;
+    }
+
 }
