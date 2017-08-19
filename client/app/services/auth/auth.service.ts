@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
@@ -12,10 +12,13 @@ export class AuthServices {
     public static isAdmin = false;
 
 
-    constructor(private http: Http, private httpService: HttpServices) { }
+    constructor(private http: HttpClient, private httpService: HttpServices) { }
 
     loginService(credentials: any): Observable<any> {
-        return this.http.post('/restful/auth/signin', credentials, this.httpService.optionsHeaders);
+        return this.http.post(
+            '/restful/auth/signin',
+            credentials,
+            this.httpService.optionsRequest);
     }
 
     logoutService(): void {

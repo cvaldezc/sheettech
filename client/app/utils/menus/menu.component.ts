@@ -11,7 +11,10 @@ import { AuthGuardLoign } from '../../services/auth-guard-login.services';
 })
 export class MenuComponent implements OnInit {
 
+    authPrms: string = '';
+
     constructor(private authGuard: AuthGuardLoign) { }
+
 
     @ViewChild('navmain') sidenav: MdSidenav;
 
@@ -25,10 +28,13 @@ export class MenuComponent implements OnInit {
         this.authGuard.decodeToken()
             .subscribe(
                 observer => {
-                    console.log(observer)
+                    console.log("OBserver", observer)
+                    if ( observer['status']) {
+                        this.authPrms = observer['payload']
+                    }
                 },
                 error => {
-                    console.warn(error)
+                    alert(error)
                 }
             )
     }

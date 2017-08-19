@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -26,7 +26,7 @@ import { HttpServices } from '../services/http.Services';
   imports: [
     CommonModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     SimpleNotificationsModule.forRoot(),
     AuthRoutingModule,
     FlexLayoutModule,

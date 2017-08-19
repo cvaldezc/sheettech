@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-// import { BaseController } from '../services/base.services';
+import { IAuthModel } from '../interfaces/Auth.interface';
 import { Auth } from '../models/auth.models';
 import { TokenServices } from '../services/auth.services';
 
@@ -60,7 +60,7 @@ export class AuthController {
      * decodeToken
      */
     public decodeToken(req: Request, res: Response) {
-        console.log(req.body);
+        // console.log(req.body);
         if (!req.body.token) {
             return res.status(403).json({status: false, raise: 'No tienes Autorización'});
         }
@@ -69,9 +69,9 @@ export class AuthController {
         TokenServices.verifyToken(token)
             .then( response => {
                 // req['user'] = response;
-                res.status(200).json(response);
+                return res.status(200).json(response);
             }).catch( error => {
-                res.status(error.scode).json(error);
+                return res.status(301).json(error);
             });
     }
 
@@ -79,8 +79,17 @@ export class AuthController {
      * getPermission
      */
     public getPermission(req: Request, res: Response) {
-        console.log(req.params)
-        console.log(req.body)
+        console.log(req.query)
+        // if (req.query.hasOwnProperty('auth')){
+            Auth.findOne({auth: req.query['auth']}, (err, _auth: IAuthModel) => {
+                if (err) return res.status(500).json({status: false, raise: err})
+                if (!_auth) return res.status(404).json({status: false, raise: 'No se ha encontrado'})
+
+                res.status(200).json(_auth)
+            });
+        // } else {
+        //     res.status(200).json({status: false});
+        // }
     }
 
 }

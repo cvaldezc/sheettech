@@ -4,24 +4,45 @@
         <md-card>
             <md-card-header>
                 <md-card-title><h4>Establecer Permisos</h4></md-card-title>
-                <md-card-subtitle>Subtitle</md-card-subtitle>
+                <md-card-subtitle>Subtitle
+                    <input type="button" (click)="test()" value="Click me!">
+                </md-card-subtitle>
             </md-card-header>
             <md-card-content fxLayout="column wrap" fxLayoutGap="15px">
                 <div fxFlex>
-                    <md-slide-toggle color="primary" [(ngModel)]="persmission.reader">
+                    <md-slide-toggle
+                    color="primary"
+                    checked="permission.reader"
+                    labelPosition="before"
+                    change="permission.reader"
+                    [(ngModel)]="permission.reader">
                         <strong>Leer</strong>
                     </md-slide-toggle>
                 </div>
                 <div fxFlex>
-                    <md-slide-toggle color="accent" [(ngModel)]="persmission.write">
+                    <md-slide-toggle
+                    checked="permission.write"
+                    color="accent"
+                    labelPosition="before"
+                    change="permission.write"
+                    [(ngModel)]="permission.write">
                         <strong>Escribir</strong>
                     </md-slide-toggle>
                 </div>
                 <div fxFlex>
-                    <md-slide-toggle color="warn" [(ngModel)]="persmission.delete">
+                    <md-slide-toggle
+                    change="permission.delete"
+                    checked="permission.delete"
+                    color="warn"
+                    labelPosition="before"
+                    [(ngModel)]="permission.delete">
                         <strong>Eliminar</strong>
                     </md-slide-toggle>
                 </div>
+                <button md-button class="light-blue">
+                    <md-icon>save</md-icon>
+                    <strong>GUARDAR CAMBIOS</strong>
+                </button>
             </md-card-content>
         </md-card>
     </section>

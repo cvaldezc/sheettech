@@ -1,5 +1,5 @@
 import { Injectable} from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import {
     ActivatedRouteSnapshot,
     CanActivate,
@@ -20,7 +20,7 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
 
     constructor(
         private router: Router,
-        private http: Http,
+        private http: HttpClient,
         private authService: AuthServices,
         private httpService: HttpServices) { }
 
@@ -103,12 +103,12 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
         // tslint:disable-next-line:prefer-const
         let token = localStorage.getItem('token');
         if (token !== null) {
-            this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsHeaders)
+            this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsRequest)
             // .map( res => res.json() )
             .subscribe(
                 (response: any)  => {
-                    // console.log(response);
-                    if (response._body.status) {
+                    console.log(response);
+                    if (response.status) {
                         observer.next(true);
                         observer.complete();
                     } else {
@@ -134,19 +134,21 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
         // tslint:disable-next-line:prefer-const
             let token = localStorage.getItem('token');
             if (token !== null) {
-                this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsHeaders)
-                .map( (res: any) => res.json() )
+                this.http.post('/restful/auth/decode', { 'token': token }, this.httpService.optionsRequest)
+                // .map( (res: any) => res.json() )
                 .subscribe(
                     (response: any)  => {
                         observer.next(response);
+                        observer.complete();
                     },
                     (err) => {
                         observer.next({status: false, err});
+                        observer.complete();
                     });
             } else {
                 observer.next({status: false});
+                observer.complete();
             }
-            observer.complete();
         });
         return vtoken;
     }
