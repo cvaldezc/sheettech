@@ -3,6 +3,7 @@ import { Router, ParamMap, ActivatedRoute } from '@angular/router';
 // import { NextObserver } from 'rxjs/Observer';
 import { NotificationsService } from 'angular2-notifications';
 
+import { IAuthModel } from '../../../server/apps/restful/interfaces/Auth.interface';
 import { IPermission } from '../../../server/apps/restful/interfaces/Permission.interface';
 import { PermissionService } from '../services/main/permission.service';
 
@@ -13,6 +14,22 @@ import { PermissionService } from '../services/main/permission.service';
   styleUrls: ['./permissions.component.sass']
 })
 export class PermissionsComponent implements OnInit {
+
+  gAuth: IAuthModel = {
+    auth: '',
+    avatar: '',
+    charge: '',
+    name: '',
+    email: '',
+    isactive: false,
+    lastLogin: '',
+    signupDate: '',
+    permission: <IPermission>{
+      reader: false,
+      write: false,
+      delete: false
+    }
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -25,27 +42,36 @@ export class PermissionsComponent implements OnInit {
     delete: false
   };
 
-  ngOnInit(): void {
-    this.getPermission();
+  options: object = {
+    position: ['top', 'right'],
+    timeOut: 5000,
+    lastOnBottom: true
   }
 
-  private getPermission() {
+  ngOnInit(): void {
+    this.getAuth();
+  }
+
+  private getAuth() {
     let auth = this.route.snapshot.params['auth']
+
     this.servicePermission.getAuth(auth)
       .subscribe(
-        (observer) => {
-          console.log(observer);
+        (observer: IAuthModel) => {
+          // console.log(observer);
           if (!observer.hasOwnProperty('status')) {
-            // this.permission = observer;
-            console.table(this.permission)
+            this.gAuth = observer;
+            this.permission = observer.permission;
+            // console.log(this.permission)
+            // console.table(observer)
           } else {
-            console.log('OBSERVER', observer);
+            // console.log('OBSERVER', observer);
             this.notity.alert('Alerta!', `${observer}`);
           }
         },
         err => {
-          this.notity.error('Error', err);
-          console.log('ERR ', err);
+          // console.log('ERR ', err);
+          this.notity.error('Error', err.error.raise);
         }
       )
   }

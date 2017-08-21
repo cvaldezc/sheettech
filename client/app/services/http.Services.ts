@@ -6,7 +6,6 @@ import { Injectable } from '@angular/core';
 //     RequestOptionsArgs
 //  } from '@angular/http';
 import {
-    // HttpClient,
     HttpHeaders,
     // HttpHeaderResponse,
     HttpParams,
@@ -19,6 +18,7 @@ import {
 export class HttpServices {
 
     public token: string = localStorage.getItem('auth_token');
+    public parameters: HttpParams = new HttpParams();
     private headers: HttpHeaders = new HttpHeaders(
         {
             'authorization': this.token || '',

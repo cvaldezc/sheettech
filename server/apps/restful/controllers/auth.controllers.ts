@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { IAuthModel } from '../interfaces/Auth.interface';
 import { Auth } from '../models/auth.models';
 import { TokenServices } from '../services/auth.services';
+import { UtilsService } from '../utils/string.service';
 
 
 export class AuthController {
@@ -19,10 +20,10 @@ export class AuthController {
         let usr: string = req.body.user;
         // tslint:disable-next-line:prefer-const
         let _auth = { passwd, usr };
-        console.log(_auth);
+        //console.log(_auth);
         TokenServices.verifyPassword(_auth)
         .then( (response: any) => {
-            console.log(response);
+            // console.log(response);
             // tslint:disable-next-line
             let _status = response.status;
             if (_status) {
@@ -35,8 +36,9 @@ export class AuthController {
                         cauth.auth = response.auth;
                         cauth.email = response.email;
                         cauth.charge = response.charge;
-                        cauth.save();
-                        // tslint:disable-next-line:max-line-length
+                        cauth.name = UtilsService.strCapitalize(response.names);
+                        cauth.isactive = true;
+                        // cauth.save();
                         return res.status(200).json({ status: true, response, raise: 'Not register', token: TokenServices.createToken(cauth) });
                     }
                     if (auth === null) {
@@ -79,11 +81,13 @@ export class AuthController {
      * getPermission
      */
     public getPermission(req: Request, res: Response) {
+        // console.log(req.params)
+        // console.log(req.body)
         console.log(req.query)
         // if (req.query.hasOwnProperty('auth')){
             Auth.findOne({auth: req.query['auth']}, (err, _auth: IAuthModel) => {
                 if (err) return res.status(500).json({status: false, raise: err})
-                if (!_auth) return res.status(404).json({status: false, raise: 'No se ha encontrado'})
+                if (!_auth) return res.status(404).json({status: false, raise: 'No se ha encontrado datos'})
 
                 res.status(200).json(_auth)
             });

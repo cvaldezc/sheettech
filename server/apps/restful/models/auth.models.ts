@@ -10,6 +10,7 @@ interface IAuth extends IAuthModel, Document { }
 
 const AuthSchema: Schema = new Schema({
     auth: { type: String, unique: true, trim: true, maxlength: 8 },
+    name: {  type: String, trim: true},
     email: { type: String, trim: true },
     avatar: { type: String },
     signupDate: { type: Date, default: Date.now() },
@@ -20,7 +21,7 @@ const AuthSchema: Schema = new Schema({
         delete: { type: Boolean, default: false }
     },
     charge: { type: String },
-    isactive: { type: Boolean, default: true }
+    isactive: { type: Boolean, default: false }
 });
 
 AuthSchema.methods.gravatar = () => {

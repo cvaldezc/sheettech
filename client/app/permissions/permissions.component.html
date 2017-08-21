@@ -4,8 +4,11 @@
         <md-card>
             <md-card-header>
                 <md-card-title><h4>Establecer Permisos</h4></md-card-title>
-                <md-card-subtitle>Subtitle
-                    <input type="button" (click)="test()" value="Click me!">
+                <md-card-subtitle>
+                    <label for="">Cargo </label>{{ gAuth.charge }}
+                    <label for="">ID </label>{{ gAuth.auth }}
+                    <label for="">Name </label>{{ gAuth.name }}
+                    <!-- <input type="button" (click)="test()" value="Click me!"> -->
                 </md-card-subtitle>
             </md-card-header>
             <md-card-content fxLayout="column wrap" fxLayoutGap="15px">
@@ -46,4 +49,5 @@
             </md-card-content>
         </md-card>
     </section>
+<simple-notifications [options]="options"></simple-notifications>
 </article>

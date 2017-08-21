@@ -75,7 +75,7 @@ export class TokenServices {
                 })
                 .then( res => res.json())
                 .then( response => {
-                    console.log(response);
+                    // console.log(response);
                     resolve(response);
                 }).catch( err => {
                     reject({

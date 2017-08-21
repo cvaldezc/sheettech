@@ -1,11 +1,12 @@
 import { IPermission } from './Permission.interface';
 
-export interface IAuthModel extends IPermission {
+export interface IAuthModel {
     auth: string;
     email: string;
     avatar: string;
-    signupDate?: Date;
-    lastLogin?: Date;
+    name: string,
+    signupDate: string;
+    lastLogin: string;
     permission: IPermission;
     charge: string;
     isactive: boolean;

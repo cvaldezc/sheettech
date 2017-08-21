@@ -59,29 +59,43 @@ export class LoginComponent implements OnInit, ILoginComponent {
         this.authService.loginService(this.auth)
             .subscribe(
                 response => {
-                    console.log(response);
+                    console.log('IF SUCCESS', response);
                     this.isProcess = false;
                     if (response.status === 206) {
-                        this.notify.bare('', `${response._body.raise}`, { timeOut: 2600, theClass: 'red accent-1'});
+                        this.notify.bare('', `${response.body.raise}`, { timeOut: 2600, theClass: 'red accent-1'});
                     }
-                    if (response.status === 200 && response._body.raise === 'Not register') {
+                    if (response.status === 200 && response.body.raise === 'Not register') {
                         // redirect to set permission by auth
-                        localStorage.setItem('token', `Bearer ${response._body.token}`);
+                        localStorage.setItem('token', `Bearer ${response.body.token}`);
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
                         AuthServices.isAdmin = true;
                         AuthServices.isLoggedIn = true;
-                        setTimeout( () => this.router.navigate([`/auth/permissions/${response._body.response.auth}`]) , 2600);
+                        setTimeout( () => this.router.navigateByUrl(`home(content:main/(data:permission/${response.body.response.auth}))`) , 2600);
+                        // this.router.navigateByUrl([
+                        //     { outlets:
+                        //         [
+                        //             {
+                        //                 content: ['main'],
+                        //             },
+                        //             {
+                        //                 data: [ 'permission' ]
+                        //             },
+                        //             [response.body.response.auth]
+                        //         ]
+                        //     }
+                        // ])
+                        // {outlets: { data: ['permission', response.body.response.auth ] }}
                     } else if (response.status === 200) {
                         // redirect to Library
-                        localStorage.setItem('token', `Bearer ${response._body.token}`);
+                        localStorage.setItem('token', `Bearer ${response.body.token}`);
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
                         AuthServices.isLoggedIn = true;
                         setTimeout( () => location.href = '/' , 2600);
                     }
                 },
-                err => {
-                    console.log(err);
-                    this.notify.bare('', `${err._body.raise}`, { timeOut: 5000, theClass: 'red accent-1' });
+                (err) => {
+                    // console.log('IF ERROR ', err);
+                    this.notify.bare(`${err.status}`, `${err.error.raise}`, { timeOut: 5000, theClass: 'red accent-1' });
                     this.isProcess = false;
                 }
             );

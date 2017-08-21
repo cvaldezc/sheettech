@@ -5,26 +5,41 @@ import 'rxjs/add/operator/map';
 
 import { HttpServices } from '../../services/http.Services';
 
-@Injectable()
-export class AuthServices {
 
-    public  static isLoggedIn = false;
+interface IAuthService {
+    loginService(credentials: any): Observable<any>;
+    logoutService(): void;
+    getAuth<IAuthModel>(auth: string): Observable<IAuthModel>;
+}
+
+@Injectable()
+export class AuthServices implements IAuthService {
+
+    public static isLoggedIn = false;
     public static isAdmin = false;
 
 
-    constructor(private http: HttpClient, private httpService: HttpServices) { }
+    constructor(
+        public http: HttpClient,
+        private httpService: HttpServices) { }
 
-    loginService(credentials: any): Observable<any> {
-        return this.http.post(
-            '/restful/auth/signin',
-            credentials,
-            this.httpService.optionsRequest);
+    public loginService(credentials: any): Observable<any> {
+        let options = this.httpService.optionsRequest
+        options['observe'] = 'response';
+        return this.http.post('/restful/auth/signin', credentials, options);
     }
 
-    logoutService(): void {
+    public logoutService(): void {
         localStorage.removeItem('token');
         AuthServices.isLoggedIn = false;
         AuthServices.isAdmin = false;
+    }
+
+    public getAuth<IAuthModel>(auth: string): Observable<IAuthModel> {
+        let options = this.httpService.optionsRequest
+        options.params = this.httpService.parameters.set('auth', auth)
+        console.log('Parameters ', options);
+        return this.http.get<IAuthModel>('/restful/auth/permission', options);
     }
 
 }
