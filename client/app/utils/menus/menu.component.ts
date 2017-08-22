@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges, SimpleChange, ViewChild, On
 import { MdSidenav } from '@angular/material';
 
 import { AuthGuardLoign } from '../../services/auth-guard-login.services';
+import { AuthServices } from '../../services/auth/auth.service';
 
 
 @Component({
@@ -12,8 +13,13 @@ import { AuthGuardLoign } from '../../services/auth-guard-login.services';
 export class MenuComponent implements OnInit {
 
     authPrms: string = '';
+    isLogin = false
+    isAdmin = false
 
-    constructor(private authGuard: AuthGuardLoign) { }
+    constructor(private authGuard: AuthGuardLoign, private servAuth: AuthServices) {
+        this.isAdmin = servAuth.isAdmin
+        this.isLogin = servAuth.isLoggedIn
+    }
 
 
     @ViewChild('navmain') sidenav: MdSidenav;
@@ -25,12 +31,15 @@ export class MenuComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.authGuard.decodeToken()
+        this.authGuard.decodedTokenLocal()
             .subscribe(
-                observer => {
-                    console.log("OBserver", observer)
+                (observer: any) => {
+                    // console.log("OBserver", observer)
                     if ( observer['status']) {
-                        this.authPrms = observer['payload']
+                        this.authPrms = observer['payload']['auth']
+                        this.isAdmin = observer['payload']['isAdmin']
+                    }else{
+                        alert(observer['err']['message'])
                     }
                 },
                 error => {

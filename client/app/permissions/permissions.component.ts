@@ -33,7 +33,7 @@ export class PermissionsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private servicePermission: PermissionService,
+    private servPermission: PermissionService,
     private notity: NotificationsService) { }
 
   permission: IPermission = {
@@ -55,29 +55,44 @@ export class PermissionsComponent implements OnInit {
   private getAuth() {
     let auth = this.route.snapshot.params['auth']
 
-    this.servicePermission.getAuth(auth)
+    this.servPermission.getAuth(auth)
       .subscribe(
         (observer: IAuthModel) => {
-          // console.log(observer);
+          console.log(observer);
           if (!observer.hasOwnProperty('status')) {
             this.gAuth = observer;
             this.permission = observer.permission;
-            // console.log(this.permission)
-            // console.table(observer)
           } else {
-            // console.log('OBSERVER', observer);
             this.notity.alert('Alerta!', `${observer}`);
           }
         },
         err => {
-          // console.log('ERR ', err);
-          this.notity.error('Error', err.error.raise);
+          console.log(err);
+          this.notity.error('Error', err.message);
         }
       )
   }
 
+  savePermission(): void {
+    this.servPermission.savePermission(this.gAuth.auth, this.permission)
+      .subscribe(
+        (saved: any) => {
+          if (saved.status) {
+            this.notity.success('Felicidades!', 'Datos Guardados correctamente')
+            this.permission = saved.permission
+          }else{
+            this.notity.alert('Alerta!', `${saved.raise}`)
+          }
+        },
+        err => {
+          this.notity.error('Alerta!', `${err.error.raise}`)
+        }
+    )
+  }
+
   test(): void {
     console.log(this.permission);
+    console.log(this.servPermission)
   }
 
 }

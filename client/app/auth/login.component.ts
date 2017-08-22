@@ -25,10 +25,10 @@ export class LoginComponent implements OnInit, ILoginComponent {
         private authGuard: AuthGuardLoign,
         private notify: NotificationsService,
         private router: Router) {
-            console.log(this.router.url);
-            this.authGuard.verifyToken().subscribe( res => {
+            // console.log(this.router.url);
+            this.authGuard.decodedTokenLocal().subscribe( (res: any) => {
                 console.log('STATUS OF PROMISES ', res);
-                if (res) {
+                if (res.status) {
                     setTimeout( () => this.router.navigate(['/']), 4600);
                     // setTimeout( () => location.href = '/home', 4600);
                 }
@@ -46,8 +46,8 @@ export class LoginComponent implements OnInit, ILoginComponent {
     };
 
     ngOnInit(): void {
-        console.log('Status logged');
-        console.log(AuthServices.isLoggedIn);
+        // console.log('Status logged');
+        // console.log(AuthServices.isLoggedIn);
     }
 
     submitAuth(): void {
@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
         this.authService.loginService(this.auth)
             .subscribe(
                 response => {
-                    console.log('IF SUCCESS', response);
+                    // console.log('IF SUCCESS', response);
                     this.isProcess = false;
                     if (response.status === 206) {
                         this.notify.bare('', `${response.body.raise}`, { timeOut: 2600, theClass: 'red accent-1'});
@@ -68,9 +68,9 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         // redirect to set permission by auth
                         localStorage.setItem('token', `Bearer ${response.body.token}`);
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
-                        AuthServices.isAdmin = true;
-                        AuthServices.isLoggedIn = true;
-                        setTimeout( () => this.router.navigateByUrl(`home(content:main/(data:permission/${response.body.response.auth}))`) , 2600);
+                        AuthServices.prototype.isAdmin = true;
+                        AuthServices.prototype.isLoggedIn = true;
+                        setTimeout( () => location.href = `/home(content:main/(data:permission/${response.body.response.auth}))` , 2600);
                         // this.router.navigateByUrl([
                         //     { outlets:
                         //         [
@@ -89,13 +89,13 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         // redirect to Library
                         localStorage.setItem('token', `Bearer ${response.body.token}`);
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
-                        AuthServices.isLoggedIn = true;
+                        AuthServices.prototype.isLoggedIn = true;
                         setTimeout( () => location.href = '/' , 2600);
                     }
                 },
                 (err) => {
                     // console.log('IF ERROR ', err);
-                    this.notify.bare(`${err.status}`, `${err.error.raise}`, { timeOut: 5000, theClass: 'red accent-1' });
+                    this.notify.bare(``, `${err}`, { timeOut: 5000, theClass: 'red accent-1' });
                     this.isProcess = false;
                 }
             );

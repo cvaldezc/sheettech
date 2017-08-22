@@ -17,38 +17,27 @@ import {
 @Injectable()
 export class HttpServices {
 
-    public token: string = localStorage.getItem('auth_token');
+    public token: string = '';
     public parameters: HttpParams = new HttpParams();
-    private headers: HttpHeaders = new HttpHeaders(
-        {
-            'authorization': this.token || '',
-            'Content-Type': 'application/json',
-            'description': ''
-        }
-    );
-    // private httpParams: HttpParams = new HttpParams();
+
     public optionsRequest = {
-        headers: this.headers,
+        headers: null,
         params: new HttpParams()
     };
 
     /**
-     * object older
+     * set
      */
-    // private headers = new Headers({
-    //     'Authorization': `Bearer ${this.token}`,
-    //     'Content-Type': 'application/json',
-    //     'charset': 'UTF-8'
-    // });
-
-    // public optionsHeaders = new RequestOptions({
-    //     headers: this.headers,
-    //     responseType: ResponseContentType.Json
-    // });
-
-    // public optionsArgs: RequestOptionsArgs = {
-    //     responseType: ResponseContentType.Json,
-    //     params: {},
-    // }
+    public getHeaders(): HttpHeaders {
+        let headers: any = null;
+        headers = new HttpHeaders(
+            {
+                'authorization': `${localStorage.getItem('token') || ''}`,
+                'Content-Type': 'application/json',
+                'description': ''
+            }
+        );
+        return headers;
+    }
 
 }

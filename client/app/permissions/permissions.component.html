@@ -5,10 +5,9 @@
             <md-card-header>
                 <md-card-title><h4>Establecer Permisos</h4></md-card-title>
                 <md-card-subtitle>
-                    <label for="">Cargo </label>{{ gAuth.charge }}
-                    <label for="">ID </label>{{ gAuth.auth }}
-                    <label for="">Name </label>{{ gAuth.name }}
-                    <!-- <input type="button" (click)="test()" value="Click me!"> -->
+                    <p><strong>ID </strong>{{ gAuth.auth }}</p>
+                    <p><strong>Cargo </strong>{{ gAuth.charge }}</p>
+                    <p><strong>Nombres </strong>{{ gAuth.name }}</p>
                 </md-card-subtitle>
             </md-card-header>
             <md-card-content fxLayout="column wrap" fxLayoutGap="15px">
@@ -42,12 +41,13 @@
                         <strong>Eliminar</strong>
                     </md-slide-toggle>
                 </div>
-                <button md-button class="light-blue">
+                <button md-button class="light-blue" (click)="savePermission()">
                     <md-icon>save</md-icon>
                     <strong>GUARDAR CAMBIOS</strong>
                 </button>
             </md-card-content>
         </md-card>
     </section>
+    <button (click)="test()"></button>
 <simple-notifications [options]="options"></simple-notifications>
 </article>

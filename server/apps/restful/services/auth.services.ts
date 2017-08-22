@@ -15,21 +15,19 @@ export class TokenServices {
     public static createToken(user: any) {
         // tslint:disable-next-line:prefer-const
         let payload: object = {
-            sub: user.auth,
+            sub: { auth: user.auth, isAdmin: (user.charge == 'Administrator' ? true : false) },
             iat: moment().unix(),
             exp: moment().add(15, 'days').unix()
-        };
-        return jwt.sign(payload, config.SECRET_TOKEN);
+        }
+        return jwt.sign(payload, config.SECRET_TOKEN)
     }
 
     /**
      * verifyToken
      */
     public static verifyToken(token: string) {
-        // tslint:disable-next-line:prefer-const
         let decode = new Promise( (resolve, reject) => {
             try {
-                // tslint:disable-next-line:prefer-const
                 let payload: any = jwt.verify(token, config.SECRET_TOKEN);
                 if (payload.exp <= moment().unix()) {
                     reject({
@@ -44,9 +42,9 @@ export class TokenServices {
                 });
             } catch (error) {
                 reject({
-                    code: 500,
+                    scode: 500,
                     status: false,
-                    raise: `Token invalid ${error}`
+                    raise: `Token invalid, cierre session y vuelva a internarlo ${error}`
                 });
             }
         });

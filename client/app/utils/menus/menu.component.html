@@ -4,9 +4,9 @@
             <i class="material-icons md-24" >local_library</i>
             <strong>Biblioteca</strong>
         </a>
-        <a md-list-item (click)="navmain.toggle()" [routerLink]="[{outlets: { data: ['permission', authPrms ] }}] ">Permisos</a>
+        <a md-list-item *ngIf="isAdmin" (click)="navmain.toggle()" [routerLink]="[{outlets: { data: ['permission', authPrms ] }}] ">Permisos</a>
         <a md-list-item (click)="navmain.toggle()" [routerLink]="[{outlets: { data: 'users' }}]">Usuarios</a>
-        <a md-list-item (click)="navmain.toggle()" href="page3.html">Page 3</a>
+        <a md-list-item (click)="navmain.toggle()" href="page3.html">Page 3 {{isAdmin}}</a>
     </md-nav-list>
     <!-- block ngModel -->
      <input type="hidden" [(ngModel)]="authPrms">
