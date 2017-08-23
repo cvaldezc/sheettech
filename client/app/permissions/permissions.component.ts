@@ -6,6 +6,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { IAuthModel } from '../../../server/apps/restful/interfaces/Auth.interface';
 import { IPermission } from '../../../server/apps/restful/interfaces/Permission.interface';
 import { PermissionService } from '../services/main/permission.service';
+import { parseDate } from '../../../server/apps/restful/utils/date.service';
 
 
 @Component({
@@ -15,20 +16,20 @@ import { PermissionService } from '../services/main/permission.service';
 })
 export class PermissionsComponent implements OnInit {
 
-  gAuth: IAuthModel = {
+  gAuth = <IAuthModel>{
     auth: '',
-    avatar: '',
-    charge: '',
-    name: '',
     email: '',
-    isactive: false,
-    lastLogin: '',
-    signupDate: '',
+    avatar: '',
+    name: '',
+    signupDate: Date.now(),
+    lastLogin: Date.now(),
     permission: <IPermission>{
       reader: false,
       write: false,
       delete: false
-    }
+    },
+    charge: '',
+    isactive: false,
   };
 
   constructor(

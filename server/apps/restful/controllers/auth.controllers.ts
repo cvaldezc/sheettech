@@ -37,6 +37,7 @@ export class AuthController {
                         cauth.charge = response.charge;
                         cauth.name = UtilsService.strCapitalize(response.names);
                         cauth.isactive = true;
+                        cauth.lastLogin = Date.now()
                         cauth.save( (err, user) => {
                             if (err) return res.status(500).json({ status: false, raise: err });
 
@@ -46,6 +47,8 @@ export class AuthController {
                         return res.status(404).json({status: false, raise: 'El usuario no se encuentra registrado.'});
                     } else {
                         let token = TokenServices.createToken(auth); // req.user = auth;
+                        auth.lastLogin = Date.now()
+                        auth.save()
                         return res.status(200).json({status: true, token});
                     }
                 });
@@ -79,6 +82,7 @@ export class AuthController {
 
     /**
      * getAuth
+     * @param auth
      */
     public getAuth(req: Request, res: Response) {
         // console.log(req.query)
@@ -87,6 +91,15 @@ export class AuthController {
             if (!_auth) return res.status(404).json({status: false, raise: 'No se ha encontrado datos'})
 
             res.status(200).json(_auth)
+        })
+    }
+
+    public getUsersRegister(req: Request, res: Response) {
+        Auth.find({}, {_id: 0, permission: 0}, (err: any, auths: IAuthModel[]) => {
+            if (err) return res.status(500).json({ raise: err })
+            if (!auths) return res.status(404).json({ raise: 'No found auths' })
+
+            res.status(200).json(auths)
         })
     }
 

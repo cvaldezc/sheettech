@@ -6,11 +6,10 @@ import { isAuth } from '../restful/middlewares/auth.middleware';
 
 const AuthUrls = express.Router();
 
-// routes for auth
-
-AuthUrls.post('/decode', new AuthController().decodeToken);
-AuthUrls.post('/signin', new AuthController().SignIn);
-
+// routes auth
+AuthUrls.post('/signin', new AuthController().SignIn)
+AuthUrls.post('/decode', new AuthController().decodeToken)
+AuthUrls.get('/all', new AuthController().getUsersRegister)
 // Permissions
 AuthUrls.put('/permission', isAuth, new AuthController().updatePermission)
 AuthUrls.get('', new AuthController().getAuth)

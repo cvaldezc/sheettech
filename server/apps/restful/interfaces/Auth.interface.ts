@@ -5,9 +5,9 @@ export interface IAuthModel {
     email: string;
     avatar: string;
     name: string,
-    signupDate: string;
-    lastLogin: string;
-    permission: IPermission;
+    signupDate?: number|string|Date;
+    lastLogin?: number|string|Date;
+    permission?: IPermission;
     charge: string;
     isactive: boolean;
 }

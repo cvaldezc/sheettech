@@ -26,8 +26,9 @@ import { PageNotFoundComponent } from './utils/not-found.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { MenuComponent } from './utils/menus/menu.component';
 import { ToolBarComponent } from './utils/menus/toolbar.component';
-import { UsersComponent } from './users/users.component';
 import { PermissionService } from './services/main/permission.service';
+import { UsersComponent } from './users/users.component';
+import { UserDetailsComponent } from './users/user-details.component';
 
 
 @NgModule({
@@ -60,6 +61,7 @@ import { PermissionService } from './services/main/permission.service';
     PageNotFoundComponent,
     PermissionsComponent,
     UsersComponent,
+    UserDetailsComponent
   ],
   providers: [PermissionService],
   // schemas: [CUSTOM_ELEMENTS_SCHEMA],

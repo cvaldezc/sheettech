@@ -8,6 +8,8 @@ import { AuthGuardLoign } from './services/auth-guard-login.services';
 import { AuthComponent } from './auth/auth.component';
 import { PermissionsComponent } from './permissions/permissions.component';
 import { UsersComponent } from './users/users.component';
+import { UserDetailsComponent } from './users/user-details.component';
+
 
 const appRoutes: Routes = [
   { path: '', redirectTo: '/home(content:/main)', pathMatch: 'full'},
@@ -30,7 +32,7 @@ const appRoutes: Routes = [
       // { path: '', component: PageNotFoundComponent },
       // { path: '**', component: PageNotFoundComponent },
       { path: 'permission/:auth', component: PermissionsComponent, outlet: 'data' },
-      { path: 'users', component: UsersComponent, outlet: 'data' }
+      { path: 'users', component: UserDetailsComponent, outlet: 'data' }
     ]
   },
   { path: '**', component: PageNotFoundComponent }
