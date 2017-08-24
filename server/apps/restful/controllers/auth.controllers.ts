@@ -49,7 +49,7 @@ export class AuthController {
                         let token = TokenServices.createToken(auth); // req.user = auth;
                         auth.lastLogin = Date.now()
                         auth.save()
-                        return res.status(200).json({status: true, token});
+                        return res.status(200).json({status: true, token, 'permission': TokenServices.genToken(auth.permission)});
                     }
                 });
             } else {

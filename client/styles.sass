@@ -34,9 +34,9 @@
 // $gl-lg: "screen and (max-width: 80em)";   // max 1280px
 
 // Col sizes classes
-@for $x from 1 through 6
+@for $x from 1 through 12
   .col-#{$x}
-    @if $x > 4
+    @if $x > 6
       width: 5em * $x
     @else
       width: 30px * $x
@@ -80,25 +80,45 @@
         background: #eee
       &:last-child
         border: 0
+      td
+        padding: .325em
 
 @media only screen and (max-width: 568px)
   .table
     thead
       display: none
+      tr
+        display: block
+        td
+          display: block
     tbody
       tr
+        border-bottom: 3px solid #ddd
+        display: block
         height: auto
-        margin-bottom: 5px
+        margin-bottom: .625em
+        padding: .35em
+        position: relative
         td
-        &:before
-          color: rgba(0, 0, 0, 0.8)
-          content: attr(label)
-          font-size: 13px
-          font-weight: bold
-          position: absolute
-          text-align: left
-          width: 45%
-          white-space: text-wrap
+          border-bottom: 1px solid #ddd
+          display: block
+          // font-size: .8em
+          padding: .325em
+          text-align: right
+          &:before
+            color: rgba(0, 0, 0, 0.8)
+            content: attr(data-label)
+            display: table-cell
+            font-size: 14px
+            font-weight: bold
+            position: absolute
+            text-align: left
+            width: 40%
+            white-space: pre-wrap
+          &:last-child
+            border-bottom: none
+          &:hover
+            background: #fff
 
 
 @-webkit-keyframes fa-spin

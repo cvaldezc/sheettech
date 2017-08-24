@@ -3,8 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
+import { PermissionGuard } from "../permission-guard.service";
 import { HttpServices } from '../../services/http.Services';
 import { IAuthModel } from '../../../../server/apps/restful/interfaces/Auth.interface';
+import { IPermission } from '../../../../server/apps/restful/interfaces/Permission.interface';
 
 
 interface IAuthService {
@@ -15,15 +17,18 @@ interface IAuthService {
 }
 
 @Injectable()
-export class AuthServices implements IAuthService {
+export class AuthServices extends PermissionGuard implements IAuthService {
 
     public isLoggedIn = false;
     public isAdmin = false;
-
+    public permission: IPermission
 
     constructor(
         public http: HttpClient,
-        private httpService: HttpServices) { }
+        private httpService: HttpServices) {
+            super();
+            this.decodePermission().subscribe(_permission => this.permission = _permission)
+    }
 
     public loginService(credentials: any): Observable<any> {
         let options = this.httpService.optionsRequest

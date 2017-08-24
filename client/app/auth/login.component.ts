@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthServices } from '../services/auth/auth.service';
 import { AuthGuardLoign } from '../services/auth-guard-login.services';
+import { TokenService } from '../services/token.service';
 
 
 interface ILoginComponent {
@@ -24,9 +25,10 @@ export class LoginComponent implements OnInit, ILoginComponent {
         private authService: AuthServices,
         private authGuard: AuthGuardLoign,
         private notify: NotificationsService,
-        private router: Router) {
+        private router: Router,
+        private tokenService: TokenService) {
             // console.log(this.router.url);
-            this.authGuard.decodedTokenLocal().subscribe( (res: any) => {
+            this.tokenService.decodedTokenLocal().subscribe( (res: any) => {
                 console.log('STATUS OF PROMISES ', res);
                 if (res.status) {
                     setTimeout( () => this.router.navigate(['/']), 4600);
@@ -88,6 +90,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
                     } else if (response.status === 200) {
                         // redirect to Library
                         localStorage.setItem('token', `Bearer ${response.body.token}`);
+                        localStorage.setItem('permission', `${response.body.permission}`)
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
                         AuthServices.prototype.isLoggedIn = true;
                         setTimeout( () => location.href = '/' , 2600);

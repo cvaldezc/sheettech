@@ -30,6 +30,8 @@ import { PermissionService } from './services/main/permission.service';
 import { UsersComponent } from './users/users.component';
 import { UserDetailsComponent } from './users/user-details.component';
 
+import { FilterPipe } from './pipes/filter.pipe';
+
 
 @NgModule({
 
@@ -54,6 +56,7 @@ import { UserDetailsComponent } from './users/user-details.component';
     MdSlideToggleModule
   ],
   declarations: [
+    FilterPipe,
     AppComponent,
     MainComponent,
     ToolBarComponent,

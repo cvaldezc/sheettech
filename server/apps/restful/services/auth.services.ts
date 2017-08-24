@@ -21,6 +21,15 @@ export class TokenServices {
         return jwt.sign(payload, config.SECRET_TOKEN)
     }
 
+    public static genToken(encode: string|object|any): string {
+        let payload: object = {
+            sub: encode,
+            iat: moment().unix(),
+            exp: moment().add(15, 'days').unix()
+        }
+        return jwt.sign(payload, config.SECRET_TOKEN)
+    }
+
     /**
      * verifyToken
      */

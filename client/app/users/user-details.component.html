@@ -4,25 +4,39 @@
             Lista de Usuarios Registrados
         </h4>
     </header>
+    <section>
+        <md-input-container fxFlex="100" floatPlaceholder="auto">
+            <input mdInput type="search" placeholder="Buscar" [(ngModel)]="search">
+            <span mdPrefix>
+                <md-icon class="md-24">filter_list</md-icon>
+            </span>
+        </md-input-container>
+    </section>
     <table class="table">
         <thead class="light-blue white-text">
             <tr>
                 <th class="col-1">#</th>
                 <th class="col-2">ID</th>
                 <th>Nombres</th>
-                <th>Activo</th>
-                <th>Registrado</th>
-                <th>Permisos</th>
+                <th class="col-5">Registrado</th>
+                <th class="col-2">Activo</th>
+                <th class="col-2">Permisos</th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let auth of auths; let $index = index">
-                <td>{{$index + 1}}</td>
-                <td>{{auth.auth}}</td>
-                <td>{{auth.name}}</td>
-                <td>{{auth.isactive}}</td>
-                <td>{{auth.signupDate}}</td>
-                <td></td>
+            <tr *ngFor="let auth of auths | filter: {'name': search}; let $index = index">
+                <td data-label="#" class="center-align">{{$index + 1}}</td>
+                <td data-label="ID">{{auth.auth}}</td>
+                <td data-label="Nombres">{{auth.name}}</td>
+                <td data-label="Register">{{auth.signupDate | date: 'medium'}}</td>
+                <td data-label="Activo" class="center-align">
+                    <md-icon [ngClass]="{'light-green-text': auth.isactive, 'red-text': !auth.isactive}">{{auth.isactive? 'check_circle': 'remove_circle_outline'}}</md-icon>
+                </td>
+                <td data-label="Permisos" class="center-align">
+                    <a href="#">
+                        <md-icon>settings_input_component</md-icon>
+                    </a>
+                </td>
             </tr>
         </tbody>
         <tfoot>
