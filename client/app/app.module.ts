@@ -31,6 +31,9 @@ import { UsersComponent } from './users/users.component';
 import { UserDetailsComponent } from './users/user-details.component';
 
 import { FilterPipe } from './pipes/filter.pipe';
+import { TokenService } from "./services/token.service";
+import { LibraryRoutingModule } from "./library/library.routing";
+import { LibraryModule } from "./library/library.module";
 
 
 @NgModule({
@@ -40,7 +43,9 @@ import { FilterPipe } from './pipes/filter.pipe';
     HttpClientModule,
     FormsModule,
     AuthModule,
+    LibraryModule,
     AppRoutingModule,
+    // LibraryRoutingModule,
     BrowserAnimationsModule,
     FlexLayoutModule,
     SimpleNotificationsModule,
@@ -66,7 +71,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     UsersComponent,
     UserDetailsComponent
   ],
-  providers: [PermissionService],
+  providers: [PermissionService, TokenService],
   // schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [ AppComponent ]
 })

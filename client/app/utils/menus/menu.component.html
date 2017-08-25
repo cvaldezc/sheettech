@@ -1,12 +1,21 @@
 <md-sidenav #navmain align="start" opened="false" class="sidenav-container">
     <md-nav-list>
-        <a md-list-item (click)="navmain.toggle()">
+        <a md-list-item (click)="navmain.toggle()" [routerLink]="['/home']">
             <i class="material-icons md-24" >local_library</i>
-            <strong>Biblioteca</strong>
+            <strong> Biblioteca</strong>
         </a>
-        <a md-list-item *ngIf="isAdmin" (click)="navmain.toggle()" [routerLink]="[{outlets: { data: ['permission', authPrms ] }}] ">Permisos</a>
-        <a md-list-item (click)="navmain.toggle()" [routerLink]="[{outlets: { data: 'users' }}]">Usuarios</a>
-        <a md-list-item (click)="navmain.toggle()" href="page3.html">Page 3 {{isAdmin}}</a>
+        <a md-list-item *ngIf="isAdmin" (click)="navmain.toggle()" [routerLink]="['./permission', authPrms] ">
+            <md-icon class="md-24">settings_input_component</md-icon>
+            <span>Permisos</span>
+        </a>
+        <a md-list-item *ngIf="isAdmin" (click)="navmain.toggle()" [routerLink]="['./users']">
+            <md-icon class="md-24">supervisor_account</md-icon>
+            <span> Usuarios</span>
+        </a>
+        <a md-list-item (click)="navmain.toggle()" [routerLink]="['./library']">
+            <md-icon class="md-24">library_books</md-icon>
+            <span> Biblioteca</span>
+        </a>
         <!-- <a md-list-item (click)="navmain.toogle()" [routerLink]="">  -->
     </md-nav-list>
     <!-- block ngModel -->

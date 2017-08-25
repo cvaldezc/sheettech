@@ -39,6 +39,7 @@ export class AuthServices extends PermissionGuard implements IAuthService {
 
     public logoutService(): void {
         localStorage.removeItem('token');
+        localStorage.removeItem('permission');
         AuthServices.prototype.isLoggedIn = false;
         AuthServices.prototype.isAdmin = false;
     }

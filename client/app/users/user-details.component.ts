@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { AuthServices } from '../services/auth/auth.service';
+import { IPermission } from "../../../server/apps/restful/interfaces/Permission.interface";
 
 @Component({
     selector: 'user-details',
@@ -9,6 +10,11 @@ import { AuthServices } from '../services/auth/auth.service';
 export class UserDetailsComponent implements OnInit {
 
     auths: any
+    permission: IPermission = {
+        reader: true,
+        write: false,
+        delete: false
+    }
 
     constructor(private servAuth: AuthServices) {
         console.log(this.servAuth.isAdmin)
@@ -27,6 +33,7 @@ export class UserDetailsComponent implements OnInit {
                     console.log(error)
                 }
             )
+        console.log(this.servAuth.permission)
     }
 
 }

@@ -7,6 +7,7 @@ import { IAuthModel } from '../../../server/apps/restful/interfaces/Auth.interfa
 import { IPermission } from '../../../server/apps/restful/interfaces/Permission.interface';
 import { PermissionService } from '../services/main/permission.service';
 import { parseDate } from '../../../server/apps/restful/utils/date.service';
+import { TokenService } from "../services/token.service";
 
 
 @Component({
@@ -35,7 +36,8 @@ export class PermissionsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private servPermission: PermissionService,
-    private notity: NotificationsService) { }
+    private notity: NotificationsService,
+    private token: TokenService) { }
 
   permission: IPermission = {
     reader: false,
@@ -81,6 +83,7 @@ export class PermissionsComponent implements OnInit {
           if (saved.status) {
             this.notity.success('Felicidades!', 'Datos Guardados correctamente')
             this.permission = saved.permission
+            this.saveLocalPermission()
           }else{
             this.notity.alert('Alerta!', `${saved.raise}`)
           }
@@ -88,6 +91,20 @@ export class PermissionsComponent implements OnInit {
         err => {
           this.notity.error('Alerta!', `${err.error.raise}`)
         }
+    )
+  }
+
+  saveLocalPermission(): void {
+    this.token.decodedTokenLocal().subscribe(
+      (observer: any) => {
+        if (observer.payload.auth == this.route.snapshot.params['auth']) {
+          this.servPermission.encodePermission(this.permission)
+            .subscribe( (observer: any) => {
+              console.log(observer)
+              localStorage.setItem('permission', observer.token)
+            })
+        }
+      }
     )
   }
 

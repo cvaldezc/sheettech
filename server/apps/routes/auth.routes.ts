@@ -10,6 +10,7 @@ const AuthUrls = express.Router();
 AuthUrls.post('/signin', new AuthController().SignIn)
 AuthUrls.post('/decode', new AuthController().decodeToken)
 AuthUrls.get('/all', new AuthController().getUsersRegister)
+AuthUrls.post('/gentoken', new AuthController().generateToken)
 // Permissions
 AuthUrls.put('/permission', isAuth, new AuthController().updatePermission)
 AuthUrls.get('', new AuthController().getAuth)

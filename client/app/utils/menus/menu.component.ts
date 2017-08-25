@@ -16,7 +16,9 @@ export class MenuComponent implements OnInit {
     isLogin = false
     isAdmin = false
 
-    constructor(private authGuard: AuthGuardLoign, private servAuth: AuthServices) {
+    constructor(
+        private authGuard: AuthGuardLoign,
+        private servAuth: AuthServices) {
         this.isAdmin = servAuth.isAdmin
         this.isLogin = servAuth.isLoggedIn
     }
@@ -31,7 +33,7 @@ export class MenuComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.authGuard.decodedTokenLocal()
+        this.servAuth.decodedTokenLocal()
             .subscribe(
                 (observer: any) => {
                     // console.log("OBserver", observer)

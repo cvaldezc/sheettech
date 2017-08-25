@@ -14,7 +14,6 @@ import { Observable } from 'rxjs/Observable';
 // import * as jwt_decode from 'jwt-decode';
 // import * as moment from 'moment';
 
-import { TokenService } from './token.service';
 import { HttpServices } from '../services/http.Services';
 import { AuthServices } from '../services/auth/auth.service';
 import { IAuthGuard } from '../../../server/apps/restful/interfaces/AuthGuard.interface';
@@ -27,8 +26,7 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
         private router: Router,
         private http: HttpClient,
         private authService: AuthServices,
-        private httpService: HttpServices,
-        private tokenService) { }
+        private httpService: HttpServices) { }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean>|boolean {
         let url: string;
@@ -51,7 +49,7 @@ export class AuthGuardLoign implements CanActivate, CanActivateChild, CanLoad {
         // tslint:disable-next-line
         var status: Observable<boolean> = Observable.create(
             (observer) => {
-                this.tokenService.decodedTokenLocal().subscribe( (next: any) => {
+                this.authService.decodedTokenLocal().subscribe( (next: any) => {
                     // console.log(next , 'DECODE TOKEN LOCAL')
                     if (url.startsWith('/login') && next.status) {
                         this.router.navigateByUrl('/');

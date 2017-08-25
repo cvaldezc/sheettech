@@ -17,7 +17,7 @@ export class ToolBarComponent {
       }
 
     sendLogout(): void {
-        location.href = '/home/logout';
+        this.router.navigate(['/logout'])
     }
 
 }

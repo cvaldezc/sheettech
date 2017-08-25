@@ -81,6 +81,13 @@ export class AuthController {
     }
 
     /**
+     * generateToken
+     */
+    public generateToken(req: Request, res: Response) {
+        res.status(201).send({token: TokenServices.genToken(req.body['pre'])})
+    }
+
+    /**
      * getAuth
      * @param auth
      */

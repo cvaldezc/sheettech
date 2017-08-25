@@ -1,8 +1,12 @@
 <article>
     <header>
-        <h4>
+        <h4 fxFlex="80">
             Lista de Usuarios Registrados
         </h4>
+        <a fxFlex md-icon-button href="" class="light-green-text">
+            <md-icon class="md-24">add_circle_outline</md-icon>
+            <span>NUEVO USUARIO</span>
+        </a>
     </header>
     <section>
         <md-input-container fxFlex="100" floatPlaceholder="auto">
@@ -33,7 +37,7 @@
                     <md-icon [ngClass]="{'light-green-text': auth.isactive, 'red-text': !auth.isactive}">{{auth.isactive? 'check_circle': 'remove_circle_outline'}}</md-icon>
                 </td>
                 <td data-label="Permisos" class="center-align">
-                    <a href="#">
+                    <a [routerLink]="['/home', 'permission', auth.auth]">
                         <md-icon>settings_input_component</md-icon>
                     </a>
                 </td>

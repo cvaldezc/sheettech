@@ -12,29 +12,33 @@ import { UserDetailsComponent } from './users/user-details.component';
 
 
 const appRoutes: Routes = [
-  { path: '', redirectTo: '/home(content:/main)', pathMatch: 'full'},
+  { path: '', redirectTo: '/home', pathMatch: 'full'},
   {
-    path: '',
+    path: 'auth',
     loadChildren: 'app/auth/auth.module#AuthModule'
   },
   {
     path: 'home',
-    component: AuthComponent,
+    component: MainComponent,
     canActivate: [AuthGuardLoign],
     children: [
-      { path: 'logout', redirectTo: '/logout' }
+      { path: 'permission/:auth', component: PermissionsComponent },
+      { path: 'users', component: UserDetailsComponent },
+      { path: '', loadChildren: 'app/library/library.module#LibraryModule' }
     ]
   },
-  {
-    path: 'main',
-    component: MainComponent, outlet: 'content', canActivate: [AuthGuardLoign],
-    children: [
-      // { path: '', component: PageNotFoundComponent },
-      // { path: '**', component: PageNotFoundComponent },
-      { path: 'permission/:auth', component: PermissionsComponent, outlet: 'data' },
-      { path: 'users', component: UserDetailsComponent, outlet: 'data' }
-    ]
-  },
+  // {
+  //   path: 'main',
+  //   component: MainComponent, outlet: 'content', canActivate: [AuthGuardLoign],
+  //   // children: [
+  //   //   // { path: '', component: PageNotFoundComponent },
+  //   //   // { path: '**', component: PageNotFoundComponent },
+  //   //   { path: 'permission/:auth', component: PermissionsComponent, outlet: 'data' },
+  //   //   { path: 'users', component: UserDetailsComponent, outlet: 'data' }
+  //   // ]
+  // },
+  // { path: 'permission/:auth', component: PermissionsComponent, },
+  // { path: 'users', component: UserDetailsComponent },
   { path: '**', component: PageNotFoundComponent }
 ];
 

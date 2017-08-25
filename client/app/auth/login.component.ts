@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 
 import { AuthServices } from '../services/auth/auth.service';
 import { AuthGuardLoign } from '../services/auth-guard-login.services';
-import { TokenService } from '../services/token.service';
 
 
 interface ILoginComponent {
@@ -25,10 +24,9 @@ export class LoginComponent implements OnInit, ILoginComponent {
         private authService: AuthServices,
         private authGuard: AuthGuardLoign,
         private notify: NotificationsService,
-        private router: Router,
-        private tokenService: TokenService) {
+        private router: Router) {
             // console.log(this.router.url);
-            this.tokenService.decodedTokenLocal().subscribe( (res: any) => {
+            this.authService.decodedTokenLocal().subscribe( (res: any) => {
                 console.log('STATUS OF PROMISES ', res);
                 if (res.status) {
                     setTimeout( () => this.router.navigate(['/']), 4600);
@@ -61,7 +59,6 @@ export class LoginComponent implements OnInit, ILoginComponent {
         this.authService.loginService(this.auth)
             .subscribe(
                 response => {
-                    // console.log('IF SUCCESS', response);
                     this.isProcess = false;
                     if (response.status === 206) {
                         this.notify.bare('', `${response.body.raise}`, { timeOut: 2600, theClass: 'red accent-1'});
@@ -70,22 +67,9 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         // redirect to set permission by auth
                         localStorage.setItem('token', `Bearer ${response.body.token}`);
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
-                        AuthServices.prototype.isAdmin = true;
-                        AuthServices.prototype.isLoggedIn = true;
-                        setTimeout( () => location.href = `/home(content:main/(data:permission/${response.body.response.auth}))` , 2600);
-                        // this.router.navigateByUrl([
-                        //     { outlets:
-                        //         [
-                        //             {
-                        //                 content: ['main'],
-                        //             },
-                        //             {
-                        //                 data: [ 'permission' ]
-                        //             },
-                        //             [response.body.response.auth]
-                        //         ]
-                        //     }
-                        // ])
+                        setTimeout( () => location.href = `/home/(data:permission/${response.body.response.auth})`, 2600);
+                        // ['/home', { outlets: { 'data': ['permission', response.body.response.auth] } } ]
+                        // = `/home(content:main/(data:permission/${response.body.response.auth}))`
                         // {outlets: { data: ['permission', response.body.response.auth ] }}
                     } else if (response.status === 200) {
                         // redirect to Library
@@ -93,7 +77,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         localStorage.setItem('permission', `${response.body.permission}`)
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
                         AuthServices.prototype.isLoggedIn = true;
-                        setTimeout( () => location.href = '/' , 2600);
+                        setTimeout( () => location.href = '/home' , 2400);
                     }
                 },
                 (err) => {
