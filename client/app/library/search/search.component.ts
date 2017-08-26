@@ -4,6 +4,6 @@ import { Component } from '@angular/core';
     selector: 'search-library',
     templateUrl: './search.component.html'
 })
-export class SearchComponent {
+export class SearchLibraryComponent {
 
 }

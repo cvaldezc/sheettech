@@ -1,18 +1,22 @@
 <aside fxFlex="100">
     <md-card>
-        <!-- <md-card-content>
-            Text content
-        </md-card-content> -->
-        <md-grid-list cols="2" [rowHeight]="'100px'" [gutterSize]="'1px'">
-            <md-grid-tile [colspan]="1" [rowspan]="1">Tile 1</md-grid-tile>
-            <md-grid-tile [colspan]="1" [rowspan]="1">Tile 2</md-grid-tile>
-        </md-grid-list>
-        <md-card-actions>
-            <md-grid-list cols="4" rowHeight="fit" [style.height]="'100px" [gutterSize]="'1px'">
-                <md-grid-tile *ngFor="let tile of [1,2,3,4]" [colspan]="1" [rowspan]="1">
-                    Tile content
-                </md-grid-tile>
-            </md-grid-list>
+        <md-card-actions fxLayout="row" fxLayout.xs="column">
+            <md-input-container floatPlaceholder="auto">
+                <input mdInput formControlName="searchCode" type="text" required
+                       placeholder="Código">
+                <span mdPrefix><md-icon>dialpad</md-icon></span>
+            </md-input-container>
+            <md-input-container floatPlaceholder="auto">
+                <input mdInput formControlName="formControlName" type="text" required
+                        placeholder="Descripcion">
+                <span mdPrefix><md-icon>text_fields</md-icon></span>
+            </md-input-container>
+            <md-select  placeholder="Marca">
+                <md-option [value]=""></md-option>
+            </md-select>
+            <md-select  placeholder="Modelo">
+                <md-option [value]=""></md-option>
+            </md-select>
         </md-card-actions>
     </md-card>
 </aside>

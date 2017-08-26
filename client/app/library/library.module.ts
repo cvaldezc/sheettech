@@ -3,22 +3,34 @@ import { CommonModule } from '@angular/common';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { Router } from '@angular/router';
 import {
-  MdIconModule
+  MdIconModule,
+  MdGridListModule,
+  MdCardModule,
+  MdInputModule,
+  MdSelectModule,
+  MdOptionModule
  } from '@angular/material';
 
 import { LibraryRoutingModule } from './library.routing';
 import { LibraryComponent } from "./library.component";
+import { SearchLibraryComponent } from "./search/search.component";
 
 @NgModule({
   imports: [
     CommonModule,
-    // BrowserAnimationsModule,
-    LibraryRoutingModule,
+    MdGridListModule,
+    MdCardModule,
     MdIconModule,
+    MdInputModule,
+    MdSelectModule,
+    MdOptionModule,
+    LibraryRoutingModule,
   ],
   declarations: [
-    LibraryComponent
+    LibraryComponent,
+    SearchLibraryComponent
   ],
+  // exports: [LibraryComponent],
   providers: []
 })
 export class LibraryModule {
