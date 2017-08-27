@@ -1,22 +1,33 @@
 <aside fxFlex="100">
     <md-card>
-        <md-card-actions fxLayout="row" fxLayout.xs="column">
-            <md-input-container floatPlaceholder="auto">
-                <input mdInput formControlName="searchCode" type="text" required
-                       placeholder="Código">
+        <md-card-actions fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center stretch" fxLayout.xs="column" fxLayoutGap="10px">
+            <md-input-container floatPlaceholder="auto" fxFlex="20%">
+                <input mdInput #searchcode maxlength="15" formControlName="searchCode" type="text" required placeholder="Código">
+                <md-hint align="end">{{searchcode.value.length}} / 15</md-hint>
                 <span mdPrefix><md-icon>dialpad</md-icon></span>
             </md-input-container>
-            <md-input-container floatPlaceholder="auto">
-                <input mdInput formControlName="formControlName" type="text" required
-                        placeholder="Descripcion">
+            <md-input-container floatPlaceholder="auto" fxFlex="40%">
+                <input mdInput formControlName="formControlName" type="text" required placeholder="Descripcion">
                 <span mdPrefix><md-icon>text_fields</md-icon></span>
             </md-input-container>
-            <md-select  placeholder="Marca">
-                <md-option [value]=""></md-option>
-            </md-select>
-            <md-select  placeholder="Modelo">
-                <md-option [value]=""></md-option>
-            </md-select>
+            <md-input-container floatPlaceholder="always" fxFlex="20%">
+                <input mdInput type="text" required [mdAutocomplete]="acbrand" placeholder="Marca">
+                <span mdPrefix><md-icon>fingerprint</md-icon></span>
+            </md-input-container>
+            <md-autocomplete #acbrand="mdAutocomplete">
+                <md-option *ngFor="let choice of dBrand" [value]="choice.id">
+                    {{ choice.name }}
+                </md-option>
+            </md-autocomplete>
+            <md-input-container floatPlaceholder="always" fxFlex="20%">
+                <input mdInput type="text" required placeholder="Modelo" [mdAutocomplete]="acmodel">
+                <span mdPrefix><md-icon>group_work</md-icon></span>
+            </md-input-container>
+            <md-autocomplete #acmodel="mdAutocomplete">
+                <md-option *ngFor="let choice of dModel" [value]="choice.id">
+                    {{ choice.name }}
+                </md-option>
+            </md-autocomplete>
         </md-card-actions>
     </md-card>
 </aside>

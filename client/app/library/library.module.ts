@@ -8,8 +8,10 @@ import {
   MdCardModule,
   MdInputModule,
   MdSelectModule,
-  MdOptionModule
+  MdOptionModule,
+  MdAutocompleteModule
  } from '@angular/material';
+ import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { LibraryRoutingModule } from './library.routing';
 import { LibraryComponent } from "./library.component";
@@ -24,7 +26,9 @@ import { SearchLibraryComponent } from "./search/search.component";
     MdInputModule,
     MdSelectModule,
     MdOptionModule,
+    MdAutocompleteModule,
     LibraryRoutingModule,
+    FlexLayoutModule
   ],
   declarations: [
     LibraryComponent,
