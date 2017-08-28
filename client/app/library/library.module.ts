@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 // import { Router } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MdIconModule,
   MdGridListModule,
@@ -9,13 +10,17 @@ import {
   MdInputModule,
   MdSelectModule,
   MdOptionModule,
-  MdAutocompleteModule
+  MdAutocompleteModule,
+  MdButtonModule
  } from '@angular/material';
  import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { LibraryRoutingModule } from './library.routing';
-import { LibraryComponent } from "./library.component";
-import { SearchLibraryComponent } from "./search/search.component";
+import { LibraryComponent } from './library.component';
+import { SearchLibraryComponent } from './search/search.component';
+import { NewBookComponent } from './book/new/new-book.component';
+import { LibraryMainComponent } from './library-main.component';
+import { BrandService } from '../services/sheet/brand.service';
 
 @NgModule({
   imports: [
@@ -27,15 +32,20 @@ import { SearchLibraryComponent } from "./search/search.component";
     MdSelectModule,
     MdOptionModule,
     MdAutocompleteModule,
+    MdButtonModule,
+    FormsModule,
+    ReactiveFormsModule,
     LibraryRoutingModule,
     FlexLayoutModule
   ],
   declarations: [
+    LibraryMainComponent,
     LibraryComponent,
-    SearchLibraryComponent
+    SearchLibraryComponent,
+    NewBookComponent
   ],
   // exports: [LibraryComponent],
-  providers: []
+  providers: [BrandService]
 })
 export class LibraryModule {
 

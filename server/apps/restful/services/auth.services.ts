@@ -1,4 +1,4 @@
-import * as fetch from 'node-fetch';
+import fetch from 'node-fetch';
 import * as FormData from 'form-data';
 import * as jwt from 'jsonwebtoken';
 import * as moment from 'moment';
@@ -71,7 +71,7 @@ export class TokenServices {
                 for (let key in auth) {
                     data.append(key, auth[key]);
                 }
-                fetch(config.servicesAuth, {
+                fetch(`${config.remoteservice}auth/`, {
                     method: 'POST',
                     // headers: {
                     //     'Content-Type': 'multipart/form-data', // application/x-www-form-urlencoded

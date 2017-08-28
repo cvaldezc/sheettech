@@ -1,0 +1,89 @@
+<a md-button [routerLink]="['/home', 'library', 'sheet']"> < REGRESAR </a>
+<md-card>
+    <md-card-header>
+        <!-- <md-icon mdCardAvatar class="md-48">book</md-icon> -->
+        <md-card-title><strong>Nueva Hoja Técnica</strong></md-card-title>
+        <!-- <md-card-subtitle>Subtitle</md-card-subtitle> -->
+    </md-card-header>
+    <!-- <img mdCardImage src="Card wide image source"> -->
+    <md-card-content
+        fxLayout="row"
+        fxLayout.xs="column"
+        fxLayout.sm="row"
+        fxLayoutGap="10px"
+        fxLayoutWrap>
+        <md-input-container floatPlaceholder="auto"
+            fxFlex.xs="100%"
+            fxFlex.sm="100%"
+            fxFlex.gt-sm="100%"
+            fxFlex.lt-md="300px"
+            fxFlex.md="300px"
+            fxFlex.lg="300px"
+            fxFlex.xl="300px">
+            <input mdInput #sheet type="text" required placeholder="ID Hoja" maxlength="15" disabled>
+            <md-hint align="end">{{sheet.value.length}} / 15</md-hint>
+            <span mdPrefix>
+                <md-icon>dialpad</md-icon>
+            </span>
+            <span mdSuffix>
+                <button type="button" md-mini-fab>
+                    <md-icon class="">search</md-icon>
+                </button>
+            </span>
+        </md-input-container>
+        <md-input-container floatPlaceholder="auto"
+            fxFlex.xs="100%"
+            fxFlex.sm="100%"
+            fxFlex.md="100%"
+            fxFlex.lg="100%"
+            fxFlex.xl="100%">
+            <input mdInput type="text" placeholder="Descripción" disabled>
+            <span mdPrefix>
+                <md-icon>text_fields</md-icon>
+            </span>
+        </md-input-container>
+        <md-input-container floatPlaceholder="always" fxFlex="auto">
+            <input type="text" mdInput placeholder="Marca" [mdAutocomplete]="brandref" [formControl]="brandCtrl">
+            <span mdPrefix><md-icon>fingerprint</md-icon></span>
+        </md-input-container>
+        <md-autocomplete #brandref="mdAutocomplete">
+            <md-option *ngFor="let choice of brandLst | async" [value]="choice.brand_id">
+                {{ choice.brand }}
+            </md-option>
+        </md-autocomplete>
+        <md-input-container floatPlaceholder="always" fxFlex="auto">
+            <input type="text" mdInput placeholder="Modelo" [mdAutocomplete]="modelref">
+            <span mdPrefix><md-icon>group_work</md-icon></span>
+        </md-input-container>
+
+        <md-autocomplete #modelref="mdAutocomplete" [displayWith]="onSelectConvertValueToInputFn">
+            <md-option *ngFor="let choice of choices" [value]="choice">
+                Choice shown in dropdown
+            </md-option>
+        </md-autocomplete>
+        <md-input-container floatPlaceholder="auto" fxFlex="grow">
+            <input mdInput #filetext type="text" placeholder="&nbsp;&nbsp;&nbsp;Adjuntar Hoja Técnica"
+                disabled value="{{ fileTech.files.length ? '&nbsp;&nbsp;&nbsp;'+fileTech.files[0].name : '' }}">
+            <span mdPrefix>
+                <button type="button" md-fab (click)="fileTech.click()">
+                    <md-icon>attach_file</md-icon>
+                </button>
+            </span>
+            <input hidden type="file" #fileTech (change)="filetext.click()">
+        </md-input-container>
+    </md-card-content>
+    <md-card-actions align="start">
+        <button type="button" class="amber" md-raised-button (click)="onAction(event)">
+            <md-icon>clear_all</md-icon>
+            LIMPIAR
+        </button>
+        <button type="button" class="light-blue white-text" md-raised-button (click)="onAction(event)">
+            <md-icon>save</md-icon>
+            <strong>GUARDAR CAMBIOS</strong>
+        </button>
+    </md-card-actions>
+
+    <!-- <md-card-footer>
+        Footer
+    </md-card-footer> -->
+</md-card>

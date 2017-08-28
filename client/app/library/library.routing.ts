@@ -1,18 +1,26 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { LibraryMainComponent } from "./library-main.component";
 import { LibraryComponent } from './library.component';
+import { NewBookComponent } from './book/new/new-book.component';
 
 
 const libraryRoutes: Routes = [
-    { path: 'library', component: LibraryComponent }
+    {
+        path: 'library',
+        component: LibraryMainComponent,
+        children: [
+            { path: 'sheet', component: LibraryComponent },
+            { path: 'new', component: NewBookComponent }
+        ]
+     }
 ]
 
-// export const routingLibrary: ModuleWithProviders = RouterModule.forChild(libraryRoutes)
 @NgModule({
     imports: [
         RouterModule.forChild(libraryRoutes)
     ],
-    exports: []
+    exports: [RouterModule]
 })
 export class LibraryRoutingModule { }

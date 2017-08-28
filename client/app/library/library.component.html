@@ -1,8 +1,12 @@
 <section>
     <header>
         <h2>
-            <i class="material-icons">book</i>
-            <span>Biblioteca</span>
+            <md-icon class="md-24">book</md-icon>
+            <span> Biblioteca</span>
+            <a md-raised-button class="right" [routerLink]="['/home', 'library', 'new']">
+                <md-icon class="">library_add</md-icon>
+                <span>NUEVA HOJA TECNICA</span>
+            </a>
         </h2>
     </header>
     <search-library></search-library>
