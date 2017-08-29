@@ -1,11 +1,11 @@
 <a md-button [routerLink]="['/home', 'library', 'sheet']"> < REGRESAR </a>
 <md-card>
     <md-card-header>
-        <!-- <md-icon mdCardAvatar class="md-48">book</md-icon> -->
+
         <md-card-title><strong>Nueva Hoja Técnica</strong></md-card-title>
-        <!-- <md-card-subtitle>Subtitle</md-card-subtitle> -->
+
     </md-card-header>
-    <!-- <img mdCardImage src="Card wide image source"> -->
+
     <md-card-content
         fxLayout="row"
         fxLayout.xs="column"
@@ -20,16 +20,17 @@
             fxFlex.md="300px"
             fxFlex.lg="300px"
             fxFlex.xl="300px">
-            <input mdInput #sheet type="text" required placeholder="ID Hoja" maxlength="15" disabled>
-            <md-hint align="end">{{sheet.value.length}} / 15</md-hint>
+            <input mdInput #icode [(ngModel)]="sheet.sheet" type="text" placeholder="ID Hoja" maxlength="15" disabled>
+            <md-hint align="end">{{icode.value.length}} / 15</md-hint>
             <span mdPrefix>
                 <md-icon>dialpad</md-icon>
             </span>
             <span mdSuffix>
-                <button type="button" md-mini-fab>
-                    <md-icon class="">search</md-icon>
+                <button type="button" md-mini-fab (click)="openDialog()">
+                    <md-icon>search</md-icon>
                 </button>
             </span>
+            <!-- You chose: {{selectedOption}} -->
         </md-input-container>
         <md-input-container floatPlaceholder="auto"
             fxFlex.xs="100%"
@@ -37,7 +38,7 @@
             fxFlex.md="100%"
             fxFlex.lg="100%"
             fxFlex.xl="100%">
-            <input mdInput type="text" placeholder="Descripción" disabled>
+            <input mdInput type="text" placeholder="Descripción" [(ngModel)]="sheet.name" disabled>
             <span mdPrefix>
                 <md-icon>text_fields</md-icon>
             </span>
@@ -65,24 +66,23 @@
             <input mdInput #filetext type="text" placeholder="&nbsp;&nbsp;&nbsp;Adjuntar Hoja Técnica"
                 disabled value="{{ fileTech.files.length ? '&nbsp;&nbsp;&nbsp;'+fileTech.files[0].name : '' }}">
             <span mdPrefix>
-                <button type="button" md-fab (click)="fileTech.click()">
-                    <md-icon>attach_file</md-icon>
+                <button type="button" class="grey darken-1 white-text" md-fab (click)="fileTech.click()">
+                    <md-icon class="md-28">attach_file</md-icon>
                 </button>
             </span>
-            <input hidden type="file" #fileTech (change)="filetext.click()">
+            <input hidden type="file" #fileTech (change)="filetext.click()" accept="application/pdf">
         </md-input-container>
     </md-card-content>
     <md-card-actions align="start">
-        <button type="button" class="amber" md-raised-button (click)="onAction(event)">
+        <button type="button" class="amber" md-raised-button (click)="cleanFields()">
             <md-icon>clear_all</md-icon>
             LIMPIAR
         </button>
-        <button type="button" class="light-blue white-text" md-raised-button (click)="onAction(event)">
+        <button type="button" class="light-blue white-text" md-raised-button (click)="saveSheet()">
             <md-icon>save</md-icon>
             <strong>GUARDAR CAMBIOS</strong>
         </button>
     </md-card-actions>
-
     <!-- <md-card-footer>
         Footer
     </md-card-footer> -->

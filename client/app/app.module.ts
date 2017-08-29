@@ -61,7 +61,7 @@ import { LibraryModule } from "./library/library.module";
     MdSlideToggleModule
   ],
   declarations: [
-    FilterPipe,
+    // FilterPipe,
     AppComponent,
     MainComponent,
     ToolBarComponent,
@@ -72,6 +72,7 @@ import { LibraryModule } from "./library/library.module";
     UserDetailsComponent
   ],
   providers: [PermissionService, TokenService],
+  // exports: [FilterPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [ AppComponent ]
 })

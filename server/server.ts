@@ -22,6 +22,8 @@ serve.use('/', (req, res) => {
 serve.use(function(req, res, next) {
     const err = new Error('Not Found');
     err['status'] = 404;
+    // console.log(err)
+    // res.status(404).json({ raiseGlobal: err })
     next(err);
 });
 
@@ -31,7 +33,7 @@ serve.use(function(err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
+    // render the error 'page'
     res.status(err.status || 500);
     res.render('error');
 });

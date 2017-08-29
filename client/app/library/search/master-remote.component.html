@@ -1,0 +1,59 @@
+<div md-dialog-content>
+    <!-- Busqueda de Materiales -->
+    <aside fxFlex="grow" fxLayoutGap="10px"
+        fxLayout.xs="column"
+        fxLayout.gt-xs="column"
+        fxLayout.lt-sm="column"
+        fxLayout.sm="row"
+        fxLayout.gt-sm="row"
+        fxLayout.lt-md="row"
+        fxLayout.md="row"
+        fxLayout.gt-md="row"
+        fxLayout.lt-lg="row"
+        fxLayout.lg="row"
+        fxLayout.gt-lg="row" fxLayout.lt-xl="row">
+        <md-input-container floatPlaceholder="auto" fxFlex>
+            <input mdInput #findcode type="text" placeholder="Código" maxlength="15" (keyup)="findCode($event, findcode.value)">
+            <md-hint align="end">{{ findcode.value.length }} / 15</md-hint>
+        </md-input-container>
+        <md-input-container floatPlaceholder="auto" fxFlex>
+            <input mdInput type="text" #findname placeholder="Descripción" (keyup)="findName($event, findname.value)">
+        </md-input-container>
+    </aside>
+</div>
+<div md-dialog-content fxLayout="column">
+    <table class="table" fxFlex="grow">
+        <thead class="light-blue lighten-2">
+            <tr>
+                <th class="col-1">#</th>
+                <th class="col-2">Código</th>
+                <th>Descripción</th>
+                <th class="col-1">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let x of ((masterList | async) | filter: {'name': search}); let $index = index">
+                <td data-label="#">{{ $index + 1}}</td>
+                <td data-label="Código">{{ x.code }}</td>
+                <td data-label="Nombres">{{ x.name }}</td>
+                <td data-label="Seleccionar">
+                    <button type="button" md-button md-dialog-close="{{x.code}},{{x.name}}">
+                        <md-icon class="light-green-text">check_circle</md-icon>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div md-dialog-actions>
+  <!-- <button md-button md-dialog-close="Option 1">Option 1</button> -->
+  <button type="button" md-button md-dialog-close="Nothing">
+    <md-icon>close</md-icon>
+    <span>SALIR</span>
+  </button>
+  <md-input-container floatPlaceholder="auto" fxFlex='auto'>
+        <input mdInput type="text"
+               placeholder="Filtrar resultado" [(ngModel)]="search">
+        <span mdPrefix><md-icon>filter_list</md-icon></span>
+    </md-input-container>
+</div>

@@ -11,7 +11,8 @@ import {
   MdSelectModule,
   MdOptionModule,
   MdAutocompleteModule,
-  MdButtonModule
+  MdButtonModule,
+  MdDialogModule
  } from '@angular/material';
  import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -22,6 +23,9 @@ import { NewBookComponent } from './book/new/new-book.component';
 import { LibraryMainComponent } from './library-main.component';
 import { BrandService } from '../services/sheet/brand.service';
 import { ModelService } from '../services/sheet/model.service';
+import { DialogMaterial } from './search/master-remote.component';
+import { MasterService } from '../services/master.service';
+import { FilterPipe } from '../pipes/filter.pipe';
 
 @NgModule({
   imports: [
@@ -35,18 +39,22 @@ import { ModelService } from '../services/sheet/model.service';
     MdAutocompleteModule,
     MdButtonModule,
     FormsModule,
+    MdDialogModule,
     ReactiveFormsModule,
     LibraryRoutingModule,
     FlexLayoutModule
   ],
   declarations: [
+    FilterPipe,
     LibraryMainComponent,
     LibraryComponent,
     SearchLibraryComponent,
-    NewBookComponent
+    NewBookComponent,
+    DialogMaterial
   ],
-  // exports: [LibraryComponent],
-  providers: [BrandService, ModelService]
+  exports: [FilterPipe],
+  bootstrap: [DialogMaterial],
+  providers: [BrandService, ModelService, MasterService]
 })
 export class LibraryModule {
 
