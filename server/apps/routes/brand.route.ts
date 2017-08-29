@@ -5,6 +5,6 @@ import { BrandController } from '../restful/controllers/brand.controller';
 const brandUrls: Router = Router();
 
 // remote all brands
-brandUrls.get('/get/remote/all', new BrandController().getRemoteAllBrand)
+brandUrls.get('/remote/all', new BrandController().getRemoteAllBrand)
 
 export { brandUrls }

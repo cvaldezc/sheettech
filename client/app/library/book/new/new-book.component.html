@@ -46,19 +46,19 @@
             <input type="text" mdInput placeholder="Marca" [mdAutocomplete]="brandref" [formControl]="brandCtrl">
             <span mdPrefix><md-icon>fingerprint</md-icon></span>
         </md-input-container>
-        <md-autocomplete #brandref="mdAutocomplete">
-            <md-option *ngFor="let choice of brandLst | async" [value]="choice.brand_id">
+        <md-autocomplete #brandref="mdAutocomplete" [displayWith]="displayFnBrand">
+            <md-option *ngFor="let choice of filteredBrands | async" [value]="choice">
                 {{ choice.brand }}
             </md-option>
         </md-autocomplete>
         <md-input-container floatPlaceholder="always" fxFlex="auto">
-            <input type="text" mdInput placeholder="Modelo" [mdAutocomplete]="modelref">
+            <input type="text" mdInput placeholder="Modelo" [mdAutocomplete]="modelref" [formControl]="modelCtrl">
             <span mdPrefix><md-icon>group_work</md-icon></span>
         </md-input-container>
 
-        <md-autocomplete #modelref="mdAutocomplete" [displayWith]="onSelectConvertValueToInputFn">
-            <md-option *ngFor="let choice of choices" [value]="choice">
-                Choice shown in dropdown
+        <md-autocomplete #modelref="mdAutocomplete" [displayWith]="displayFnModel">
+            <md-option *ngFor="let choice of filteredModels | async" [value]="choice.model">
+                {{ choice.model }}
             </md-option>
         </md-autocomplete>
         <md-input-container floatPlaceholder="auto" fxFlex="grow">

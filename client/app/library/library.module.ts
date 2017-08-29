@@ -21,6 +21,7 @@ import { SearchLibraryComponent } from './search/search.component';
 import { NewBookComponent } from './book/new/new-book.component';
 import { LibraryMainComponent } from './library-main.component';
 import { BrandService } from '../services/sheet/brand.service';
+import { ModelService } from '../services/sheet/model.service';
 
 @NgModule({
   imports: [
@@ -45,7 +46,7 @@ import { BrandService } from '../services/sheet/brand.service';
     NewBookComponent
   ],
   // exports: [LibraryComponent],
-  providers: [BrandService]
+  providers: [BrandService, ModelService]
 })
 export class LibraryModule {
 

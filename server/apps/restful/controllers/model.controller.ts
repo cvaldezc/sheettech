@@ -13,14 +13,21 @@ export class ModelController {
      * get remote all brand
      */
     public getRemoteAllModel(req: Request, res: Response) {
-        fetch(`${config.remoteservice}services/`)
-            .then(res => res.json())
-            .then(response => {
-                res.status(200).json(response)
-            })
-            .catch( reason => {
-                res.status(500).json({ raise: reason })
-            })
+        try {
+            fetch(`${config.remoteservice}services/?getallmodel=true`,
+                {
+                    method: 'GET',
+                })
+                .then(res => res.json())
+                .then(response => {
+                    res.status(200).json(response)
+                })
+                .catch( reason => {
+                    res.status(500).json({ raise: reason })
+                })
+        } catch (error) {
+            res.status(503).json({ raise: error })
+        }
     }
 
 }
