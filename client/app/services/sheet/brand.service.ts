@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpServices } from '../http.Services';
 import { IBrand } from '../../../../server/apps/restful/interfaces/Brand.inteface';
 
+
 interface IBrandService {
     getBrandRemote(): Observable<IBrand[]>;
 }

@@ -14,7 +14,8 @@ import {
   MdButtonModule,
   MdDialogModule
  } from '@angular/material';
- import { FlexLayoutModule } from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 
 import { LibraryRoutingModule } from './library.routing';
 import { LibraryComponent } from './library.component';
@@ -26,6 +27,8 @@ import { ModelService } from '../services/sheet/model.service';
 import { DialogMaterial } from './search/master-remote.component';
 import { MasterService } from '../services/master.service';
 import { FilterPipe } from '../pipes/filter.pipe';
+import { SheetService } from '../services/sheet/sheet.service';
+
 
 @NgModule({
   imports: [
@@ -42,7 +45,8 @@ import { FilterPipe } from '../pipes/filter.pipe';
     MdDialogModule,
     ReactiveFormsModule,
     LibraryRoutingModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    SimpleNotificationsModule.forRoot()
   ],
   declarations: [
     FilterPipe,
@@ -54,7 +58,11 @@ import { FilterPipe } from '../pipes/filter.pipe';
   ],
   exports: [FilterPipe],
   bootstrap: [DialogMaterial],
-  providers: [BrandService, ModelService, MasterService]
+  providers: [
+    SheetService,
+    BrandService,
+    ModelService,
+    MasterService]
 })
 export class LibraryModule {
 

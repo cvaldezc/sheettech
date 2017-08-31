@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { HttpEventType, HttpResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Observable } from "rxjs/Observable";
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
+import { NotificationsService } from 'angular2-notifications';
 
 import { BrandService } from '../../../services/sheet/brand.service';
 import { IBrand } from '../../../../../server/apps/restful/interfaces/Brand.inteface';
@@ -11,6 +13,8 @@ import { ModelService } from '../../../services/sheet/model.service';
 import { IModel } from '../../../../../server/apps/restful/interfaces/Model.interface';
 import { DialogMaterial } from '../../search/master-remote.component';
 import { ISheet } from "../../../../../server/apps/restful/interfaces/Sheet.interface";
+import { UtilService } from '../../../services/util.service';
+import { SheetService } from '../../../services/sheet/sheet.service';
 
 
 @Component({
@@ -33,30 +37,35 @@ export class NewBookComponent implements OnInit {
 
     sheet = {
         sheet: '',
-        name: ''}
+        name: '',
+        brand: '',
+        model: ''}
+
+    public options = {
+        position: ['top', 'right'],
+        timeOut: 2600,
+        lastOnBottom: true
+    }
 
     constructor(
+        private sheetServ: SheetService,
         private brandServ: BrandService,
         private modelServ: ModelService,
+        private notify: NotificationsService,
         public dialog: MdDialog) { }
 
     ngOnInit(): void {
-        this.sheet = {
-            sheet: '',
-            name: ''
-        }
-        this.brandServ.getBrandRemote()
-            .subscribe(observer => {
-                this.brandLst = observer
-            }, err => {
-                console.log(err)
-            })
+        // this.sheet = {
+        //     sheet: '',
+        //     name: ''
+        // }
+        this.brandServ.getBrandRemote().subscribe(observer => this.brandLst = observer )
         this.brandCtrl = new FormControl()
-        // console.log(this.brandCtrl)
         this.filteredBrands = this.brandCtrl.valueChanges
             .startWith(null)
             .map(brand => brand && typeof brand === 'object' ? brand.brand : brand)
             .map(name => name ? this.filterBrand(name) : this.brandLst)
+
         this.modelServ.getModelRemote().subscribe(observer => this.modelLst = observer)
         this.modelCtrl = new FormControl()
         this.filteredModels = this.modelCtrl.valueChanges
@@ -84,8 +93,9 @@ export class NewBookComponent implements OnInit {
     cleanFields(): void {
         this.sheet = {
             sheet: '',
-            name: ''
-        }
+            name: '',
+            brand: '',
+            model: ''}
         this.brandCtrl.setValue('')
         this.modelCtrl.setValue('')
         this.fileTech.nativeElement.value = ''
@@ -93,60 +103,95 @@ export class NewBookComponent implements OnInit {
     }
 
     saveSheet(): void {
-        // console.log(this.validForm())
-        this.validForm().then(result => console.info(result))
+        this.validForm().then(result => {
+            // console.info(result)
+            if (result) {
+                let form = new FormData()
+                form = UtilService.convertToForm(this.sheet)
+                form.append('file', this.fileTech.nativeElement.files[0])
+                this.sheetServ.save(form).subscribe(
+                    (event: any) => {
+                        if (event.type === HttpEventType.UploadProgress) {
+                            const percentDone = Math.round(100 * event.loaded / event.total);
+                            console.log(`File is ${percentDone}% uploaded.`);
+                          } else if (event instanceof HttpResponse) {
+                            console.log('File is completely uploaded!');
+                            console.log(event)
+                          }
+                    }
+                )
+            }
+        })
+
     }
 
-    async validForm() {
+    private async validForm() {
         let isValid: boolean = true
-        if ( this.sheet.sheet.trim() === '') {
+        console.info(this.sheet.sheet, typeof this.sheet.sheet)
+        if ( this.sheet.sheet === '') {
+            this.notify.warn('Alerta', 'Seleccione un código valido!')
             isValid = await false
         }
         if (isValid) {
-            await this.brandLst.forEach( (brand, index) => {
-                if (brand.brand == this.brandCtrl.value) {
-                    isValid = true
-                }
-            })
+            isValid = await this.validBrand()
+            if (!isValid) this.notify.warn('Alerta', 'Seleccione una marca de la lista')
         }
         if (isValid) {
-            await this.modelLst.forEach( (model, index) => {
-                if (model.model == this.modelCtrl.value) {
-                    isValid = true
-                }
-            })
+            isValid = await this.validModel()
+            if (!isValid) this.notify.warn('Alerta', 'Seleccione un modelo de la lista')
         }
         if (isValid) {
             if (this.fileTech.nativeElement.files.length) {
                 let ext: Array<string> = this.fileTech.nativeElement.files[0].name.split('.')
                 if (ext[ext.length - 1].toLowerCase() === 'pdf'){
-                    isValid = true
+                    isValid = await true
                 }else{
-                    isValid = false
+                    isValid = await false
+                    this.notify.warn('Alerta', 'El archivo tiene que ser en formato pdf!')
                 }
             }else{
-                isValid = false
+                isValid = await false
+                this.notify.warn('Alerta', 'Seleccione un archivo')
             }
         }
-        return isValid
+        return await isValid
     }
 
+    private async validBrand() {
+        let valid: boolean = false
+        this.brandLst.forEach( (brand, index) => {
+            if (brand.brand === this.brandCtrl.value) {
+                // console.log(brand.brand, this.brandCtrl.value)
+                this.sheet.brand = brand.brand_id
+                valid = true
+                return
+            }
+        })
+        return valid
+    }
+
+    private async validModel() {
+        let valid: boolean = false
+        this.modelLst.forEach( (model, index) => {
+            if (model.model === this.modelCtrl.value) {
+                console.log(model.model, this.modelCtrl.value)
+                this.sheet.model = model.model_id
+                valid = true
+                return
+            }
+        })
+        return valid
+    }
 
     filterBrand(val: string) {
-        // console.log(val)
-        return this.brandLst.filter((option: IBrand) => new RegExp(`^${val}`, 'gi').test(option.brand))
+        return this.brandLst.filter((option: IBrand) =>
+            new RegExp(`(${val})`, 'gi').test(option.brand))
     }
 
-    displayFnBrand(_brand: IBrand): string { // set value for selected
-        return _brand ? _brand.brand : '';
-    }
 
     filterModel(val: string) {
-        return this.modelLst.filter((option: IModel) => new RegExp(`^${val}`, 'gi').test(option.model))
-    }
-
-    displayfnModel(_model: IModel): string { // set value model
-        return _model ? _model.model : ''
+        return this.modelLst.filter((option: IModel) =>
+            new RegExp(`(${val})`, 'gi').test(option.model))
     }
 
 }

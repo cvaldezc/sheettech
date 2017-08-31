@@ -1,10 +1,14 @@
-import * as express from 'express';
+import { Router } from 'express';
+import { SheetController } from '../restful/controllers/sheet.controller';
+import { isAuth } from '../restful/middlewares/auth.middleware';
 
-import { SheetController } from '../restful/controllers/sheet.controllers';
+// import { SheetController } from '../restful/controllers/sheet.controllers';
 
 
-const SheetUrls = express.Router();
+const sheetUrls = Router();
 
-SheetUrls.get('/all', new SheetController().getAllDocuments);
+// SheetUrls.get('/all', new SheetController().getAllDocuments);
+// post save sheet in library
+sheetUrls.post('/save', new SheetController().saveSheet)
 
-export { SheetUrls };
+export { sheetUrls };

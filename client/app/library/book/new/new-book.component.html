@@ -47,8 +47,8 @@
             <input type="text" mdInput placeholder="Marca" [mdAutocomplete]="brandref" [formControl]="brandCtrl">
             <span mdPrefix><md-icon>fingerprint</md-icon></span>
         </md-input-container>
-        <md-autocomplete #brandref="mdAutocomplete" [displayWith]="displayFnBrand">
-            <md-option *ngFor="let choice of filteredBrands | async" [value]="choice">
+        <md-autocomplete #brandref="mdAutocomplete" >
+            <md-option *ngFor="let choice of (filteredBrands | async)" [value]="choice.brand">
                 {{ choice.brand }}
             </md-option>
         </md-autocomplete>
@@ -56,9 +56,8 @@
             <input type="text" mdInput placeholder="Modelo" [mdAutocomplete]="modelref" [formControl]="modelCtrl">
             <span mdPrefix><md-icon>group_work</md-icon></span>
         </md-input-container>
-
-        <md-autocomplete #modelref="mdAutocomplete" [displayWith]="displayFnModel">
-            <md-option *ngFor="let choice of filteredModels | async" [value]="choice.model">
+        <md-autocomplete #modelref="mdAutocomplete" >
+            <md-option *ngFor="let choice of (filteredModels | async)" [value]="choice.model">
                 {{ choice.model }}
             </md-option>
         </md-autocomplete>
@@ -87,3 +86,4 @@
         Footer
     </md-card-footer> -->
 </md-card>
+<simple-notifications [options]="options"></simple-notifications>

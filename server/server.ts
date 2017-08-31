@@ -1,6 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as path from 'path';
+// const formidable = require('express-formidable');
 
 
 import { urls } from './apps/routes/urls';
@@ -8,9 +9,11 @@ import { urls } from './apps/routes/urls';
 
 const serve = express();
 
-serve.use(bodyParser.json());
-serve.use(bodyParser.urlencoded({ extended: false}));
-serve.use(express.static(path.join(__dirname, 'media')));
+serve.use( express.static(path.join(__dirname, 'media')));
+
+// serve.use(formidable())
+serve.use(bodyParser.json({limit: "50mb"}));
+serve.use(bodyParser.urlencoded({limit: "50mb", extended: false, parameterLimit:50000}));
 
 serve.use('/restful', urls);
 

@@ -25,6 +25,13 @@ export class HttpServices {
         params: new HttpParams()
     };
 
+    constructor() {
+        this.optionsRequest = {
+            headers: this.getHeaders(),
+            params: new HttpParams()
+        };
+    }
+
     /**
      * set
      */
