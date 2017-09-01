@@ -40,7 +40,7 @@ export class HttpServices {
         headers = new HttpHeaders(
             {
                 'authorization': `${localStorage.getItem('token') || ''}`,
-                'Content-Type': 'application/json',
+                'Content-Type': '*/*',
                 'description': ''
             }
         );

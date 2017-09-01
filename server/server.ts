@@ -1,24 +1,27 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as path from 'path';
-// const formidable = require('express-formidable');
-
+import * as express from 'express'
+import * as bodyParser from 'body-parser'
+import path = require('path')
+import fileUpload = require('express-fileupload')
 
 import { urls } from './apps/routes/urls';
 
 
 const serve = express();
 
-serve.use( express.static(path.join(__dirname, 'media')));
+serve.use( express.static(path.join(__dirname, 'media')))
 
-// serve.use(formidable())
-serve.use(bodyParser.json({limit: "50mb"}));
-serve.use(bodyParser.urlencoded({limit: "50mb", extended: false, parameterLimit:50000}));
+serve.use(bodyParser.json({limit: "25mb"}))
+serve.use(bodyParser.urlencoded({
+    limit: 25 * 1024 * 1024, 
+    extended: true,
+    parameterLimit: 25 * 1024 * 1024}))
+
+serve.use(fileUpload())
+
 
 serve.use('/restful', urls);
 
 serve.use('/', (req, res) => {
-    // console.log(req);
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 

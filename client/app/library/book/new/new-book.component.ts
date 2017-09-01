@@ -65,8 +65,9 @@ export class NewBookComponent implements OnInit {
             .startWith(null)
             .map(brand => brand && typeof brand === 'object' ? brand.brand : brand)
             .map(name => name ? this.filterBrand(name) : this.brandLst)
-
-        this.modelServ.getModelRemote().subscribe(observer => this.modelLst = observer)
+        setTimeout( () => 
+            this.modelServ.getModelRemote().subscribe(observer => this.modelLst = observer)
+        , 800)
         this.modelCtrl = new FormControl()
         this.filteredModels = this.modelCtrl.valueChanges
             .startWith(null)
@@ -111,13 +112,14 @@ export class NewBookComponent implements OnInit {
                 form.append('file', this.fileTech.nativeElement.files[0])
                 this.sheetServ.save(form).subscribe(
                     (event: any) => {
-                        if (event.type === HttpEventType.UploadProgress) {
-                            const percentDone = Math.round(100 * event.loaded / event.total);
-                            console.log(`File is ${percentDone}% uploaded.`);
-                          } else if (event instanceof HttpResponse) {
-                            console.log('File is completely uploaded!');
-                            console.log(event)
-                          }
+                        console.warn(event)
+                        // if (event.type === HttpEventType.UploadProgress) {
+                        //     const percentDone = Math.round(100 * event.loaded / event.total);
+                        //     console.log(`File is ${percentDone}% uploaded.`);
+                        //   } else if (event instanceof HttpResponse) {
+                        //     console.log('File is completely uploaded!');
+                        //     console.log(event)
+                        //   }
                     }
                 )
             }

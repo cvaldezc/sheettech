@@ -20,7 +20,6 @@ export class BrandController {
                 })
                 .then(res => res.json())
                 .then(response => {
-                    console.log(response)
                     res.status(200).json(response)
                 })
                 .catch( reason => {

@@ -27,8 +27,10 @@ export class SheetService implements ISheetService {
         let options = this.httpServ.optionsRequest
         let headers = this.httpServ.getHeaders()
         options['reportProgress'] = true
-        options.headers = headers.set('Content-Type', 'application/x-www-form-urlencoded')
-        return this.http.post('/restful/sheet/save', form, options)
+        options.headers = headers
+            .set('Content-Type', undefined)
+            .set('enctype', 'multipart/form-data')
+        return this.http.post('/restful/sheet/save', form)
     }
 
 }
