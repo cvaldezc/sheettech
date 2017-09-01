@@ -4,6 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import * as moment from 'moment';
 
 import { config } from '../../../config.server';
+import { Auth } from "../models/auth.models";
 
 
 export class TokenServices {
@@ -44,10 +45,21 @@ export class TokenServices {
                         raise: 'Token is expired'
                     });
                 }
-                resolve({
-                    status: true,
-                    payload: payload.sub
-                });
+                Auth.findOne({auth: payload.sub.auth }, (err, _auth) => {
+                    if (_auth === null) {
+                        resolve({
+                            status: true,
+                            payload: payload.sub
+                        })
+                    }else{
+                        let _payload: any = payload.sub
+                        _payload['user'] = _auth._id
+                        resolve({
+                            status: true,
+                            payload: _payload
+                        })
+                    }
+                })
             } catch (error) {
                 reject({
                     scode: 500,

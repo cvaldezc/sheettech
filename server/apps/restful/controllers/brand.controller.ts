@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
 import fetch from 'node-fetch';
+import { DocumentQuery } from 'mongoose';
+import { Observable } from 'rxjs/Observable';
 
 import { config } from '../../../config.server';
 import { IBrand } from '../interfaces/Brand.inteface';
-import { Brand } from '../models/brand.models';
+import { Brand, IBrandDocument } from '../models/brand.models';
 
 
 export class BrandController {
@@ -27,6 +29,23 @@ export class BrandController {
                 })
         } catch (error) {
             res.status(503).json({ raise: error })
+        }
+    }
+
+    /**
+     * create Brand
+     */
+    public async createBrand(req: Request, res: Response) {
+        try {
+            // console.log(req)
+            let brd: any
+            let br: IBrandDocument = new Brand()
+            br.bid = req.body.brand
+            br.brand = req.body.bname
+            brd = await br.save(async (err, _brand) => _brand )
+            return await brd
+        } catch (error) {
+            return await { 'raise': error }
         }
     }
 

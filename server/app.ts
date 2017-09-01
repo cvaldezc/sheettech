@@ -1,10 +1,11 @@
-import * as mongoose from 'mongoose';
-
 import { config } from './config.server';
 import { serve } from './server';
 
-const PORT = config.port;
+import mongoose = require('mongoose');
 
+
+const PORT = config.port;
+mongoose.Promise = Promise
 mongoose.connect(config.db, (err) => {
     if (err) {
         console.log(`Error at connect to DB ${err}`);

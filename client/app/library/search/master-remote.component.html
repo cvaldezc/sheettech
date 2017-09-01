@@ -37,7 +37,7 @@
                 <td data-label="Código">{{ x.code }}</td>
                 <td data-label="Nombres">{{ x.name }}</td>
                 <td data-label="Seleccionar">
-                    <button type="button" md-button md-dialog-close="{{x.code}},{{x.name}}">
+                    <button type="button" md-button md-dialog-close="{{x.code}}|@|{{x.name}}">
                         <md-icon class="light-green-text">check_circle</md-icon>
                     </button>
                 </td>

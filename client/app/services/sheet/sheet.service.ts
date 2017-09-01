@@ -26,11 +26,11 @@ export class SheetService implements ISheetService {
     save(form: FormData) {
         let options = this.httpServ.optionsRequest
         let headers = this.httpServ.getHeaders()
-        options['reportProgress'] = true
+        // options['reportProgress'] = true
         options.headers = headers
-            .set('Content-Type', undefined)
-            .set('enctype', 'multipart/form-data')
-        return this.http.post('/restful/sheet/save', form)
+            .delete('Content-Type')
+            // .set('Content-Type', undefined)
+        return this.http.post('/restful/sheet/save', form, options)
     }
 
 }

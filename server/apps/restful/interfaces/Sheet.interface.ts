@@ -8,7 +8,7 @@ export interface ISheet {
     name: string,
     dirsheet: string,
     brand: IBrand,
-    model: IModel,
+    pattern: IModel,
     register: number|string|Date,
     rate: number,
     auth: IAuthModel

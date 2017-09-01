@@ -12,9 +12,10 @@ serve.use( express.static(path.join(__dirname, 'media')))
 
 serve.use(bodyParser.json({limit: "25mb"}))
 serve.use(bodyParser.urlencoded({
-    limit: 25 * 1024 * 1024, 
+    // limit: 25 * 1024 * 1024,
     extended: true,
-    parameterLimit: 25 * 1024 * 1024}))
+//     parameterLimit: 25 * 1024 * 1024
+}))
 
 serve.use(fileUpload())
 

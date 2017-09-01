@@ -39,7 +39,9 @@ export class NewBookComponent implements OnInit {
         sheet: '',
         name: '',
         brand: '',
-        model: ''}
+        model: '',
+        bname: '',
+        mname: ''}
 
     public options = {
         position: ['top', 'right'],
@@ -65,7 +67,7 @@ export class NewBookComponent implements OnInit {
             .startWith(null)
             .map(brand => brand && typeof brand === 'object' ? brand.brand : brand)
             .map(name => name ? this.filterBrand(name) : this.brandLst)
-        setTimeout( () => 
+        setTimeout( () =>
             this.modelServ.getModelRemote().subscribe(observer => this.modelLst = observer)
         , 800)
         this.modelCtrl = new FormControl()
@@ -78,7 +80,7 @@ export class NewBookComponent implements OnInit {
     openDialog() {
         let dialogRef = this.dialog.open(DialogMaterial, { width: '80%', height: 'auto', hasBackdrop: true });
         dialogRef.afterClosed().subscribe((result: string) => {
-            let arrst: Array<string> = result.split(',')
+            let arrst: Array<string> = result.split('|@|')
             console.log(arrst.length, arrst)
             if (arrst.length === 2) {
                 this.sheet.sheet = arrst[0];
@@ -96,7 +98,9 @@ export class NewBookComponent implements OnInit {
             sheet: '',
             name: '',
             brand: '',
-            model: ''}
+            model: '',
+            bname: '',
+            mname: ''}
         this.brandCtrl.setValue('')
         this.modelCtrl.setValue('')
         this.fileTech.nativeElement.value = ''
@@ -165,6 +169,7 @@ export class NewBookComponent implements OnInit {
             if (brand.brand === this.brandCtrl.value) {
                 // console.log(brand.brand, this.brandCtrl.value)
                 this.sheet.brand = brand.brand_id
+                this.sheet.bname = brand.brand
                 valid = true
                 return
             }
@@ -178,6 +183,7 @@ export class NewBookComponent implements OnInit {
             if (model.model === this.modelCtrl.value) {
                 console.log(model.model, this.modelCtrl.value)
                 this.sheet.model = model.model_id
+                this.sheet.mname = model.model
                 valid = true
                 return
             }

@@ -115,6 +115,8 @@ export class AuthController {
      */
     public updatePermission(req: Request, res: Response) {
 
+        console.log(req)
+
         Auth.findOneAndUpdate({ auth: req.body['auth'] }, { 'permission': req.body['permission']}, (err, permission) => {
             if (err) return res.status(500).json({ status: false, raise: err })
             if (!permission) return res.status(404).json({ status: false, raise: 'Auth not found' })

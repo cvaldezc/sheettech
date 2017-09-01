@@ -5,8 +5,8 @@
   "scripts": {
     "ng": "ng",
     "front": "ng serve --proxy-config=proxy.conf.json",
-    "start": "nodemon dist/server/index.js",
-    "serve": "concurrently \"tsc -p server\" \"nodemon dist/server/app.js\"",
+    "start": "nodemon dist/server/app.js",
+    "serve": "concurrently \"tsc -w -p server\" \"nodemon dist/server/app.js --watch dist/server/apps\"",
     "dev": "concurrently \"ng serve --proxy-config=proxy.conf.json --open\" \"tsc -w -p server\" \"nodemon dist/server/app.js\" ",
     "prod": "concurrently \"mongod\" \"ng build -aot -prod && tsc -p server && node dist/server/app.js\"",
     "build": "ng build",
