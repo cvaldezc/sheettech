@@ -45,13 +45,14 @@ export class TokenServices {
                         raise: 'Token is expired'
                     });
                 }
+                console.log('payload ', payload)
                 Auth.findOne({auth: payload.sub.auth }, (err, _auth) => {
-                    if (_auth === null) {
+                    if (!_auth) {
                         resolve({
                             status: true,
                             payload: payload.sub
                         })
-                    }else{
+                    } else {
                         let _payload: any = payload.sub
                         _payload['user'] = _auth._id
                         resolve({

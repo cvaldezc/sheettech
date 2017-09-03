@@ -12,7 +12,8 @@ import {
   MdOptionModule,
   MdAutocompleteModule,
   MdButtonModule,
-  MdDialogModule
+  MdDialogModule,
+  MdProgressBarModule
  } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { SimpleNotificationsModule } from 'angular2-notifications';
@@ -43,6 +44,7 @@ import { SheetService } from '../services/sheet/sheet.service';
     MdButtonModule,
     FormsModule,
     MdDialogModule,
+    MdProgressBarModule,
     ReactiveFormsModule,
     LibraryRoutingModule,
     FlexLayoutModule,

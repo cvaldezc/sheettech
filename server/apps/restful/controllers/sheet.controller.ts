@@ -19,7 +19,6 @@ export class SheetController {
      */
     public async saveSheet(req: Request, res: Response) {
         try {
-            console.log(req.body)
             let brand: any = await Brand.findOne({bid: req.body['brand']}, (err, vbrand) => vbrand)
             let model: any = await Models.findOne({mid: req.body['model']}, (err, vmodel) => vmodel)
             if (brand === null) {
@@ -56,7 +55,8 @@ export class SheetController {
                         sheet.dirsheet = dirsheet
                         sheet.brand = brand._id
                         sheet.pattern = model._id
-                        sheet.auth = req['user']['user']
+                        sheet.auth = req['user']['payload']['user']
+                        console.log('request User', req['user'])
                         sheet.save( (err, _st) => {
                             if (err) return res.status(503).json({ raise: 'La hoja no se ha guardado' })
 

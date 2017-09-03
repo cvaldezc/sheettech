@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { Observable } from "rxjs/Observable";
@@ -34,6 +34,8 @@ export class NewBookComponent implements OnInit {
     modelLst: Array<IModel>
     modelCtrl: FormControl
     filteredModels: Observable<IModel[]>
+    process: boolean = false
+    loadProgress: number = 0
 
     sheet = {
         sheet: '',
@@ -57,10 +59,6 @@ export class NewBookComponent implements OnInit {
         public dialog: MdDialog) { }
 
     ngOnInit(): void {
-        // this.sheet = {
-        //     sheet: '',
-        //     name: ''
-        // }
         this.brandServ.getBrandRemote().subscribe(observer => this.brandLst = observer )
         this.brandCtrl = new FormControl()
         this.filteredBrands = this.brandCtrl.valueChanges
@@ -109,23 +107,39 @@ export class NewBookComponent implements OnInit {
 
     saveSheet(): void {
         this.validForm().then(result => {
-            // console.info(result)
+            this.process = true
             if (result) {
                 let form = new FormData()
                 form = UtilService.convertToForm(this.sheet)
                 form.append('file', this.fileTech.nativeElement.files[0])
                 this.sheetServ.save(form).subscribe(
                     (event: any) => {
-                        console.warn(event)
-                        // if (event.type === HttpEventType.UploadProgress) {
-                        //     const percentDone = Math.round(100 * event.loaded / event.total);
-                        //     console.log(`File is ${percentDone}% uploaded.`);
-                        //   } else if (event instanceof HttpResponse) {
-                        //     console.log('File is completely uploaded!');
-                        //     console.log(event)
-                        //   }
-                    }
+                        if (event.type === HttpEventType.UploadProgress) {
+                            const percentDone = Math.round(100 * event.loaded / event.total);
+                            this.loadProgress = percentDone
+                            // console.log(`File is ${percentDone}% uploaded.`);
+                        } else if (event instanceof HttpResponse) {
+                            // console.log(event)
+                            if (event.ok) {
+                                // messge succeful
+                                console.log('File is completely uploaded!');
+                            } else {
+                                // show raise
+                                console.log(event['body']['raise'])
+                            }
+                            this.process = false
+                        }
+                    }, (err => {
+                        if (err instanceof HttpErrorResponse) {
+                            console.log(err.error.raise)
+                            console.log(err instanceof HttpErrorResponse);
+                            console.log(typeof err)
+                            this.process = false
+                        }
+                    })
                 )
+            }else{
+                this.process = false
             }
         })
 
