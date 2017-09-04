@@ -1,33 +1,40 @@
-<aside fxFlex="100">
-    <md-card>
+<aside fxLayout="row wrap">
+    <md-card fxFlex="grown">
         <md-card-actions fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center stretch" fxLayout.xs="column" fxLayoutGap="10px">
+            <button type="button" class="right" md-mini-fab
+                fxShow.xs="true" fxShow.gt-xs="true" fxShow.lt-sm="true" fxShow.sm="true" fxShow.gt-sm="true"
+                fxHide.lt-md="true" fxHide.md="true" fxHide.gt-md="true" fxHide.lt-lg="true" fxHide.lg="true" fxHide.gt-lg="true" fxHide.lt-xl="true" fxHide.xl="true">
+                <md-icon>arrow_drop_down</md-icon>
+            </button>
             <md-input-container floatPlaceholder="auto" fxFlex="20%">
-                <input mdInput #searchcode maxlength="15" formControlName="searchCode" type="text" required placeholder="Código">
+                <input mdInput #searchcode maxlength="15" type="text" [(ngModel)]="search.code" placeholder="Código" (keyup)="catchKeyEvent($event)">
                 <md-hint align="end">{{searchcode.value.length}} / 15</md-hint>
                 <span mdPrefix><md-icon>dialpad</md-icon></span>
             </md-input-container>
             <md-input-container floatPlaceholder="auto" fxFlex="40%">
-                <input mdInput formControlName="formControlName" type="text" required placeholder="Descripcion">
+                <input mdInput type="text" placeholder="Descripcion" [(ngModel)]="search.name" (keyup)="catchKeyEvent($event)">
                 <span mdPrefix><md-icon>text_fields</md-icon></span>
             </md-input-container>
             <md-input-container floatPlaceholder="always" fxFlex="20%">
-                <input mdInput type="text" required [mdAutocomplete]="acbrand" placeholder="Marca">
+                <input mdInput type="text" [mdAutocomplete]="refbrand" [formControl]="brandCtrl" placeholder="Marca" (keyup)="catchKeyEvent($event)">
                 <span mdPrefix><md-icon>fingerprint</md-icon></span>
             </md-input-container>
-            <md-autocomplete #acbrand="mdAutocomplete">
-                <md-option *ngFor="let choice of dBrand" [value]="choice.id">
-                    {{ choice.name }}
+            <md-autocomplete #refbrand="mdAutocomplete" [displayWith]="displayBrand.bind(this)">
+                <md-option *ngFor="let choice of (filterBrands | async)" [value]="choice">
+                    {{ choice.brand }}
                 </md-option>
             </md-autocomplete>
             <md-input-container floatPlaceholder="always" fxFlex="20%">
-                <input mdInput type="text" required placeholder="Modelo" [mdAutocomplete]="acmodel">
+                <input mdInput type="text" placeholder="Modelo" [mdAutocomplete]="refmodel" [formControl]="modelCtrl" (keyup)="catchKeyEvent($event)">
                 <span mdPrefix><md-icon>group_work</md-icon></span>
             </md-input-container>
-            <md-autocomplete #acmodel="mdAutocomplete">
-                <md-option *ngFor="let choice of dModel" [value]="choice.id">
-                    {{ choice.name }}
+            <md-autocomplete #refmodel="mdAutocomplete" [displayWith]="displayModel.bind(this)">
+                <md-option *ngFor="let choice of (filterModels | async)" [value]="choice">
+                    {{ choice.model }}
                 </md-option>
             </md-autocomplete>
         </md-card-actions>
     </md-card>
+    <search-result fxFlex="grow"
+        [code]="search.code" [name]="search.name" [brand]="search.brand" [pattern]="search.pattern" [showData]="isFind"></search-result>
 </aside>

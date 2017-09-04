@@ -29,6 +29,7 @@ import { DialogMaterial } from './search/master-remote.component';
 import { MasterService } from '../services/master.service';
 import { FilterPipe } from '../pipes/filter.pipe';
 import { SheetService } from '../services/sheet/sheet.service';
+import { SearchResultComponent } from './search/search-result.component';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { SheetService } from '../services/sheet/sheet.service';
     LibraryComponent,
     SearchLibraryComponent,
     NewBookComponent,
+    SearchResultComponent,
     DialogMaterial
   ],
   exports: [FilterPipe],
@@ -66,10 +68,4 @@ import { SheetService } from '../services/sheet/sheet.service';
     ModelService,
     MasterService]
 })
-export class LibraryModule {
-
-  // constructor(router: Router) {
-  //   console.log('Routes: ', JSON.stringify(router.config, undefined, 2));
-  // }
-
-}
+export class LibraryModule {  }

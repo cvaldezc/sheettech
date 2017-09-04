@@ -37,13 +37,14 @@ export class SheetController {
             Sheet.findOne({ sheet: req.body.sheet, brand: brand._id, pattern: model._id })
                 // .populate({ path: 'brand', match: { bid: brand.bid }})
                 // .populate({ path: 'pattern', match: { mid: model.mid }})
-            , async (err, _sheet) => {
+            .populate('brand')
+            .populate('pattern')
+            .exec( async (err, _sheet) => {
                 console.log('RESULT BY POPULATE ', _sheet)
-                if (err)
-                    res.status(505).json({ raise: err })
-                if (!_sheet) {
-                    console.log('result brand ', brand)
-                    console.log('result model ', model)
+                if (err) return res.status(505).json({ raise: err })
+                if (_sheet === null) {
+                    // console.log('result brand ', brand)
+                    // console.log('result model ', model)
                     let shbinary: any = req.files.file
                     let dirsheet: string = path.join(config.SOURCE_LIBRARY, req.body.sheet)
                     console.log('Exists ', fs.existsSync(dirsheet))

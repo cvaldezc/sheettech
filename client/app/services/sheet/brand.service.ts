@@ -8,6 +8,7 @@ import { IBrand } from '../../../../server/apps/restful/interfaces/Brand.intefac
 
 interface IBrandService {
     getBrandRemote(): Observable<IBrand[]>;
+    getBrands(): Observable<IBrand[]>;
 }
 
 @Injectable()
@@ -20,6 +21,10 @@ export class BrandService implements IBrandService {
 
     getBrandRemote(): Observable<IBrand[]> {
         return this.http.get<IBrand[]>('/restful/brand/remote/all', this.httpServ.optionsRequest)
+    }
+
+    getBrands(): Observable<IBrand[]> {
+        return this.http.get<IBrand[]>('/restful/brand/all', this.httpServ.optionsRequest)
     }
 
 }

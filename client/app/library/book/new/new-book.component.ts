@@ -127,6 +127,7 @@ export class NewBookComponent implements OnInit {
                             // console.log(event)
                             if (event.ok) {
                                 // messge succeful
+                                this.cleanFields()
                                 this.notify.success('Correcto!', 'El archivo se ha cargardo correctamente!')
                                 // console.log('File is completely uploaded!');
                             } else {

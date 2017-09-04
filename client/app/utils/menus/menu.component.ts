@@ -29,7 +29,7 @@ export class MenuComponent implements OnInit {
     @Input()
     set showToggle(showToggle: boolean) {
         this.sidenav.toggle();
-        console.log(showToggle);
+        // console.log(showToggle);
     }
 
     ngOnInit(): void {

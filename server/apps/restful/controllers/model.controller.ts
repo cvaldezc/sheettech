@@ -31,6 +31,22 @@ export class ModelController {
     }
 
     /**
+     * getLocalModels
+     */
+    public getLocalModels(req: Request, res: Response) {
+        try {
+            Models.find((err, _models) => {
+                if (err) return res.status(500).json({ raise: err })
+                if (!_models) return res.status(404).json({ raise: 'not found' })
+
+                res.status(200).json(_models)
+            })
+        } catch (error) {
+            res.status(501).json({ raise: error })
+        }
+    }
+
+    /**
      * create Brand
      */
     public async createModel(req: Request, res: Response) {

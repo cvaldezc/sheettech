@@ -33,6 +33,22 @@ export class BrandController {
     }
 
     /**
+     * getLocalBrands
+     */
+    public getLocalBrands(req: Request, res: Response) {
+        try {
+            Brand.find((err, _brands) => {
+                if (err) return res.status(501).json({ raise: err })
+                if (!_brands)
+                    return res.status(404).json({ raise: 'not found'})
+                res.status(200).json(_brands)
+            })
+        } catch (error) {
+            res.status(500).json({raise: error})
+        }
+    }
+
+    /**
      * create Brand
      */
     public async createBrand(req: Request, res: Response) {
