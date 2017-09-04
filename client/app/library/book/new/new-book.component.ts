@@ -46,9 +46,13 @@ export class NewBookComponent implements OnInit {
         mname: ''}
 
     public options = {
+        animate: 'scale',
+        clickToClose: true,
+        lastOnBottom: true,
+        pauseOnHover: true,
         position: ['top', 'right'],
+        showProgressBar: true,
         timeOut: 2600,
-        lastOnBottom: true
     }
 
     constructor(
@@ -109,6 +113,7 @@ export class NewBookComponent implements OnInit {
         this.validForm().then(result => {
             this.process = true
             if (result) {
+                this.notify.html(`<md-icon class="fa-spin">data_usage</md-icon> Procesando...!`, 'alert', { timeOut: null, id: 'EySVcZStQ'})
                 let form = new FormData()
                 form = UtilService.convertToForm(this.sheet)
                 form.append('file', this.fileTech.nativeElement.files[0])
@@ -122,23 +127,26 @@ export class NewBookComponent implements OnInit {
                             // console.log(event)
                             if (event.ok) {
                                 // messge succeful
-                                console.log('File is completely uploaded!');
+                                this.notify.success('Correcto!', 'El archivo se ha cargardo correctamente!')
+                                // console.log('File is completely uploaded!');
                             } else {
+                                this.notify.remove('EySVcZStQ')
                                 // show raise
-                                console.log(event['body']['raise'])
+                                // console.log(event['body']['raise'])
+                                this.notify.error('Error', `${event.body}`)
                             }
                             this.process = false
                         }
                     }, (err => {
                         if (err instanceof HttpErrorResponse) {
-                            console.log(err.error.raise)
-                            console.log(err instanceof HttpErrorResponse);
-                            console.log(typeof err)
+                            // console.log(err.error.raise)
+                            this.notify.error('Error', `${err.error.raise}`, this.options)
                             this.process = false
                         }
                     })
                 )
-            }else{
+            } else {
+                this.notify.alert('Alerta!', 'El formulario es invalido', this.options)
                 this.process = false
             }
         })

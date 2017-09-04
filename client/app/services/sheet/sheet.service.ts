@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { HttpServices } from '../http.Services';
@@ -23,7 +23,7 @@ export class SheetService implements ISheetService {
     /**
      * save
      */
-    save(form: FormData) {
+    save(form: FormData): Observable<HttpEvent<{}>> {
         let options = this.httpServ.optionsRequest
         let headers = this.httpServ.getHeaders()
         options['reportProgress'] = true

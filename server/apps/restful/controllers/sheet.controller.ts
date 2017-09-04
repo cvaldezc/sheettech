@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { DocumentQuery } from 'mongoose';
+import { DocumentQuery, Types } from 'mongoose';
 import path = require('path')
 import fs = require('fs')
 
@@ -32,10 +32,16 @@ export class SheetController {
             if (brand == null || model == null) {
                 return res.status(501).json({ raise: 'marca o modelo no se ha registrado' })
             }
-            Sheet.findOne({sheet: req.body.sheet}, async (err, _sheet) => {
+            console.log('RESULT BRAND ', brand);
+            console.log('RESULT MODEL ', model);
+            Sheet.findOne({ sheet: req.body.sheet, brand: brand._id, pattern: model._id })
+                // .populate({ path: 'brand', match: { bid: brand.bid }})
+                // .populate({ path: 'pattern', match: { mid: model.mid }})
+            , async (err, _sheet) => {
+                console.log('RESULT BY POPULATE ', _sheet)
                 if (err)
                     res.status(505).json({ raise: err })
-                if (_sheet === null) {
+                if (!_sheet) {
                     console.log('result brand ', brand)
                     console.log('result model ', model)
                     let shbinary: any = req.files.file
