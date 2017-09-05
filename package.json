@@ -6,6 +6,7 @@
     "ng": "ng",
     "front": "ng serve --proxy-config=proxy.conf.json",
     "start": "nodemon dist/server/app.js",
+    "preser": "tsc -p server",
     "serve": "concurrently \"tsc -w -p server\" \"nodemon dist/server/app.js --watch dist/server/apps\"",
     "dev": "concurrently \"ng serve --proxy-config=proxy.conf.json --open\" \"tsc -w -p server\" \"nodemon dist/server/app.js\" ",
     "prod": "concurrently \"mongod\" \"ng build -aot -prod && tsc -p server && node dist/server/app.js\"",
@@ -73,6 +74,6 @@
     "protractor": "~5.1.2",
     "ts-node": "~3.0.4",
     "tslint": "~5.3.2",
-    "typescript": "~2.3.3"
+    "typescript": "^2.5.2"
   }
 }

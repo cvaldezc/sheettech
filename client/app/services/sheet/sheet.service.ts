@@ -8,6 +8,7 @@ import { ISheet } from '../../../../server/apps/restful/interfaces/Sheet.interfa
 
 interface ISheetService {
     save(form: FormData): any
+    finds(params: any): Observable<ISheet[]>
 }
 
 @Injectable()
@@ -15,11 +16,18 @@ export class SheetService implements ISheetService {
 
     constructor(
         private http: HttpClient,
-        private httpServ: HttpServices)
-    {
-        // this.http.post()
-    }
+        private httpServ: HttpServices
+    ) {  }
 
+    /**
+     * finds
+     */
+    public finds(params: object): Observable<ISheet[]> {
+        let options = this.httpServ.optionsRequest
+        options.params = this.httpServ.setHttpParams(params)
+        // console.log(options)
+        return this.http.get<ISheet[]>('/restful/sheet/finds', options)
+    }
     /**
      * save
      */

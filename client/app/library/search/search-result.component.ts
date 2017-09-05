@@ -1,11 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input } from '@angular/core'
+import { Observable } from 'rxjs/Observable';
+
+import { SheetService } from '../../services/sheet/sheet.service';
+import { ISheet } from '../../../../server/apps/restful/interfaces/Sheet.interface';
 
 
 @Component({
     selector: 'search-result',
     templateUrl: './search-result.component.html'
 })
-export class SearchResultComponent implements OnInit {
+export class SearchResultComponent {
 
     @Input('code') mcode: string
     @Input('name') mname: string
@@ -14,21 +18,25 @@ export class SearchResultComponent implements OnInit {
 
     @Input()
     set showData(isFind: boolean) {
-        console.info(isFind);
-
-        if (isFind) this.showanother()
+        // console.info(isFind);
+        this.findResult()
     }
 
+    /* variables globales */
+    sheetList: Observable< ISheet[] >
 
-    ngOnInit(): void {
-        // this.showanother()
-    }
+    constructor(private sheetServ: SheetService) {  }
 
-    showanother() {
-        console.log(this.mcode);
-        console.log(this.mname);
-        console.log(this.mbrand);
-        console.log(this.mpattern);
+    findResult(): void {
+        let pfind: any = {
+            sheet: this.mcode,
+            name: this.mname,
+            brand: this.mbrand,
+            pattern: this.mpattern
+        }
+        // console.log(pfind)
+        if ( this.mcode || this.mname || this.mbrand || this.mpattern )
+            this.sheetList = this.sheetServ.finds(pfind)
     }
 
 }

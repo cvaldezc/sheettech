@@ -14,6 +14,43 @@ import { config } from '../../../config.server';
 
 export class SheetController {
 
+
+    /**
+     * finds sheet by
+     * @code string
+     * @name string
+     * @brand string -> ObjectID
+     * @pattern string -> ObjectID
+     */
+    public finds(req: Request, res: Response) {
+        try {
+            let _where: object = {}
+            Object.keys(req.query).forEach((key) => {
+                if (req.query[key]){
+                    if (key === 'brand' || key === 'pattern')
+                        _where[key] = Types.ObjectId(req.query[key])
+                    else if (key === 'name')
+                        _where[key] = { $regex: `${req.query[key]}`, $options: 'i'}
+                    else
+                        _where[key] = req.query[key]
+                }
+            })
+            console.log(_where)
+            Sheet.find(_where)
+            .populate('brand')
+            .populate('pattern')
+            .exec((err, _sheets) => {
+                if (err)
+                    return res.status(500).json({ raise: err })
+                if(!_sheets)
+                    return res.status(404).json({ raise: 'not found result' })
+                res.status(202).json(_sheets)
+            })
+        } catch (error) {
+            res.status(501).json({ raise: error })
+        }
+    }
+
     /**
      * saveSheet
      */
@@ -32,8 +69,8 @@ export class SheetController {
             if (brand == null || model == null) {
                 return res.status(501).json({ raise: 'marca o modelo no se ha registrado' })
             }
-            console.log('RESULT BRAND ', brand);
-            console.log('RESULT MODEL ', model);
+            // console.log('RESULT BRAND ', brand);
+            // console.log('RESULT MODEL ', model);
             Sheet.findOne({ sheet: req.body.sheet, brand: brand._id, pattern: model._id })
                 // .populate({ path: 'brand', match: { bid: brand.bid }})
                 // .populate({ path: 'pattern', match: { mid: model.mid }})

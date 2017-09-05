@@ -83,7 +83,8 @@ export class SearchLibraryComponent implements OnInit {
             _strbrand = brand.brand
             this.search.brand = brand._id
         } else {
-            this.search['brand'] = ''
+            console.log('here pattern');
+            this.search.brand = ''
         }
         return _strbrand
     }
@@ -94,6 +95,7 @@ export class SearchLibraryComponent implements OnInit {
             _strmodel = model.model
             this.search.pattern = model._id
         } else {
+            console.log('here pattern');
             this.search.pattern = ''
         }
         return _strmodel

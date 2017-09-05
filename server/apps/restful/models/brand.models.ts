@@ -9,6 +9,8 @@ const BrandSchema: Schema = new Schema({
     register: { type: Date, default: Date.now() }
 })
 
-export interface IBrandDocument extends IBrand, Document { }
+export interface IBrandDocument extends IBrand, Document {
+    _id: string
+ }
 
 export const Brand: Model<IBrandDocument> = model<IBrandDocument>('Brand', BrandSchema)

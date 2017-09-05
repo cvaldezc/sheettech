@@ -9,6 +9,9 @@ const ModelSchema = new Schema({
     register: { type: Date, default: Date.now() }
 })
 
-// export interface IModelDocument extends Document { }
+// export interface IModelDocument extends IModel, Document {
+//     _id: string,
+//     model: string
+//  }
 
 export const Models = model('Model', ModelSchema)

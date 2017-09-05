@@ -28,7 +28,7 @@ export class HttpServices {
     constructor() {
         this.optionsRequest = {
             headers: this.getHeaders(),
-            params: new HttpParams()
+            params: this.setHttpParams()
         };
     }
 
@@ -47,6 +47,19 @@ export class HttpServices {
             }
         );
         return headers;
+    }
+
+    /**
+     * set HttpParams
+     */
+    public setHttpParams(params?: object|string): HttpParams {
+        let _params: HttpParams = new HttpParams()
+        if (params && typeof params === 'object') {
+            Object.keys(params).forEach( (key, index) => {
+                _params = _params.append(key, params[key])
+            } )
+        }
+        return _params
     }
 
 }

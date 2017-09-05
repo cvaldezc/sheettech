@@ -12,6 +12,9 @@ interface IMasterService extends HttpServices {
 }
 
 export class MasterService extends HttpClient implements IMasterService {
+    public setHttpParams(params: string | object): HttpParams {
+        return new HttpParams()
+    }
     public token: string;
     public parameters: HttpParams;
     public optionsRequest: { headers: any; params: HttpParams; };

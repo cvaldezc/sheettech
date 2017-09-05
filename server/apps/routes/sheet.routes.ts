@@ -7,7 +7,7 @@ import { isAuth } from '../restful/middlewares/auth.middleware';
 
 const sheetUrls = Router();
 
-// SheetUrls.get('/all', new SheetController().getAllDocuments);
+sheetUrls.get('/finds', new SheetController().finds);
 // post save sheet in library
 sheetUrls.post('/save', isAuth, new SheetController().saveSheet)
 
