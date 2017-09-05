@@ -1,15 +1,17 @@
-import { Component, Input } from '@angular/core'
+import { Component, OnInit, Input } from '@angular/core'
 import { Observable } from 'rxjs/Observable';
 
 import { SheetService } from '../../services/sheet/sheet.service';
 import { ISheet } from '../../../../server/apps/restful/interfaces/Sheet.interface';
+import { AuthServices } from '../../services/auth/auth.service';
+import { IPermission } from '../../../../server/apps/restful/interfaces/Permission.interface';
 
 
 @Component({
     selector: 'search-result',
     templateUrl: './search-result.component.html'
 })
-export class SearchResultComponent {
+export class SearchResultComponent implements OnInit {
 
     @Input('code') mcode: string
     @Input('name') mname: string
@@ -24,8 +26,19 @@ export class SearchResultComponent {
 
     /* variables globales */
     sheetList: Observable< ISheet[] >
+    _permission: IPermission
+    showFilter: boolean = false
 
-    constructor(private sheetServ: SheetService) {  }
+    constructor(
+        private sheetServ: SheetService,
+        private authServ: AuthServices
+    ) {
+        this._permission = this.authServ.permission
+     }
+
+    ngOnInit(): void {
+        console.info(this._permission);
+    }
 
     findResult(): void {
         let pfind: any = {

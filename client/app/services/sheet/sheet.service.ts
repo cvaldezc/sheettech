@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpRequest, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest, HttpEvent, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
 import { HttpServices } from '../http.Services';
@@ -18,6 +18,17 @@ export class SheetService implements ISheetService {
         private http: HttpClient,
         private httpServ: HttpServices
     ) {  }
+
+
+    /**
+     * getAttachment
+     */
+    public getAttachment(sheet: string) {
+        let options = this.httpServ.optionsRequest
+        // options.headers = this.httpServ.getHeaders()
+        return this.http.get(`/restful/sheet/attachment/${sheet}`, options)
+            // .map( response => response)
+    }
 
     /**
      * finds

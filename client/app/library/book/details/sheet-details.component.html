@@ -1,0 +1,58 @@
+<a [routerLink]="['/home', 'library', 'sheet']">
+    <md-icon class="md-24">chevron_left</md-icon>
+    <span>REGRESAR</span>
+</a>
+<article fxLayout="row wrap">
+    <aside fxFlex="35">
+        <md-card>
+            <md-card-content>
+                <h1>Title</h1>
+                <h2>Marca</h2>
+                <h2>Modelo</h2>
+                <p>
+                    <span fxLayoutAlign=" center">
+                        Marcar como Favorito
+                        <button md-icon-button (click)="onClick">
+                            <md-icon class="md-24">favorite_border</md-icon>
+                        </button>
+                    </span>
+                </p>
+                <p>
+                    <button md-raised-button (click)="onClick" fxFlex="grow">
+                        <md-icon class="md-24">file_download</md-icon>
+                        <span> DESCARGAR </span>
+                    </button>
+                </p>
+                <p>
+                    <strong>Valoración</strong>
+                    <br>
+                    <button md-icon-button >
+                        <md-icon class="md-24">star_border</md-icon>
+                    </button>
+                    <button md-icon-button >
+                        <md-icon class="md-24">star_border</md-icon>
+                    </button>
+                    <button md-icon-button >
+                        <md-icon class="md-24">star_border</md-icon>
+                    </button>
+                    <button md-icon-button >
+                        <md-icon class="md-24">star_border</md-icon>
+                    </button>
+                    <button md-icon-button >
+                        <md-icon class="md-24">star_border</md-icon>
+                    </button>
+                </p>
+            </md-card-content>
+        </md-card>
+    </aside>
+    <section fxFlex>
+        <iframe #sheetfile src="/restful/sheet/attactment/59ad6ea7ce5f732e6b18ee00" type="application/pdf" fxFlex="grow"></iframe>
+    </section>
+    <article fxFlex="grow">
+        <md-card>
+            <md-card-content>
+                <h4>Reviews</h4>
+            </md-card-content>
+        </md-card>
+    </article>
+</article>

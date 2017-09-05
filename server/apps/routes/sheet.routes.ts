@@ -10,5 +10,6 @@ const sheetUrls = Router();
 sheetUrls.get('/finds', new SheetController().finds);
 // post save sheet in library
 sheetUrls.post('/save', isAuth, new SheetController().saveSheet)
-
+// get attachment by id
+sheetUrls.get('/attachment/:sheet', new SheetController().getAttachmentById)
 export { sheetUrls };

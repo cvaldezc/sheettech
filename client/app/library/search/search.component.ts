@@ -34,6 +34,8 @@ export class SearchLibraryComponent implements OnInit {
     modelCtrl: FormControl
     filterModels: Observable<IModel[]>
 
+    hideSearch: boolean = true
+
     search: ISearchLibrary = {
         code: '',
         name: '',
@@ -64,6 +66,8 @@ export class SearchLibraryComponent implements OnInit {
 
     catchKeyEvent(event: KeyboardEvent): void {
         if ( event.keyCode === 13) {
+            if (this.brandCtrl.value === '') this.search.brand = ''
+            if (this.modelCtrl.value === '') this.search.pattern = ''
             this.isFind = !this.isFind
         }
     }

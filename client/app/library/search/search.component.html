@@ -1,11 +1,14 @@
 <aside fxLayout="row wrap">
+
     <md-card fxFlex="grown">
-        <md-card-actions fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center stretch" fxLayout.xs="column" fxLayoutGap="10px">
-            <button type="button" class="right" md-mini-fab
+        <md-card-header fxLayoutAlign="end">
+            <button type="button" md-mini-fab (click)="hideSearch=!hideSearch"
                 fxShow.xs="true" fxShow.gt-xs="true" fxShow.lt-sm="true" fxShow.sm="true" fxShow.gt-sm="true"
                 fxHide.lt-md="true" fxHide.md="true" fxHide.gt-md="true" fxHide.lt-lg="true" fxHide.lg="true" fxHide.gt-lg="true" fxHide.lt-xl="true" fxHide.xl="true">
-                <md-icon>arrow_drop_down</md-icon>
+                <md-icon>{{ hideSearch ? 'arrow_drop_up': 'arrow_drop_down'}}</md-icon>
             </button>
+        </md-card-header>
+        <md-card-actions *ngIf="hideSearch" fxLayout="row" fxLayoutAlign="center center" fxLayoutAlign.xs="center stretch" fxLayout.xs="column" fxLayoutGap="10px">
             <md-input-container floatPlaceholder="auto" fxFlex="20%">
                 <input mdInput #searchcode maxlength="15" type="text" [(ngModel)]="search.code" placeholder="Código" (keyup)="catchKeyEvent($event)">
                 <md-hint align="end">{{searchcode.value.length}} / 15</md-hint>

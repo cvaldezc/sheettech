@@ -1,30 +1,59 @@
-<header>
-    <h4>
-        Result Sheet
-        <a [routerLink]="['/home', 'library', 'new']">
-            new component
-        </a>
-    </h4>
-</header>
-<table class="table">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>ID</th>
-            <th>Description</th>
-            <th>Brand</th>
-            <th>Model</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let x of (sheetList | async); let $index = index">
-            <td><small>{{$index + 1}}</small></td>
-            <td><small>{{x.sheet}}</small></td>
-            <td>{{x.name}}</td>
-            <td>{{x.brand.brand}}</td>
-            <td>{{x.pattern.model}}</td>
-            <td></td>
-        </tr>
-    </tbody>
-</table>
+<section>
+    <md-card>
+        <md-card-footer>
+            <h3>
+                Result:
+                <button type="button" md-button class="right" (click)="showFilter=!showFilter"><md-icon class="md-18">search</md-icon></button>
+            </h3>
+        </md-card-footer>
+    </md-card>
+    <table class="table">
+        <tfoot *ngIf="showFilter" style="display: table-caption;">
+            <tr>
+                <td></td>
+                <td colspan="6" fxFlex="100">
+                    <md-input-container floatPlaceholder="auto" fxFlex="100">
+                        <input mdInput type="search" placeholder="filtrar" [(ngModel)]="filterResult">
+                    </md-input-container>
+                </td>
+                <td></td>
+            </tr>
+        </tfoot>
+        <thead class="red accent-3">
+            <tr>
+                <th class="col-1">#</th>
+                <th class="col-2">ID</th>
+                <th>Description</th>
+                <th class="col-3">Brand</th>
+                <th class="col-3">Model</th>
+                <th class="col-1"></th>
+                <th class="col-1" *ngIf="_permission.write"></th>
+                <th class="col-1" *ngIf="_permission.delete"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let x of (sheetList | async) | filter: {name: filterResult, sheet: filterResult}; let $index = index">
+                <td data-label="#"><small>{{$index + 1}}</small></td>
+                <td data-label="ID"><small>{{x.sheet}}</small></td>
+                <td data-label="Descripción">{{x.name}}</td>
+                <td data-label="Marca">{{x.brand.brand}}</td>
+                <td data-label="Model">{{x.pattern.model}}</td>
+                <td>
+                    <a [routerLink]="['/home', 'library', 'details', x._id]">
+                        <md-icon class="md-18">open_in_new</md-icon>
+                    </a>
+                </td>
+                <td *ngIf="_permission.write">
+                    <a href="#!edit">
+                        <md-icon class="md-18">edit</md-icon>
+                    </a>
+                </td>
+                <td *ngIf="_permission.delete">
+                    <a href="#!delete">
+                        <md-icon class="md-18">delete_forever</md-icon>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

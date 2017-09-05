@@ -30,6 +30,7 @@ import { MasterService } from '../services/master.service';
 import { FilterPipe } from '../pipes/filter.pipe';
 import { SheetService } from '../services/sheet/sheet.service';
 import { SearchResultComponent } from './search/search-result.component';
+import { SheetDetailsComponent } from './book/details/sheet-details.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { SearchResultComponent } from './search/search-result.component';
     SearchLibraryComponent,
     NewBookComponent,
     SearchResultComponent,
-    DialogMaterial
+    DialogMaterial,
+    SheetDetailsComponent
   ],
   exports: [FilterPipe],
   bootstrap: [DialogMaterial],

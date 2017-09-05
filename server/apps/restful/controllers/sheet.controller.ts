@@ -14,6 +14,38 @@ import { config } from '../../../config.server';
 
 export class SheetController {
 
+    /**
+     * getId
+     * @param _id
+     */
+    public getAttachmentById(req: Request, res: Response) {
+        try {
+            console.log(req.params)
+            Sheet.findById(req.params.sheet)
+                .populate('brand')
+                .populate('pattern')
+                .exec((err, _sheet) => {
+                    if (err)
+                        return res.status(501).json({ raise: err })
+                    if (!_sheet)
+                        return res.status(404).json({ raise: 'sheet not found '})
+                    console.log('RESULT FIND', _sheet);
+
+                    // res.set('Content-disposition', `attachment; filename=${_sheet.name} ${_sheet.brand.brand} - ${_sheet.pattern.model}.pdf`)
+                    // res.set('Content-Type', 'application/pdf')
+                    // res.attachment(_sheet.dirsheet)
+                    fs.readFile(_sheet.dirsheet, (serr, data) => {
+                        res.contentType('application/pdf')
+                        res.send(data)
+                    })
+                    // res.status(200).download(_sheet.dirsheet, `${_sheet.name} ${_sheet.brand.brand} - ${_sheet.pattern.model}.pdf` )
+                })
+            // res.status(200).json({ status: true })
+        } catch (error) {
+            res.status(500).json({ raise: error })
+        }
+    }
+
 
     /**
      * finds sheet by
