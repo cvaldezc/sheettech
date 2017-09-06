@@ -2,13 +2,13 @@
     <md-icon class="md-24">chevron_left</md-icon>
     <span>REGRESAR</span>
 </a>
-<article fxLayout="row wrap">
+<article fxLayout="row wrap" fxFlexFill>
     <aside fxFlex="35">
         <md-card>
             <md-card-content>
-                <h1>Title</h1>
-                <h2>Marca</h2>
-                <h2>Modelo</h2>
+                <h1>{{ sheetData.name }}</h1>
+                <h2>Marca: {{ sheetData.brand.brand }}</h2>
+                <h2>Modelo: {{ sheetData.pattern.model }}</h2>
                 <p>
                     <span fxLayoutAlign=" center">
                         Marcar como Favorito
@@ -18,7 +18,7 @@
                     </span>
                 </p>
                 <p>
-                    <button md-raised-button (click)="onClick" fxFlex="grow">
+                    <button md-raised-button (click)="downloadSheet()" fxFlex="grow">
                         <md-icon class="md-24">file_download</md-icon>
                         <span> DESCARGAR </span>
                     </button>
@@ -42,11 +42,14 @@
                         <md-icon class="md-24">star_border</md-icon>
                     </button>
                 </p>
+                <p>
+                    <strong>Relacionados: </strong> <br>
+                </p>
             </md-card-content>
         </md-card>
     </aside>
-    <section fxFlex>
-        <iframe #sheetfile src="/restful/sheet/attactment/59ad6ea7ce5f732e6b18ee00" type="application/pdf" fxFlex="grow"></iframe>
+    <section fxFlex="65">
+        <iframe type="application/pdf" src="" #sheetfile fxFlex></iframe>
     </section>
     <article fxFlex="grow">
         <md-card>

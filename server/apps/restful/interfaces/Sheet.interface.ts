@@ -6,10 +6,10 @@ import { IAuthModel } from './Auth.interface';
 export interface ISheet {
     sheet: string,
     name: string,
-    dirsheet: string,
+    dirsheet?: string,
     brand: IBrand,
     pattern: IModel,
-    register: number|string|Date,
+    register?: number|string|Date,
     rate: number,
     auth: IAuthModel
 }

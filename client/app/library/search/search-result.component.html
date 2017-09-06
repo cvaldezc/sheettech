@@ -27,12 +27,12 @@
                 <th class="col-3">Brand</th>
                 <th class="col-3">Model</th>
                 <th class="col-1"></th>
-                <th class="col-1" *ngIf="_permission.write"></th>
-                <th class="col-1" *ngIf="_permission.delete"></th>
+                <th class="col-1" *ngIf="_permission['write']"></th>
+                <th class="col-1" *ngIf="_permission['delete']"></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let x of (sheetList | async) | filter: {name: filterResult, sheet: filterResult}; let $index = index">
+            <tr *ngFor="let x of sheetList | filter: {name: filterResult, sheet: filterResult}; let $index = index">
                 <td data-label="#"><small>{{$index + 1}}</small></td>
                 <td data-label="ID"><small>{{x.sheet}}</small></td>
                 <td data-label="Descripción">{{x.name}}</td>
@@ -43,12 +43,12 @@
                         <md-icon class="md-18">open_in_new</md-icon>
                     </a>
                 </td>
-                <td *ngIf="_permission.write">
+                <td *ngIf="_permission['write']">
                     <a href="#!edit">
                         <md-icon class="md-18">edit</md-icon>
                     </a>
                 </td>
-                <td *ngIf="_permission.delete">
+                <td *ngIf="_permission['delete']">
                     <a href="#!delete">
                         <md-icon class="md-18">delete_forever</md-icon>
                     </a>

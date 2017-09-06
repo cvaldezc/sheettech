@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-// import {
-//     Headers,
-//     ResponseContentType,
-//     RequestOptions,
-//     RequestOptionsArgs
-//  } from '@angular/http';
+import {
+    // Headers,
+    ResponseContentType,
+    // RequestOptions,
+    RequestOptionsArgs
+ } from '@angular/http';
 import {
     HttpHeaders,
     // HttpHeaderResponse,
@@ -22,14 +22,16 @@ export class HttpServices {
 
     public optionsRequest = {
         headers: null,
-        params: new HttpParams()
+        params: new HttpParams(),
+        responseType: null
     };
 
     constructor() {
         this.optionsRequest = {
             headers: this.getHeaders(),
-            params: this.setHttpParams()
-        };
+            params: this.setHttpParams(),
+            responseType: 'json'
+        }
     }
 
     /**

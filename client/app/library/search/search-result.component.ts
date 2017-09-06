@@ -25,7 +25,7 @@ export class SearchResultComponent implements OnInit {
     }
 
     /* variables globales */
-    sheetList: Observable< ISheet[] >
+    sheetList: ISheet[]
     _permission: IPermission
     showFilter: boolean = false
 
@@ -49,7 +49,13 @@ export class SearchResultComponent implements OnInit {
         }
         // console.log(pfind)
         if ( this.mcode || this.mname || this.mbrand || this.mpattern )
-            this.sheetList = this.sheetServ.finds(pfind)
+            {
+                this.sheetServ.finds(pfind)
+                .subscribe( res => {
+                    console.log(res)
+                    this.sheetList = res
+                })
+            }
     }
 
 }

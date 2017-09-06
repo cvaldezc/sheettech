@@ -3,5 +3,5 @@ export interface IModel {
     _id?: string,
     mid: string,
     model: string,
-    register: number|string|Date
+    register?: number|string|Date
 }

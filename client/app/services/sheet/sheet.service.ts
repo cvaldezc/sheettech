@@ -4,11 +4,15 @@ import { Observable } from 'rxjs/Observable';
 
 import { HttpServices } from '../http.Services';
 import { ISheet } from '../../../../server/apps/restful/interfaces/Sheet.interface';
+import { ResponseContentType } from '@angular/http';
 
 
 interface ISheetService {
     save(form: FormData): any
-    finds(params: any): Observable<ISheet[]>
+    finds(params: any): Observable< ISheet[] >
+    getAttachment(sheet: string): Observable< Blob >
+    getByID(sheet: string): Observable< ISheet>
+    findSheetRelated(params: object): Observable< ISheet[] >
 }
 
 @Injectable()
@@ -19,15 +23,22 @@ export class SheetService implements ISheetService {
         private httpServ: HttpServices
     ) {  }
 
+    /**
+     * getByID
+     */
+    public getByID(sheet): Observable<ISheet> {
+        return this.http.post<ISheet>(`/restful/sheet/${sheet}`, null, this.httpServ.optionsRequest)
+    }
+
 
     /**
      * getAttachment
+     * return file in type blob
      */
-    public getAttachment(sheet: string) {
+    public getAttachment(sheet: string): Observable<Blob> {
         let options = this.httpServ.optionsRequest
-        // options.headers = this.httpServ.getHeaders()
-        return this.http.get(`/restful/sheet/attachment/${sheet}`, options)
-            // .map( response => response)
+        options['responseType'] = 'blob'
+        return this.http.get<Blob>(`/restful/sheet/attachment/${sheet}`, options)
     }
 
     /**
@@ -35,9 +46,19 @@ export class SheetService implements ISheetService {
      */
     public finds(params: object): Observable<ISheet[]> {
         let options = this.httpServ.optionsRequest
+        options.headers = this.httpServ.getHeaders()
         options.params = this.httpServ.setHttpParams(params)
-        // console.log(options)
+        options.responseType = 'json'
         return this.http.get<ISheet[]>('/restful/sheet/finds', options)
+    }
+
+    /**
+     * find sheet Related
+     */
+    public findSheetRelated(params: object): Observable<ISheet[]> {
+        let options = this.httpServ.optionsRequest
+        options.params = this.httpServ.setHttpParams(params)
+        return this.http.get<Array<ISheet>>('/result/sheet/related', options)
     }
     /**
      * save
@@ -53,5 +74,7 @@ export class SheetService implements ISheetService {
         return this.http.request(req)
         // return this.http.post('/restful/sheet/save', form, options)
     }
+
+
 
 }
