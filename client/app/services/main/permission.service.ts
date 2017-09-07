@@ -22,7 +22,7 @@ export class PermissionService extends AuthServices implements IPermissionServic
     constructor(
         http: HttpClient,
         private serviceHttp: HttpServices) {
-        super(http, serviceHttp);
+        super(http, serviceHttp, null);
     }
 
     savePermission(auth: string, permission: IPermission): Observable<any> {

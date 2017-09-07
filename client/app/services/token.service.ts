@@ -38,8 +38,26 @@ export class TokenService {
     /**
      * decodeTokenRemote
      */
-    public decodeTokenRemote() {
-
+    public decodeTokenRemote(keyName: string = 'token'): Observable<{}> {
+        try {
+            return Observable.create( observer => {
+                let token: string = localStorage.getItem(keyName)
+                fetch('/restful/auth/token')
+                    .then( (res: Response) => {
+                        observer.next(res.body)
+                        observer.complete()
+                    })
+                    .catch( err => {
+                        observer.next({ status: false, raise: 'Token invalid, close session in the browser' })
+                        observer.complete()
+                    })
+            })
+        } catch (error) {
+            return Observable.create(observer => {
+                observer.next({ status: false, raise: 'Token invalid, close session in the browser' })
+                observer.complete()
+            })
+        }
     }
 
 }

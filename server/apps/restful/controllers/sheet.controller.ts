@@ -21,7 +21,7 @@ export class SheetController {
     public getById(req: Request, res: Response) {
         Sheet
             .findById(req.params.sheet)
-            .select({ _id: 0, dirsheet: 0 })
+            .select({ _id: 0, dirsheet: 0, rate: 0 })
             .populate('brand', { _id: 0, register: 0 }, 'Brand')
             .populate('pattern', { _id: 0, register: 0 }, 'Model')
             .populate('auth', { _id: 0, permission: 0, lastLogin: 0, signupDate: 0}, 'Auth')
@@ -42,6 +42,7 @@ export class SheetController {
         try {
             // console.log(req.params)
             Sheet.findById(req.params.sheet)
+                .select({ rate: 0 })
                 .populate('brand', { _id: 0, register: 0 }, 'Brand')
                 .populate('pattern', { _id: 0, register: 0 }, 'Model')
                 .exec(async (err, _sheet) => {
@@ -88,7 +89,7 @@ export class SheetController {
             // console.log(_where)
             Sheet
                 .find(_where)
-                .select({ register: 0, dirsheet: 0})
+                .select({ register: 0, dirsheet: 0, rate: 0 })
                 .populate('brand', { _id: 0, register: 0 }, 'Brand')
                 .populate('pattern', { _id: 0, register: 0 }, 'Model')
                 .exec((err, _sheets) => {
@@ -112,18 +113,21 @@ export class SheetController {
     public sheetRelated(req: Request, res: Response) {
         try {
             Sheet
-                .find({ sheet: req.query.sheet})
-                .sort({ rate: 1})
-                .limit(req.query.limit)
+                .find({ sheet: req.query.sheet, _id: { $ne: req.query.sid } })
+                // .sort({ rate: 1})
+                .limit(parseInt(req.query.limit))
+                .populate('brand', { _id: 0, register: 0}, 'Brand')
+                .populate('pattern', { _id: 0, register: 0 }, 'Model')
+                .select({ auth: 0, dirsheet: 0, rate: 0 })
                 .exec( (err, _sheet) => {
                     if (err)
                         return res.status(500).json({ raise: err })
                     if (!_sheet)
-                        return res.status(404).json({ raise: 'not found' })
+                        return res.status(404).send({ raise: 'not found' })
                     res.status(200).json(_sheet)
                 } )
         } catch (error) {
-            res.status(501).json({ raise: error})
+            res.status(501).json({ raise: error })
         }
     }
 
@@ -175,7 +179,7 @@ export class SheetController {
                             sheet.brand = brand._id
                             sheet.pattern = model._id
                             sheet.auth = req['user']['payload']['user']
-                            console.log('request User', req['user'])
+                            // console.log('request User', req['user'])
                             sheet.save( (err, _st) => {
                                 if (err) return res.status(503).json({ raise: 'La hoja no se ha guardado' })
 
@@ -188,6 +192,37 @@ export class SheetController {
                 })
         } catch (error) {
             res.status(501).json({raise: error})
+        }
+    }
+
+    /**
+     * saveRate
+     * @param sheet
+     * @param auth
+     * @param star
+     * @method post
+     */
+    public saveRate(req: Request, res: Response) {
+        try {
+            console.log(req.body);
+
+            // find sheet
+            Sheet
+                .findById(req.body.sheet, (err, _sheet) => {
+                    if (err)
+                        return res.status(500).json({ raise: err })
+                    if (!_sheet)
+                        return res.status(404).json({ raise: 'Sheet not found, not save' })
+
+                    // get rating by auth
+                    // let rating = _sheet.rate.slice()
+                    let idex = _sheet.rate.filter( (obj, index) => obj && obj.auth === req.body.auth ? index : -1)
+                    console.log('Index object', idex)
+                    res.status(201).json( idex )
+                })
+            // res.status(201).send('true')
+        } catch (error) {
+            res.status(501).json({ raise: error })
         }
     }
 

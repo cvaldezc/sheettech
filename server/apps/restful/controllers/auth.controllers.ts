@@ -68,7 +68,7 @@ export class AuthController {
     public decodeToken(req: Request, res: Response) {
         // console.log(req.body);
         if (!req.body.token) {
-            return res.status(403).json({status: false, raise: 'No tienes Autorización'});
+            return res.status(403).json({status: false, raise: 'Controller No tienes Autorización'});
         }
         let token = req.body.token.split(' ')[1];
         TokenServices.verifyToken(token)
@@ -114,14 +114,26 @@ export class AuthController {
      * savePermission
      */
     public updatePermission(req: Request, res: Response) {
-
-        console.log(req)
-
         Auth.findOneAndUpdate({ auth: req.body['auth'] }, { 'permission': req.body['permission']}, (err, permission) => {
             if (err) return res.status(500).json({ status: false, raise: err })
             if (!permission) return res.status(404).json({ status: false, raise: 'Auth not found' })
 
             res.status(200).json({status: true, permission: req.body['permission'] })
+        })
+    }
+
+    /**
+     * getUID
+     */
+    public getUID(req: Request, res: Response) {
+        console.log('user auth middleware ', req['user']);
+
+        Auth.findOne({ auth: req.body.auth }, { _id: 1 }, (err, rauth) => {
+            if (err)
+                return res.status(500).json({ raise: err })
+            if (!rauth)
+                return res.status(404).json({ raise: 'UID not Found' })
+            res.status(201).send(rauth._id)
         })
     }
 

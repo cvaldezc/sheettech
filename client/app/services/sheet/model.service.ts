@@ -20,10 +20,14 @@ export class ModelService implements IModelService {
     }
 
     getModelRemote(): Observable<IModel[]> {
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
         return this.http.get<IModel[]>('/restful/model/remote/all', this.httpServ.optionsRequest)
     }
 
     getModels(): Observable<IModel[]> {
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
         return this.http.get<IModel[]>('/restful/model/all', this.httpServ.optionsRequest)
     }
 

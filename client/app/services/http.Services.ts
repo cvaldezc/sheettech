@@ -21,9 +21,9 @@ export class HttpServices {
     public parameters: HttpParams = new HttpParams();
 
     public optionsRequest = {
-        headers: null,
+        headers: undefined,
         params: new HttpParams(),
-        responseType: null
+        responseType: undefined
     };
 
     constructor() {

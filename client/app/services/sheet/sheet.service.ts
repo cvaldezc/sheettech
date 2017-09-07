@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpRequest, HttpEvent, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 
 import { HttpServices } from '../http.Services';
 import { ISheet } from '../../../../server/apps/restful/interfaces/Sheet.interface';
@@ -13,6 +14,7 @@ interface ISheetService {
     getAttachment(sheet: string): Observable< Blob >
     getByID(sheet: string): Observable< ISheet>
     findSheetRelated(params: object): Observable< ISheet[] >
+    saveRate(form: FormData): Observable< any >
 }
 
 @Injectable()
@@ -27,7 +29,9 @@ export class SheetService implements ISheetService {
      * getByID
      */
     public getByID(sheet): Observable<ISheet> {
-        return this.http.post<ISheet>(`/restful/sheet/${sheet}`, null, this.httpServ.optionsRequest)
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
+        return this.http.post<ISheet>(`/restful/sheet/encode/${sheet}`, null, this.httpServ.optionsRequest)
     }
 
 
@@ -58,12 +62,14 @@ export class SheetService implements ISheetService {
     public findSheetRelated(params: object): Observable<ISheet[]> {
         let options = this.httpServ.optionsRequest
         options.params = this.httpServ.setHttpParams(params)
-        return this.http.get<Array<ISheet>>('/result/sheet/related', options)
+        options['responseType'] = 'json'
+        return this.http.get<Array<ISheet>>('/restful/sheet/related', options)
     }
+
     /**
      * save
      */
-    save(form: FormData): Observable<HttpEvent<{}>> {
+    public save(form: FormData): Observable<HttpEvent<{}>> {
         let options = this.httpServ.optionsRequest
         let headers = this.httpServ.getHeaders()
         options['reportProgress'] = true
@@ -76,5 +82,28 @@ export class SheetService implements ISheetService {
     }
 
 
+    /**
+     * saveRate
+     */
+    public saveRate(form: any): Observable<any> {
+        let options = this.httpServ.optionsRequest
+        options.params = this.httpServ.setHttpParams()
+        options['responseType'] = 'json'
+        return this.http.post<any>('/restful/sheet/rating', form, options)
+    }
+
+    test(): Observable< object > {
+        return Observable.create( observer => {
+            try {
+                if ( 1 == 1) {
+                    throw new Error('another')
+                }
+                observer.next( { status: true} )
+            } catch (ex) {
+                observer.error( { status: false, raise: ex} )
+            }
+            observer.complete()
+        })
+    }
 
 }

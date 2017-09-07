@@ -3,6 +3,8 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 import { SheetService } from '../../../services/sheet/sheet.service';
 import { ISheet } from '../../../../../server/apps/restful/interfaces/Sheet.interface';
+import { UtilService } from '../../../services/util.service';
+import { AuthServices } from '../../../services/auth/auth.service';
 
 
 @Component({
@@ -23,10 +25,12 @@ export class SheetDetailsComponent implements OnInit {
         rate: 0,
         auth: <any>{ auth: '', email: '', name: '', isactive: false},
     }
+    _related: ISheet[] = <any>[]
 
     constructor(
         private activatedRouter: ActivatedRoute,
-        private sheetServ: SheetService
+        private sheetServ: SheetService,
+        private authServ: AuthServices
     ) {  }
 
     ngOnInit(): void {
@@ -44,7 +48,10 @@ export class SheetDetailsComponent implements OnInit {
      */
     public getData(): void {
         this.sheetServ.getByID(this._sheet)
-            .subscribe( response => this.sheetData = response )
+            .subscribe( response => {
+                this.sheetData = response
+                this.getRelated()
+            })
     }
 
     /**
@@ -71,13 +78,37 @@ export class SheetDetailsComponent implements OnInit {
      * getRelated
      */
     public getRelated(): void {
-        this.sheetServ.findSheetRelated({sheet: this._sheet, limit: 5})
+        this.sheetServ
+            .findSheetRelated({
+                sid: this._sheet,
+                sheet: this.sheetData.sheet,
+                limit: 5
+            })
             .subscribe( response => {
-                console.log(response)
+                this._related = response
+                // console.log( 'show related ', response)
             },
             ( err => {
-                console.warn(err);
+                console.info(err);
             })
+        )
+    }
+
+    /**
+     * saveReting
+     */
+    public saveReting(): void {
+        let params = { auth: this.authServ._auth }
+        this.sheetServ.saveRate(params)
+            .subscribe( res => {
+                console.log(res)
+            })
+    }
+
+    test(): void {
+        this.sheetServ.test().subscribe(
+            val => console.log('Test val ', val),
+            err => console.log('Test err ', err)
         )
     }
 

@@ -17,17 +17,21 @@ export class MasterService extends HttpClient implements IMasterService {
     }
     public token: string;
     public parameters: HttpParams;
-    public optionsRequest: { headers: any; params: HttpParams; };
+    public optionsRequest: { headers: any; params: HttpParams; responseType: any };
     public getHeaders(): HttpHeaders {
         return new HttpHeaders()
     }
 
     findRemoteCode(code: string): Observable<Array<IMaster>> {
-        return this.get<Array<IMaster>>(`/restful/master/find/code/${code}`, this.optionsRequest)
+        let options = this.optionsRequest
+        options['responseType'] = 'json'
+        return this.get<Array<IMaster>>(`/restful/master/find/code/${code}`, options)
     }
 
     findRemoteNames(names: string): Observable<Array<IMaster>> {
-        return this.get<Array<IMaster>>(`/restful/master/find/name/${names}`, this.optionsRequest)
+        let options = this.optionsRequest
+        options['responseType'] = 'json'
+        return this.get<Array<IMaster>>(`/restful/master/find/name/${names}`, options)
     }
 
 }

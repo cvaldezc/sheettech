@@ -1,6 +1,7 @@
 import { IBrand } from './Brand.inteface';
 import { IModel } from './Model.interface';
 import { IAuthModel } from './Auth.interface';
+import { IRate } from './Rate.interface';
 
 
 export interface ISheet {
@@ -10,6 +11,6 @@ export interface ISheet {
     brand: IBrand,
     pattern: IModel,
     register?: number|string|Date,
-    rate: number,
+    rate: Array<IRate>,
     auth: IAuthModel
 }

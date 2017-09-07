@@ -20,11 +20,15 @@ export class BrandService implements IBrandService {
 
 
     getBrandRemote(): Observable<IBrand[]> {
-        return this.http.get<IBrand[]>('/restful/brand/remote/all', this.httpServ.optionsRequest)
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
+        return this.http.get<IBrand[]>('/restful/brand/remote/all', options)
     }
 
     getBrands(): Observable<IBrand[]> {
-        return this.http.get<IBrand[]>('/restful/brand/all', this.httpServ.optionsRequest)
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
+        return this.http.get<IBrand[]>('/restful/brand/all', options)
     }
 
 }
