@@ -32,7 +32,7 @@ const appRoutes: Routes = [
   //   component: MainComponent, outlet: 'content', canActivate: [AuthGuardLoign],
   //   // children: [
   //   //   // { path: '', component: PageNotFoundComponent },
-  //   //   // { path: '**', component: PageNotFoundComponent },
+
   //   //   { path: 'permission/:auth', component: PermissionsComponent, outlet: 'data' },
   //   //   { path: 'users', component: UserDetailsComponent, outlet: 'data' }
   //   // ]

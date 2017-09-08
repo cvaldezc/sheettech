@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 import { SheetService } from '../../../services/sheet/sheet.service';
 import { ISheet } from '../../../../../server/apps/restful/interfaces/Sheet.interface';
@@ -30,7 +30,8 @@ export class SheetDetailsComponent implements OnInit {
     constructor(
         private activatedRouter: ActivatedRoute,
         private sheetServ: SheetService,
-        private authServ: AuthServices
+        private authServ: AuthServices,
+        private router: Router
     ) {  }
 
     ngOnInit(): void {
@@ -51,7 +52,9 @@ export class SheetDetailsComponent implements OnInit {
             .subscribe( response => {
                 this.sheetData = response
                 this.getRelated()
-            })
+            },
+            err => this.router.navigate(['notfound'])
+        )
     }
 
     /**
@@ -97,12 +100,15 @@ export class SheetDetailsComponent implements OnInit {
     /**
      * saveReting
      */
-    public saveReting(): void {
-        let params = { auth: this.authServ._auth }
+    public saveReting(star: number): void {
+        let params = { star: star, sheet: this._sheet, auth: this.authServ._uid }
         this.sheetServ.saveRate(params)
-            .subscribe( res => {
-                console.log(res)
-            })
+            .subscribe(
+                res => {
+                    console.log(res)
+                },
+                err => console.log(err)
+            )
     }
 
     test(): void {

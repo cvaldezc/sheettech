@@ -22,6 +22,18 @@ const SheetSchema = new Schema({
     auth: { type: Schema.Types.ObjectId, ref: 'Auth' }
 })
 
+
+SheetSchema.methods.ratingSheet = () => {
+    let star: number = 0
+    if ( this.rate.length ) {
+        this.rate.forEach( (rate, index) => {
+
+        });
+    }
+    return star
+}
+
+
 export interface ISheetDocument extends ISheet, Document { }
 
 export const Sheet: Model<ISheetDocument> = model<ISheetDocument>('Sheet', SheetSchema)

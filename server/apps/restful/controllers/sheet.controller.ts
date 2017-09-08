@@ -7,6 +7,7 @@ import { Sheet, ISheetDocument } from '../models/sheet.models'
 import { Brand, IBrandDocument } from '../models/brand.models';
 import { Models } from '../models/model.models';
 import { ISheet } from '../interfaces/Sheet.interface'
+import { IRate } from '../interfaces/Rate.interface';
 import { BrandController } from './brand.controller';
 import { ModelController } from './model.controller';
 import { config } from '../../../config.server';
@@ -156,7 +157,7 @@ export class SheetController {
                 .populate('brand', { _id: 0, register: 0 }, 'Brand')
                 .populate('pattern', { _id: 0, register: 0 }, 'Model')
                 .exec( async (err, _sheet) => {
-                    console.log('RESULT BY POPULATE ', _sheet)
+                    // console.log('RESULT BY POPULATE ', _sheet)
                     if (err) return res.status(505).json({ raise: err })
                     if (_sheet === null) {
                         // console.log('result brand ', brand)
@@ -204,8 +205,7 @@ export class SheetController {
      */
     public saveRate(req: Request, res: Response) {
         try {
-            console.log(req.body);
-
+            // console.log(req.body);
             // find sheet
             Sheet
                 .findById(req.body.sheet, (err, _sheet) => {
@@ -213,16 +213,35 @@ export class SheetController {
                         return res.status(500).json({ raise: err })
                     if (!_sheet)
                         return res.status(404).json({ raise: 'Sheet not found, not save' })
-
                     // get rating by auth
                     // let rating = _sheet.rate.slice()
-                    let idex = _sheet.rate.filter( (obj, index) => obj && obj.auth === req.body.auth ? index : -1)
-                    console.log('Index object', idex)
-                    res.status(201).json( idex )
+                    let idex = _sheet.rate
+                        // .map( (obj, index) => obj && typeof obj ? index : -1)
+                        .filter( (obj, index) => obj && obj.auth === req.body.auth)
+                    console.log('Index object', idex, typeof idex)
+                    // verify exist content
+                    if ( !idex.length ) {
+                        _sheet.rate.push(this.objectStar(req.body.auth, req.body.star))
+                        _sheet.save()
+                        return res.status(201).json({ 'nothing': true }).end()
+                    }else{
+                        res.status(201).json( idex )
+                    }
                 })
             // res.status(201).send('true')
         } catch (error) {
             res.status(501).json({ raise: error })
+        }
+    }
+
+    private objectStar(auth: string, star: number): IRate {
+        return <IRate> {
+            auth: auth,
+            starOne: (star == 1 ) ? 1 : 0,
+            starTwo: (star == 2 ) ? 1 : 0,
+            starThree: (star == 3 ) ? 1 : 0,
+            starFour: (star == 4 ) ? 1 : 0,
+            starFive: (star == 5 ) ? 1 : 0
         }
     }
 

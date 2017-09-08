@@ -126,14 +126,16 @@ export class AuthController {
      * getUID
      */
     public getUID(req: Request, res: Response) {
-        console.log('user auth middleware ', req['user']);
+        // console.log('user auth middleware ', req['user']);
 
         Auth.findOne({ auth: req.body.auth }, { _id: 1 }, (err, rauth) => {
             if (err)
                 return res.status(500).json({ raise: err })
             if (!rauth)
                 return res.status(404).json({ raise: 'UID not Found' })
-            res.status(201).send(rauth._id)
+            res.status(200)
+            res.write(`${rauth._id}`)
+            res.end()
         })
     }
 
