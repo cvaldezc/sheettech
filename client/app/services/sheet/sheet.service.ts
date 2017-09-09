@@ -15,6 +15,7 @@ interface ISheetService {
     getByID(sheet: string): Observable< ISheet>
     findSheetRelated(params: object): Observable< ISheet[] >
     saveRate(form: FormData): Observable< any >
+    getRatingbySheet(sheet: string): Observable< number >
 }
 
 @Injectable()
@@ -90,6 +91,15 @@ export class SheetService implements ISheetService {
         options.params = this.httpServ.setHttpParams()
         options['responseType'] = 'json'
         return this.http.post<any>('/restful/sheet/rating', form, options)
+    }
+
+    /**
+     * get Rating by Sheet
+     */
+    public getRatingbySheet(sheet: string): Observable<number> {
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
+        return this.http.get<number>(`/restful/sheet/rating/${sheet}`, options)
     }
 
     test(): Observable< object > {

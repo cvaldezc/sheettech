@@ -23,17 +23,17 @@ const SheetSchema = new Schema({
 })
 
 
-SheetSchema.methods.ratingSheet = () => {
-    let star: number = 0
-    if ( this.rate.length ) {
-        this.rate.forEach( (rate, index) => {
-
-        });
-    }
-    return star
-}
-
-
 export interface ISheetDocument extends ISheet, Document { }
 
 export const Sheet: Model<ISheetDocument> = model<ISheetDocument>('Sheet', SheetSchema)
+
+export const setStar = (user: string, star: number): IRate => {
+    return <IRate> {
+        auth: user,
+        starOne: (star == 1 ) ? 1 : 0,
+        starTwo: (star == 2 ) ? 1 : 0,
+        starThree: (star == 3 ) ? 1 : 0,
+        starFour: (star == 4 ) ? 1 : 0,
+        starFive: (star == 5 ) ? 1 : 0
+    }
+}

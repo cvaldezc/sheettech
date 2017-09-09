@@ -19,5 +19,7 @@ sheetUrls.get('/related', isAuth, new SheetController().sheetRelated)
 sheetUrls.post('/rating', isAuth, new SheetController().saveRate)
 // get attachment by id
 sheetUrls.get('/attachment/:sheet', new SheetController().getAttachmentById)
+// get rating by id
+sheetUrls.get('/rating/:sheet', new SheetController().getRatingBySheet)
 
 export { sheetUrls }

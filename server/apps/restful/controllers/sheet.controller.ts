@@ -3,7 +3,7 @@ import { DocumentQuery, Types } from 'mongoose';
 import path = require('path')
 import fs = require('fs')
 
-import { Sheet, ISheetDocument } from '../models/sheet.models'
+import { Sheet, ISheetDocument, setStar } from '../models/sheet.models'
 import { Brand, IBrandDocument } from '../models/brand.models';
 import { Models } from '../models/model.models';
 import { ISheet } from '../interfaces/Sheet.interface'
@@ -25,12 +25,12 @@ export class SheetController {
             .select({ _id: 0, dirsheet: 0, rate: 0 })
             .populate('brand', { _id: 0, register: 0 }, 'Brand')
             .populate('pattern', { _id: 0, register: 0 }, 'Model')
-            .populate('auth', { _id: 0, permission: 0, lastLogin: 0, signupDate: 0}, 'Auth')
+            .populate('auth', { _id: 0, permission: 0, lastLogin: 0, signupDate: 0 }, 'Auth')
             .exec(async (err, _sheet) => {
                 if (err)
                     return res.status(501).json({ raise: err })
                 if (!_sheet)
-                    return res.status(404).json({ raise: 'sheet not found '})
+                    return res.status(404).json({ raise: 'sheet not found ' })
                 res.status(200).json(_sheet)
             })
     }
@@ -50,7 +50,7 @@ export class SheetController {
                     if (err)
                         return res.status(501).json({ raise: err })
                     if (!_sheet)
-                        return res.status(404).json({ raise: 'sheet not found '})
+                        return res.status(404).json({ raise: 'sheet not found ' })
                     // console.log('RESULT FIND', _sheet);
                     // let file = await fs.createReadStream(_sheet.dirsheet)
                     // let stat = await fs.statSync(_sheet.dirsheet)
@@ -58,7 +58,7 @@ export class SheetController {
                     // res.set('Content-Type', 'application/pdf')
                     // res.set('Content-Disposition', `attachment;filename=${_sheet.name} ${_sheet.brand.brand} ${_sheet.pattern.model}.pdf`)
                     // file.pipe(await res)
-                    res.status(200).download(_sheet.dirsheet, `${_sheet.name} ${_sheet.brand.brand} - ${_sheet.pattern.model}.pdf` )
+                    res.status(200).download(_sheet.dirsheet, `${_sheet.name} ${_sheet.brand.brand} - ${_sheet.pattern.model}.pdf`)
                     // res.end()
                 })
         } catch (error) {
@@ -78,11 +78,11 @@ export class SheetController {
         try {
             let _where: object = {}
             Object.keys(req.query).forEach((key) => {
-                if (req.query[key]){
+                if (req.query[key]) {
                     if (key === 'brand' || key === 'pattern')
                         _where[key] = Types.ObjectId(req.query[key])
                     else if (key === 'name')
-                        _where[key] = { $regex: `${req.query[key]}`, $options: 'i'}
+                        _where[key] = { $regex: `${req.query[key]}`, $options: 'i' }
                     else
                         _where[key] = req.query[key]
                 }
@@ -96,7 +96,7 @@ export class SheetController {
                 .exec((err, _sheets) => {
                     if (err)
                         return res.status(500).json({ raise: err })
-                    if(!_sheets)
+                    if (!_sheets)
                         return res.status(404).json({ raise: 'not found result' })
                     res.status(202).json(_sheets)
                 })
@@ -117,16 +117,16 @@ export class SheetController {
                 .find({ sheet: req.query.sheet, _id: { $ne: req.query.sid } })
                 // .sort({ rate: 1})
                 .limit(parseInt(req.query.limit))
-                .populate('brand', { _id: 0, register: 0}, 'Brand')
+                .populate('brand', { _id: 0, register: 0 }, 'Brand')
                 .populate('pattern', { _id: 0, register: 0 }, 'Model')
                 .select({ auth: 0, dirsheet: 0, rate: 0 })
-                .exec( (err, _sheet) => {
+                .exec((err, _sheet) => {
                     if (err)
                         return res.status(500).json({ raise: err })
                     if (!_sheet)
                         return res.status(404).send({ raise: 'not found' })
                     res.status(200).json(_sheet)
-                } )
+                })
         } catch (error) {
             res.status(501).json({ raise: error })
         }
@@ -137,8 +137,8 @@ export class SheetController {
      */
     public async saveSheet(req: Request, res: Response) {
         try {
-            let brand: any = await Brand.findOne({bid: req.body['brand']}, (err, vbrand) => vbrand)
-            let model: any = await Models.findOne({mid: req.body['model']}, (err, vmodel) => vmodel)
+            let brand: any = await Brand.findOne({ bid: req.body['brand'] }, (err, vbrand) => vbrand)
+            let model: any = await Models.findOne({ mid: req.body['model'] }, (err, vmodel) => vmodel)
             if (brand === null) {
                 console.log('create brand');
                 brand = await new BrandController().createBrand(req, res)
@@ -156,7 +156,7 @@ export class SheetController {
                 .findOne({ sheet: req.body.sheet, brand: brand._id, pattern: model._id })
                 .populate('brand', { _id: 0, register: 0 }, 'Brand')
                 .populate('pattern', { _id: 0, register: 0 }, 'Model')
-                .exec( async (err, _sheet) => {
+                .exec(async (err, _sheet) => {
                     // console.log('RESULT BY POPULATE ', _sheet)
                     if (err) return res.status(505).json({ raise: err })
                     if (_sheet === null) {
@@ -181,18 +181,18 @@ export class SheetController {
                             sheet.pattern = model._id
                             sheet.auth = req['user']['payload']['user']
                             // console.log('request User', req['user'])
-                            sheet.save( (err, _st) => {
+                            sheet.save((err, _st) => {
                                 if (err) return res.status(503).json({ raise: 'La hoja no se ha guardado' })
 
                                 res.status(201).json({ status: true })
                             })
                         })
-                    }else{
+                    } else {
                         res.status(409).json({ raise: 'La hoja técnica ya existe' })
                     }
                 })
         } catch (error) {
-            res.status(501).json({raise: error})
+            res.status(501).json({ raise: error })
         }
     }
 
@@ -214,18 +214,22 @@ export class SheetController {
                     if (!_sheet)
                         return res.status(404).json({ raise: 'Sheet not found, not save' })
                     // get rating by auth
-                    // let rating = _sheet.rate.slice()
-                    let idex = _sheet.rate
-                        // .map( (obj, index) => obj && typeof obj ? index : -1)
-                        .filter( (obj, index) => obj && obj.auth === req.body.auth)
-                    console.log('Index object', idex, typeof idex)
                     // verify exist content
-                    if ( !idex.length ) {
-                        _sheet.rate.push(this.objectStar(req.body.auth, req.body.star))
+                    if (_sheet.rate.length == 0) {
+                        _sheet.rate.push(setStar(req.body.auth, req.body.star))
                         _sheet.save()
-                        return res.status(201).json({ 'nothing': true }).end()
-                    }else{
-                        res.status(201).json( idex )
+                        return res.status(200).json({ 'nothing': true }).end()
+                    } else {
+                        let index = _sheet.rate.findIndex((star) => Types.ObjectId(req.body.auth).equals(Types.ObjectId(star.auth)))
+                        if (index != -1) {
+                            console.log('Index object', index, typeof index)
+                            _sheet.rate[index] = setStar(req.body.auth, req.body.star)
+                        } else {
+                            // set firt rating by sheet
+                            _sheet.rate.push(setStar(req.body.auth, req.body.star))
+                        }
+                        _sheet.save()
+                        res.status(200).json({ msg: 'save rating sucessful'})
                     }
                 })
             // res.status(201).send('true')
@@ -234,15 +238,42 @@ export class SheetController {
         }
     }
 
-    private objectStar(auth: string, star: number): IRate {
-        return <IRate> {
-            auth: auth,
-            starOne: (star == 1 ) ? 1 : 0,
-            starTwo: (star == 2 ) ? 1 : 0,
-            starThree: (star == 3 ) ? 1 : 0,
-            starFour: (star == 4 ) ? 1 : 0,
-            starFive: (star == 5 ) ? 1 : 0
-        }
+    /**
+     * get Rating By Sheet
+     */
+    public getRatingBySheet(req: Request, res: Response) {
+        Sheet.findById(req.params.sheet, (err, _sheet) => {
+            if (err)
+                return res.status(500).json({ raise: err })
+            if (!_sheet)
+                return res.status(404).json({ raise: 'not found sheet'})
+            if (_sheet.rate.length) {
+                let rates: Array<number> = [0, 0, 0, 0, 0]
+                let amount: number = 0
+                let avg: number = 0
+                _sheet.rate.forEach((star, index) => {
+                    if (star.starOne) rates[0] += 1
+                    if (star.starTwo) rates[1] += 1
+                    if (star.starThree) rates[2] += 1
+                    if (star.starFour) rates[3] += 1
+                    if (star.starFive) rates[4] += 1
+                })
+                // console.log(rates);
+                amount = rates.reduce( (vp, vc) => vp + vc , 0 )
+                console.log(amount);
+                avg = (
+                    (
+                        (rates[0] * 1) +
+                        (rates[1] * 2) +
+                        (rates[2] * 3) +
+                        (rates[3] * 4) +
+                        (rates[4] * 5)
+                    ) / amount
+                )
+                res.status(200).json( avg )
+            } else
+                res.status(200).json(0)
+        })
     }
 
 }

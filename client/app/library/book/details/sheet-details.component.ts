@@ -26,6 +26,7 @@ export class SheetDetailsComponent implements OnInit {
         auth: <any>{ auth: '', email: '', name: '', isactive: false},
     }
     _related: ISheet[] = <any>[]
+    star: number = 0
 
     constructor(
         private activatedRouter: ActivatedRoute,
@@ -41,6 +42,7 @@ export class SheetDetailsComponent implements OnInit {
                 this._sheet = params['sheet']
                 this.getData()
                 this.getAttachment()
+                this.getRating()
             })
     }
 
@@ -102,13 +104,25 @@ export class SheetDetailsComponent implements OnInit {
      */
     public saveReting(star: number): void {
         let params = { star: star, sheet: this._sheet, auth: this.authServ._uid }
-        this.sheetServ.saveRate(params)
-            .subscribe(
-                res => {
-                    console.log(res)
-                },
-                err => console.log(err)
-            )
+        if ( this.authServ.permission.write ) {
+            this.sheetServ.saveRate(params)
+                .subscribe(
+                    res => {
+                        console.log('RES Rating ', res)
+                        this.getRating()
+                    },
+                    err => console.log(err)
+                )
+        } else {
+            console.log(' Nothing permission for write ');
+        }
+    }
+
+    getRating(): void {
+        this
+            .sheetServ
+            .getRatingbySheet(this._sheet)
+            .subscribe( star => this.star = star )
     }
 
     test(): void {
