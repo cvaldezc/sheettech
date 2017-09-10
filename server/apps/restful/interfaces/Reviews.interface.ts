@@ -1,7 +1,8 @@
 import { ISheet } from './Sheet.interface';
 
 export interface IReviews {
+    auth: string
     sheet: string
-    review: string
+    comment: string
     register: string|number|Date
 }

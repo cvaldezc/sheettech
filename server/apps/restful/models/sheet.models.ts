@@ -1,4 +1,4 @@
-import { Document, Model, model, Schema } from 'mongoose';
+import { Document, Model, model, Schema, Types } from 'mongoose';
 
 import { ISheet } from '../interfaces/Sheet.interface';
 import { IRate } from '../interfaces/Rate.interface';
@@ -23,7 +23,9 @@ const SheetSchema = new Schema({
 })
 
 
-export interface ISheetDocument extends ISheet, Document { }
+export interface ISheetDocument extends ISheet, Document {
+    _id: string
+ }
 
 export const Sheet: Model<ISheetDocument> = model<ISheetDocument>('Sheet', SheetSchema)
 

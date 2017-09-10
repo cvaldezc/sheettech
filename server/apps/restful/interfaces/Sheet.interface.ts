@@ -5,6 +5,7 @@ import { IRate } from './Rate.interface';
 
 
 export interface ISheet {
+    _id?: string
     sheet: string,
     name: string,
     dirsheet?: string,

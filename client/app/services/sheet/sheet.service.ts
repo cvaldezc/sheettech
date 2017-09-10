@@ -16,6 +16,7 @@ interface ISheetService {
     findSheetRelated(params: object): Observable< ISheet[] >
     saveRate(form: FormData): Observable< any >
     getRatingbySheet(sheet: string): Observable< number >
+    getFavorite(auth: string, sheet: string): Observable< boolean >
 }
 
 @Injectable()
@@ -99,7 +100,28 @@ export class SheetService implements ISheetService {
     public getRatingbySheet(sheet: string): Observable<number> {
         let options = this.httpServ.optionsRequest
         options['responseType'] = 'json'
+        options.params = this.httpServ.setHttpParams()
         return this.http.get<number>(`/restful/sheet/rating/${sheet}`, options)
+    }
+
+    /**
+     * getFavorite
+     */
+    public getFavorite(auth: string, sheet: string): Observable< boolean > {
+        let options = this.httpServ.optionsRequest
+        options.params = this.httpServ.setHttpParams()
+        options['responseType'] = 'json'
+        return this.http.get<boolean>(`/restful/sheet/favorite/${auth}/${sheet}`, options)
+    }
+
+    /**
+     * favoriteSave
+     */
+    public favoriteSave(auth: string, sheet: string): Observable< any > {
+        let options = this.httpServ.optionsRequest
+        options.params = this.httpServ.setHttpParams()
+        options['responseType'] = 'json'
+        return this.http.post('/restful/sheet/save/favorite', {auth: auth, sheet: sheet}, options)
     }
 
     test(): Observable< object > {

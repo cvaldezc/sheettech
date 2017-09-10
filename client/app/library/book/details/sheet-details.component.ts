@@ -5,6 +5,7 @@ import { SheetService } from '../../../services/sheet/sheet.service';
 import { ISheet } from '../../../../../server/apps/restful/interfaces/Sheet.interface';
 import { UtilService } from '../../../services/util.service';
 import { AuthServices } from '../../../services/auth/auth.service';
+import { IPermission } from '../../../../../server/apps/restful/interfaces/Permission.interface';
 
 
 @Component({
@@ -27,13 +28,14 @@ export class SheetDetailsComponent implements OnInit {
     }
     _related: ISheet[] = <any>[]
     star: number = 0
+    _favorite: boolean = false
 
     constructor(
         private activatedRouter: ActivatedRoute,
         private sheetServ: SheetService,
         private authServ: AuthServices,
         private router: Router
-    ) {  }
+    ) { }
 
     ngOnInit(): void {
         this
@@ -43,6 +45,9 @@ export class SheetDetailsComponent implements OnInit {
                 this.getData()
                 this.getAttachment()
                 this.getRating()
+                setTimeout(() => {
+                    this.checkedFavorite()
+                }, 800);
             })
     }
 
@@ -103,26 +108,46 @@ export class SheetDetailsComponent implements OnInit {
      * saveReting
      */
     public saveReting(star: number): void {
-        let params = { star: star, sheet: this._sheet, auth: this.authServ._uid }
-        if ( this.authServ.permission.write ) {
-            this.sheetServ.saveRate(params)
-                .subscribe(
-                    res => {
-                        console.log('RES Rating ', res)
-                        this.getRating()
-                    },
-                    err => console.log(err)
-                )
-        } else {
-            console.log(' Nothing permission for write ');
+        if (this.authServ.permission.write) {
+            let params = { star: star, sheet: this._sheet, auth: this.authServ._uid }
+            if ( this.authServ.permission.write ) {
+                this.sheetServ.saveRate(params)
+                    .subscribe(
+                        res => {
+                            console.log('RES Rating ', res)
+                            this.getRating()
+                        },
+                        err => console.log(err)
+                    )
+            } else {
+                console.log(' Nothing permission for write ');
+            }
         }
     }
 
-    getRating(): void {
+    public getRating(): void {
         this
             .sheetServ
             .getRatingbySheet(this._sheet)
             .subscribe( star => this.star = star )
+    }
+
+    /**
+     * checkedFavorite
+     */
+    public checkedFavorite() {
+        this.sheetServ
+            .getFavorite(this.authServ._uid, this._sheet)
+            .subscribe( (_fav) => this._favorite = _fav, err => console.log(err))
+    }
+
+    /**
+     * favoriteSave
+     */
+    public favoriteSave() {
+        this.sheetServ.favoriteSave(this.authServ._uid, this._sheet)
+        .subscribe( res => this.checkedFavorite(), err => console.log(err)
+        )
     }
 
     test(): void {

@@ -37,13 +37,15 @@ export class AuthServices extends PermissionGuard implements IAuthService {
             this.tkServ.decodedTokenLocal().subscribe( res => {
                 if (res.hasOwnProperty('raise')) {
                     Router.prototype.navigate['/logout']
+                    console.log('inside router');
+
                 } else {
                     this.isAdmin = res['payload']['isAdmin']
                     this._auth = res['payload']['auth']
                     this.getAuthID(this._auth).subscribe( isuid => {
                         // console.warn(isuid)
                         this._uid = isuid
-                        // console.log(this._uid)
+                        // console.log('UID USER', this._uid)
                     }, err => {
                         console.error(err);
                     })

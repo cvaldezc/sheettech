@@ -1,6 +1,7 @@
 import { Router } from 'express'
 
 import { SheetController } from '../restful/controllers/sheet.controller'
+import { FavoriteController } from '../restful/controllers/favorite.controller';
 import { isAuth } from '../restful/middlewares/auth.middleware'
 
 
@@ -21,5 +22,10 @@ sheetUrls.post('/rating', isAuth, new SheetController().saveRate)
 sheetUrls.get('/attachment/:sheet', new SheetController().getAttachmentById)
 // get rating by id
 sheetUrls.get('/rating/:sheet', new SheetController().getRatingBySheet)
+// checked sheet favorite
+sheetUrls.get('/favorite/:auth/:sheet', isAuth, new FavoriteController().verifyFavorite)
+// save Favorite
+sheetUrls.post('/save/favorite', isAuth, new FavoriteController().saveFavorite)
+
 
 export { sheetUrls }

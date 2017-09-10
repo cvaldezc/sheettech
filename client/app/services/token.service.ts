@@ -1,6 +1,3 @@
-/**
- * Token
- */
 import { Observable } from 'rxjs/Observable';
 import * as jwt_decode from 'jwt-decode';
 import * as moment from "moment";

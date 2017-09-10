@@ -12,8 +12,8 @@
                 <p>
                     <span fxLayoutAlign=" center">
                         Marcar como Favorito
-                        <button md-icon-button (click)="onClick">
-                            <md-icon class="md-24">favorite_border</md-icon>
+                        <button md-icon-button (click)="favoriteSave()" [ngClass]="{'red-text': _favorite}">
+                            <md-icon class="md-24">{{ (_favorite ? 'favorite' : 'favorite_border')}}</md-icon>
                         </button>
                     </span>
                 </p>

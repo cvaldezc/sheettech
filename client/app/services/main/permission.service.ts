@@ -5,6 +5,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpServices } from '../http.Services';
 import { AuthServices } from '../auth/auth.service';
 import { IPermission } from '../../../../server/apps/restful/interfaces/Permission.interface';
+import { TokenService } from '../token.service';
 // import { IAuthModel } from '../../../../server/apps/restful/interfaces/Auth.interface';
 
 
@@ -21,8 +22,10 @@ export class PermissionService extends AuthServices implements IPermissionServic
 
     constructor(
         http: HttpClient,
-        private serviceHttp: HttpServices) {
-        super(http, serviceHttp, null);
+        private serviceHttp: HttpServices,
+        private tk: TokenService
+    ) {
+        super(http, serviceHttp, tk)
     }
 
     savePermission(auth: string, permission: IPermission): Observable<any> {
