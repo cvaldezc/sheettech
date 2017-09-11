@@ -61,21 +61,19 @@ export class FavoriteController {
      */
     public removeFavorite(req: Request, res: Response) {
         Favorite
-        .findOne({ auth: Types.ObjectId(req.body.auth) })
+        .update(
+            { auth: Types.ObjectId(req.body.auth) },
+            { $pull: { favorites: Types.ObjectId(req.body.sheet) } }
+        )
         .exec( (err, _fav) => {
             if (err)
                 return res.status(500).json({ raise: err })
             if (!_fav)
-                return res.status(404).json({ raise: 'not found' })
-            let index: number = -1
-            index = _fav.favorites.findIndex((obj) => Types.ObjectId(obj._id).equals(Types.ObjectId(req.body.sheet)))
-            if (index != -1) {
-                _fav.favorites.splice(index, 1)
-                _fav.save()
-                res.status(200).json({ msg: 'hoja eliminda'})
-            } else {
-                res.status(404).json({ raise: 'No se ha encontrado la hoja'})
-            }
+                return res.status(404).json({ raise: 'No se ha encontrado la hoja' })
+            console.log('This UPdate ', _fav);
+
+            res.status(200).json(false)
+
         })
     }
 
@@ -91,13 +89,13 @@ export class FavoriteController {
         Favorite
         .findOne({
             auth: Types.ObjectId(req.params.auth),
-            favorites: { $in: [Types.ObjectId(req.params.sheet)] }
+            favorites: { $in: [ req.params.sheet ] }
         })
         .exec( (err, _fav) => {
             if (err)
                 return res.status(500).json({ raise: err })
             if (!_fav)
-                return res.status(404).json({ raise: 'not found' })
+                return res.status(201).json( false )
             res.status(200).json( true )
         })
     }

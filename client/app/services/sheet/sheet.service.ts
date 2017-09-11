@@ -3,9 +3,9 @@ import { HttpClient, HttpParams, HttpRequest, HttpEvent, HttpResponse } from '@a
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import { HttpServices } from '../http.Services';
 import { ISheet } from '../../../../server/apps/restful/interfaces/Sheet.interface';
-import { ResponseContentType } from '@angular/http';
+import { HttpServices } from '../http.Services';
+import { FavoriteService } from './favorite.service';
 
 
 interface ISheetService {
@@ -16,16 +16,17 @@ interface ISheetService {
     findSheetRelated(params: object): Observable< ISheet[] >
     saveRate(form: FormData): Observable< any >
     getRatingbySheet(sheet: string): Observable< number >
-    getFavorite(auth: string, sheet: string): Observable< boolean >
 }
 
 @Injectable()
-export class SheetService implements ISheetService {
+export class SheetService extends FavoriteService implements ISheetService {
 
     constructor(
-        private http: HttpClient,
-        private httpServ: HttpServices
-    ) {  }
+        public http: HttpClient,
+        public httpServ: HttpServices
+    ) {
+        super(http, httpServ);
+    }
 
     /**
      * getByID
@@ -83,7 +84,6 @@ export class SheetService implements ISheetService {
         // return this.http.post('/restful/sheet/save', form, options)
     }
 
-
     /**
      * saveRate
      */
@@ -104,25 +104,7 @@ export class SheetService implements ISheetService {
         return this.http.get<number>(`/restful/sheet/rating/${sheet}`, options)
     }
 
-    /**
-     * getFavorite
-     */
-    public getFavorite(auth: string, sheet: string): Observable< boolean > {
-        let options = this.httpServ.optionsRequest
-        options.params = this.httpServ.setHttpParams()
-        options['responseType'] = 'json'
-        return this.http.get<boolean>(`/restful/sheet/favorite/${auth}/${sheet}`, options)
-    }
 
-    /**
-     * favoriteSave
-     */
-    public favoriteSave(auth: string, sheet: string): Observable< any > {
-        let options = this.httpServ.optionsRequest
-        options.params = this.httpServ.setHttpParams()
-        options['responseType'] = 'json'
-        return this.http.post('/restful/sheet/save/favorite', {auth: auth, sheet: sheet}, options)
-    }
 
     test(): Observable< object > {
         return Observable.create( observer => {

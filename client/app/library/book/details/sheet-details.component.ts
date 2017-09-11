@@ -92,7 +92,7 @@ export class SheetDetailsComponent implements OnInit {
             .findSheetRelated({
                 sid: this._sheet,
                 sheet: this.sheetData.sheet,
-                limit: 5
+                limit: 3
             })
             .subscribe( response => {
                 this._related = response
@@ -145,9 +145,13 @@ export class SheetDetailsComponent implements OnInit {
      * favoriteSave
      */
     public favoriteSave() {
-        this.sheetServ.favoriteSave(this.authServ._uid, this._sheet)
-        .subscribe( res => this.checkedFavorite(), err => console.log(err)
-        )
+        if ( !this._favorite ){
+            this.sheetServ.favoriteSave(this.authServ._uid, this._sheet)
+            .subscribe( res => this.checkedFavorite(), err => console.log(err) )
+        } else {
+            this.sheetServ.favoriteRemove(this.authServ._uid, this._sheet)
+            .subscribe( res => this._favorite = res, err => console.log(err))
+        }
     }
 
     test(): void {

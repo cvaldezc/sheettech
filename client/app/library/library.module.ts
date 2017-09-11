@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-// import { Router } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
+// import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+// import { Router } from '@angular/router'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   MdIconModule,
   MdGridListModule,
@@ -14,23 +14,26 @@ import {
   MdButtonModule,
   MdDialogModule,
   MdProgressBarModule
- } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { SimpleNotificationsModule } from 'angular2-notifications';
+ } from '@angular/material'
+import { FlexLayoutModule } from '@angular/flex-layout'
+import { SimpleNotificationsModule } from 'angular2-notifications'
 
-import { LibraryRoutingModule } from './library.routing';
-import { LibraryComponent } from './library.component';
-import { SearchLibraryComponent } from './search/search.component';
-import { NewBookComponent } from './book/new/new-book.component';
-import { LibraryMainComponent } from './library-main.component';
-import { BrandService } from '../services/sheet/brand.service';
-import { ModelService } from '../services/sheet/model.service';
-import { DialogMaterial } from './search/master-remote.component';
-import { MasterService } from '../services/master.service';
-import { FilterPipe } from '../pipes/filter.pipe';
-import { SheetService } from '../services/sheet/sheet.service';
-import { SearchResultComponent } from './search/search-result.component';
-import { SheetDetailsComponent } from './book/details/sheet-details.component';
+import { LibraryRoutingModule } from './library.routing'
+import { LibraryComponent } from './library.component'
+import { SearchLibraryComponent } from './search/search.component'
+import { NewBookComponent } from './book/new/new-book.component'
+import { LibraryMainComponent } from './library-main.component'
+import { ModelService } from '../services/sheet/model.service'
+import { DialogMaterial } from './search/master-remote.component'
+import { FilterPipe } from '../pipes/filter.pipe'
+import { SearchResultComponent } from './search/search-result.component'
+import { SheetDetailsComponent } from './book/details/sheet-details.component'
+import { ReviewsComponent } from './book/reviews/reviews.component'
+import { BrandService } from '../services/sheet/brand.service'
+import { MasterService } from '../services/master.service'
+import { SheetService } from '../services/sheet/sheet.service'
+import { ReviewsService } from '../services/sheet/reviews.service'
+
 
 
 @NgModule({
@@ -60,7 +63,8 @@ import { SheetDetailsComponent } from './book/details/sheet-details.component';
     NewBookComponent,
     SearchResultComponent,
     DialogMaterial,
-    SheetDetailsComponent
+    SheetDetailsComponent,
+    ReviewsComponent
   ],
   exports: [FilterPipe],
   bootstrap: [DialogMaterial],
@@ -68,6 +72,7 @@ import { SheetDetailsComponent } from './book/details/sheet-details.component';
     SheetService,
     BrandService,
     ModelService,
-    MasterService]
+    MasterService,
+    ReviewsService]
 })
 export class LibraryModule {  }
