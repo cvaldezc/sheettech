@@ -3,7 +3,9 @@ import { Document, Model, model, Schema } from 'mongoose'
 import { IReviews } from '../interfaces/Reviews.interface'
 
 
-export interface IReviewsModel extends IReviews, Document { }
+export interface IReviewsModel extends IReviews, Document {
+    _id: string
+}
 
 const reviewsSchema: Schema = new Schema({
     auth: { type: Schema.Types.ObjectId, ref: 'Auth' },

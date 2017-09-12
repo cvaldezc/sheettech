@@ -13,5 +13,7 @@ reviewsUrls.post('/save', isAuth, new ReviewsController().save)
 reviewsUrls.put('/update', isAuth, new ReviewsController().update)
 // reviews remove
 reviewsUrls.delete('/remove', isAuth, new ReviewsController().remove)
+// reviews list
+reviewsUrls.get('/list', new ReviewsController().getListbySheet)
 
 export { reviewsUrls }

@@ -8,42 +8,27 @@
         <button md-button (click)="comment='';_boxcomment=false">
             <span>Cancelar</span>
         </button>
-        <button md-raised-button class="light-blue white-text" (click)="onAction1">
+        <button md-raised-button class="light-blue white-text" (click)="save()">
             <md-icon>comment</md-icon>
             <span>Comentar</span>
         </button>
     </md-card-actions>
-    <md-card>
-        <md-card-content>
-            <strong> Orlando Fadel </strong> <span>2016-11-09T14:01:07.568Z</span>
-            <p>
-                Eligendi rem repellat. Impedit sit veritatis deleniti. Nulla iste quidem minus ipsam. Vel odit odit sit sint quisquam tempore.
-                Sint tempora accusantium fugit ut eum.
-                Eaque et ipsam et.
-                Animi voluptatem consequatur qui.
-                Qui asperiores enim consequuntur perferendis velit at deserunt.
-                Soluta doloremque sed ab dolorem architecto totam error exercitationem.
-            </p>
-        </md-card-content>
-        <md-card-content>
-            <strong> Adelle Runolfsdottir </strong> <span>2017-09-11T08:49:51.256Z</span>
-            <p>
-                In omnis nostrum in quam.
-                Maiores vero sit.
-                Natus consequuntur totam dolor.
-                Voluptatem neque provident error consequatur quae necessitatibus.
-                Voluptatem nisi et.
-            </p>
-        </md-card-content>
-        <md-card-content>
-            <strong> Isadore Hayes </strong> <span>2017-09-03T11:41:53.534Z</span>
-            <p>
-                Maiores sint similique sequi. Assumenda molestiae alias reprehenderit dolorem. Laboriosam fuga dolore. Dolor ratione vitae consequatur neque rerum illo. Omnis vel exercitationem dolorum soluta animi tempore aliquid.
-
-                Dolorem doloremque quia consectetur. Non placeat et architecto ipsum similique aut eligendi. Eius quae nam asperiores. Porro optio sint sint nihil doloremque itaque dolores omnis. Laboriosam harum maxime et. Accusamus iusto molestias molestias accusantium impedit recusandae repudiandae nisi et.
-
-                Distinctio velit porro beatae dignissimos architecto amet. Mollitia ut deleniti quia dolor excepturi. Qui vel et et velit.
-            </p>
+    <md-card fxFlex="grow" *ngIf="commentList.length > 0">
+        <md-card-content *ngFor="let x of commentList">
+            <strong> {{x.auth.name}} </strong>
+            <span>{{x.register}}</span>
+            <span *ngIf="x.auth._id == _user">
+                <button md-icon-button class="right" (click)="remove(x._id)">
+                    <md-icon class="md-18 red-text">delete_sweep</md-icon>
+                </button>
+                <button md-icon-button class="right" (click)="showUpdate(x._id, x.comment)">
+                    <md-icon class="md-18 grey-text text-lighten-1">mode_edit</md-icon>
+                </button>
+            </span>
+            <p id="{{x._id}}"></p>
+            <p>{{x.comment}}</p>
         </md-card-content>
     </md-card>
+    <md-card fxFlex="grow" *ngIf="(commentList.length == 0)" class="grey-text text-lighten-1"><i> Se el primero en dejar tu comentario.</i></md-card>
 </md-card>
+<simple-notifications [options]="optNotify"></simple-notifications>

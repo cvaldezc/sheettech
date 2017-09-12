@@ -20,11 +20,11 @@ export class ReviewsController {
         reviews.sheet = req.body.sheet
         reviews.auth = req.body.auth
         reviews.comment = req.body.comment
-        // reviews.register
+        reviews.register = Date.now()
         reviews.save((err, _reviews) => {
             if (err)
                 return res.status(500).json(false)
-            res.status(201).json(_reviews)
+            res.status(201).json(true)
         })
     }
 
@@ -38,8 +38,8 @@ export class ReviewsController {
     public remove(req: Request, res: Response) {
         Reviews.remove(
             {
-                auth: Types.ObjectId(req.body.auth),
-                sheet: Types.ObjectId(req.body.sheet)
+                _id: Types.ObjectId(req.body.review),
+                // sheet: Types.ObjectId(req.body.sheet)
             },
             (err) => {
                 if (err)
@@ -58,13 +58,34 @@ export class ReviewsController {
      */
     public update(req: Request, res: Response) {
         Reviews
-        .findById(req.body.review, (err, _reviews) => {
-            if (err)
-                return res.status(500).json(err)
-            if (_reviews)
-                return res.status(404).json(false)
-            res.status(202).json(_reviews)
-        })
+            .findByIdAndUpdate(req.body.review, { $set: { 'comment': req.body.comment }} )
+            .exec( (err, _reviews) => {
+                if (err)
+                    return res.status(500).json(err)
+                if (!_reviews)
+                    return res.status(404).json(false)
+                res.status(202).json(true)
+            })
+    }
+
+    /**
+     * getListbySheet
+     * @class ReviewsController
+     * @method GET
+     * @param sheet
+     */
+    public getListbySheet(req: Request, res: Response) {
+        Reviews
+            .find({ sheet: Types.ObjectId(req.query.sheet) })
+            .populate('auth')
+            .sort({ register: -1 })
+            .exec((err, _reviews) => {
+                if (err)
+                    return res.status(500).json(err)
+                // if (!_reviews)
+                //     return res.status(404).json(false)
+                res.status(200).json(_reviews)
+            })
     }
 
 }

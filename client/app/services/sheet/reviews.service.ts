@@ -7,9 +7,10 @@ import { IReviews } from '../../../../server/apps/restful/interfaces/Reviews.int
 
 
 interface IReviewsService {
-    save(params: object): Observable< IReviews >
-    remove(params: object): Observable< boolean >
-    update(params: object): Observable< IReviews >
+    save(params: object): Observable<IReviews>
+    remove(params: object): Observable<boolean>
+    update(params: object): Observable<IReviews>
+    list(sheet: string): Observable<Array<IReviews>>
 }
 
 
@@ -19,28 +20,35 @@ export class ReviewsService implements IReviewsService {
     constructor(
         private http: HttpClient,
         private httpServ: HttpServices
-    ) {  }
+    ) { }
 
-    remove(params: object): Observable< boolean > {
+    remove(params: object): Observable<boolean> {
         let options = this.httpServ.optionsRequest
         options['responseType'] = 'json'
         options['params'] = this.httpServ.setHttpParams()
         options['body'] = params
-        return this.http.delete< boolean >('/restful/reviews/remove', options)
+        return this.http.delete<boolean>('/restful/reviews/remove', options)
     }
 
-    save(params: object): Observable< IReviews > {
+    save(params: object): Observable<IReviews> {
         let options = this.httpServ.optionsRequest
         options['responseType'] = 'json'
         options['params'] = this.httpServ.setHttpParams()
         return this.http.post<IReviews>('/restful/reviews/save', params, options)
     }
 
-    update(params: object): Observable< IReviews > {
+    update(params: object): Observable<IReviews> {
         let options = this.httpServ.optionsRequest
         options['responseType'] = 'json'
         options['params'] = this.httpServ.setHttpParams()
-        return this.http.put< IReviews >('/restful/reviews/update', params, options)
+        return this.http.put<IReviews>('/restful/reviews/update', params, options)
+    }
+
+    list(sheet: string): Observable<Array<IReviews>> {
+        let options = this.httpServ.optionsRequest
+        options['responseType'] = 'json'
+        options.params = this.httpServ.parameters.set('sheet', sheet)
+        return this.http.get<Array<IReviews>>('/restful/reviews/list', options)
     }
 
 }
