@@ -29,6 +29,7 @@ import { FilterPipe } from '../pipes/filter.pipe'
 import { SearchResultComponent } from './search/search-result.component'
 import { SheetDetailsComponent } from './book/details/sheet-details.component'
 import { ReviewsComponent } from './book/reviews/reviews.component'
+import { UDComponent } from './book/ud/ud.component'
 import { BrandService } from '../services/sheet/brand.service'
 import { MasterService } from '../services/master.service'
 import { SheetService } from '../services/sheet/sheet.service'
@@ -64,7 +65,8 @@ import { ReviewsService } from '../services/sheet/reviews.service'
     SearchResultComponent,
     DialogMaterial,
     SheetDetailsComponent,
-    ReviewsComponent
+    ReviewsComponent,
+    UDComponent
   ],
   exports: [FilterPipe],
   bootstrap: [DialogMaterial],

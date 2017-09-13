@@ -1,0 +1,72 @@
+<a md-raised-button [routerLink]="['../../' , 'details' , sheet]">
+    <md-icon>chevron_left</md-icon>
+    <span>REGRESAR</span>
+</a>
+<md-card>
+    <button *ngIf="userServ.permission.delete" type="button" class="right red white-text" md-fab (click)="onClick">
+        <md-icon class="md-24">delete_forever</md-icon>
+    </button>
+    <h4>
+        Modificar Hoja Técnica
+    </h4>
+    <button *ngIf="userServ.permission.write" type="button" class="light-blue white-text" md-raised-button (click)="performUpdate()">
+        <md-icon class="md-24">save</md-icon>
+        <span>GUARDAR</span>
+    </button>
+    <section fxLayout.xs="row wrap" fxLayout="column" fxLayoutAlign=" start" fxLayoutGap="10px">
+        <md-input-container floatPlaceholder="auto" fxFlex.xs="grow">
+            <input mdInput type="text" placeholder="Código" maxlength="15" [ngModel]="ud.sheet" readonly>
+            <span mdPrefix>
+                <md-icon>dialpad</md-icon>
+            </span>
+        </md-input-container>
+        <md-input-container floatPlaceholder="auto" fxFlexFill>
+            <input mdInput type="text" placeholder="Descripción" [ngModel]="ud.name" readonly>
+            <span mdPrefix>
+                <md-icon>text_fields</md-icon>
+            </span>
+        </md-input-container>
+        <md-input-container floatPlaceholder="always" fxFlex.xs="grow">
+            <input mdInput placeholder="Marca" [mdAutocomplete]="brandRefId" [formControl]="brandCtrl" [(ngModel)]="ud.brand">
+            <span mdPrefix>
+                <md-icon>fingerprint</md-icon>
+            </span>
+        </md-input-container>
+
+        <md-autocomplete #brandRefId="mdAutocomplete" [displayWith]="onSelectConvertValueToInputFn">
+            <md-option *ngFor="let xbr of (filterBrand | async)" [value]="xbr.brand">
+                {{xbr.brand}}
+            </md-option>
+        </md-autocomplete>
+
+        <md-input-container floatPlaceholder="always" fxFlex.xs="grow">
+            <input mdInput placeholder="Modelo" [mdAutocomplete]="patternRefId" [formControl]="patternCtrl" [(ngModel)]="ud.pattern">
+            <span mdPrefix>
+                <md-icon>group_work</md-icon>
+            </span>
+        </md-input-container>
+
+        <md-autocomplete #patternRefId="mdAutocomplete" [displayWith]="onSelectConvertValueToInputFn">
+            <md-option *ngFor="let xpt of (filterPattern | async)" [value]="xpt.model">
+                {{xpt.model}}
+            </md-option>
+        </md-autocomplete>
+        <md-input-container floatPlaceholder="auto" fxFlex="grow" fxFlexFill>
+            <input mdInput #filetext type="text" placeholder="&nbsp;&nbsp;&nbsp;Adjuntar Hoja Técnica"
+                disabled value="{{ fileTech.files.length ? '&nbsp;&nbsp;&nbsp;'+fileTech.files[0].name : '' }}">
+            <span mdPrefix>
+                <button type="button" class="grey darken-1 white-text" md-fab (click)="fileTech.click()">
+                    <md-icon class="md-28">attach_file</md-icon>
+                </button>
+            </span>
+            <input hidden type="file" id="file" #fileTech (change)="filetext.click()" accept="application/pdf">
+        </md-input-container>
+        <span>
+            <i>Solo cambie el archivo si está realmente seguro.</i>
+        </span>
+        <md-card-content fxFlex="90vh" fxFlexFill>
+            <iframe id="preview" frameborder="0" allowfullscreen type="application/pdf" src="" #sheetfile fxFlex></iframe>
+        </md-card-content>
+
+    </section>
+</md-card>

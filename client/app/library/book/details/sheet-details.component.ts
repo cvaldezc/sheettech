@@ -145,12 +145,14 @@ export class SheetDetailsComponent implements OnInit {
      * favoriteSave
      */
     public favoriteSave() {
-        if ( !this._favorite ){
-            this.sheetServ.favoriteSave(this.authServ._uid, this._sheet)
-            .subscribe( res => this.checkedFavorite(), err => console.log(err) )
-        } else {
-            this.sheetServ.favoriteRemove(this.authServ._uid, this._sheet)
-            .subscribe( res => this._favorite = res, err => console.log(err))
+        if (this.authServ.permission.write) {
+            if ( !this._favorite ){
+                this.sheetServ.favoriteSave(this.authServ._uid, this._sheet)
+                .subscribe( res => this.checkedFavorite(), err => console.log(err) )
+            } else {
+                this.sheetServ.favoriteRemove(this.authServ._uid, this._sheet)
+                .subscribe( res => this._favorite = res, err => console.log(err))
+            }
         }
     }
 

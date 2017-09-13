@@ -6,8 +6,11 @@
     <aside fxFlex="35">
         <md-card>
             <md-card-content>
+                <a *ngIf="authServ.permission.write" class="right" md-mini-fab [routerLink]="['../../', 'ud', _sheet]">
+                    <md-icon class="md-24">mode_edit</md-icon>
+                </a>
                 <h1>
-                    <md-icon>book</md-icon>
+                    <!-- <md-icon>book</md-icon> -->
                      {{ sheetData.name }}
                 </h1>
                 <h2>Marca: {{ sheetData.brand.brand }}</h2>

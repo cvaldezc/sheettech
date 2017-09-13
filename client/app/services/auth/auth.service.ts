@@ -23,7 +23,11 @@ export class AuthServices extends PermissionGuard implements IAuthService {
 
     public isLoggedIn = false;
     public isAdmin = false;
-    public permission: IPermission
+    public permission: IPermission = {
+        reader: false,
+        write: false,
+        delete: false
+    }
     public _auth: string
     public _uid: string
 
@@ -37,8 +41,7 @@ export class AuthServices extends PermissionGuard implements IAuthService {
             this.tkServ.decodedTokenLocal().subscribe( res => {
                 if (res.hasOwnProperty('raise')) {
                     Router.prototype.navigate['/logout']
-                    console.log('inside router');
-
+                    // console.log('inside router');
                 } else {
                     this.isAdmin = res['payload']['isAdmin']
                     this._auth = res['payload']['auth']
