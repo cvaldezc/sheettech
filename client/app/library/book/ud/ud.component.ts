@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Params } from '@angular/router'
+import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { FormControl } from '@angular/forms'
 import { Observable } from 'rxjs/Observable'
+import { NotificationsService } from 'angular2-notifications'
 
 import { AuthServices } from '../../../services/auth/auth.service'
 import { BrandService } from '../../../services/sheet/brand.service'
 import { ModelService } from '../../../services/sheet/model.service'
 import { SheetService } from '../../../services/sheet/sheet.service'
+import { UtilService } from '../../../services/util.service'
 
 
 @Component({
@@ -24,16 +27,27 @@ export class UDComponent implements OnInit {
 
     sheet: string = ''
     ud: object = {}
+    percentLoad: number = 0
+    process: boolean = false
 
     constructor(
         private activatedRoute: ActivatedRoute,
+        private notify: NotificationsService,
         public userServ: AuthServices,
         private brServ: BrandService,
         private ptServ: ModelService,
         private sheetServ: SheetService
-    )
-    {
-        this.activatedRoute.params.subscribe( (params: Params) => this.sheet = params['sheet'] )
+    ) {
+        this.activatedRoute.params.subscribe((params: Params) => this.sheet = params['sheet'])
+    }
+
+    opNotify = {
+        animate: 'scale',
+        clickToClose: true,
+        pauseOnHover: true,
+        position: ['top', 'right'],
+        showProgressBar: true,
+        timeOut: 2600,
     }
 
     ngOnInit(): void {
@@ -42,33 +56,33 @@ export class UDComponent implements OnInit {
         this.sheetServ
             .getByID(this.sheet)
             .subscribe(
-                (observer: any) => {
-                    let _ud = observer
-                    _ud['brand'] = _ud['brand']['brand']
-                    _ud['pattern'] = _ud['pattern']['model']
-                    this.ud = _ud
-                },
-                err => console.log(err)
+            (observer: any) => {
+                let _ud = observer
+                _ud['brand'] = _ud['brand']['brand']
+                _ud['pattern'] = _ud['pattern']['model']
+                this.ud = _ud
+            },
+            err => console.log(err)
             )
         this.sheetServ
             .getAttachment(this.sheet)
             .subscribe(
-                observer => {
-                    let preview: HTMLIFrameElement = <HTMLIFrameElement>document.getElementById('preview')
-                    preview.setAttribute('src', URL.createObjectURL(observer))
-                },
-                err => console.log(err)
+            observer => {
+                let preview: HTMLIFrameElement = <HTMLIFrameElement>document.getElementById('preview')
+                preview.setAttribute('src', URL.createObjectURL(observer))
+            },
+            err => console.log(err)
             )
 
         this.brServ.getBrandRemote().subscribe(
-             observer => this.brands = observer,
-             err => console.log(err),
-             () => {
+            observer => this.brands = observer,
+            err => console.log(err),
+            () => {
                 this.filterBrand = this.brandCtrl.valueChanges
                     .startWith(null)
                     .map(brand => brand && typeof brand == 'object' ? brand.brand : brand)
                     .map(valBrand => valBrand ? this.filteredBrand(valBrand) : this.brands)
-             }
+            }
         )
         this.ptServ.getModelRemote().subscribe(
             observer => this.patterns = observer,
@@ -84,10 +98,43 @@ export class UDComponent implements OnInit {
     }
 
     performUpdate(): void {
-        this.validateForm().then( res => {
+        this.validateForm().then(res => {
+            this.process = true
+            this.ud['_sheet'] = this.sheet
             let form = this.ud
-            console.log(res, form)
-        })
+            this
+                .sheetServ.updated(UtilService.convertToForm(form))
+                .subscribe(
+                    (event: any) => {
+                        if (event.type === HttpEventType.UploadProgress) {
+                            this.percentLoad = Math.round((100 * event.loaded) / event.total)
+                        } else if(event instanceof HttpResponse) {
+                            // console.log(event)
+                            // console.log(HttpResponse)
+                            // event = instanceof(HttpResponse)
+                            this.process = false
+                            this.percentLoad = 0
+                            if (event.ok) {
+                                this.notify.info('Info', 'actualizado!', this.opNotify)
+                                setTimeout(function() {
+                                    location.reload()
+                                }, 1600)
+                            } else {
+                                this.notify.warn('Correcto', '', this.opNotify)
+                            }
+                        }
+                    },
+                    (err) => {
+                        this.process = false
+                        this.percentLoad = 0
+                        // if (err instanceof HttpErrorResponse) {
+                        this.notify.error('Error', err.message, this.opNotify)
+                        console.log(err.message)
+                        // }
+                    }
+                )
+                // console.log(res, form)
+            })
     }
 
     async validateForm(): Promise<boolean> {
@@ -95,8 +142,8 @@ export class UDComponent implements OnInit {
         let vbr: any
         let vpt: any
         let file: HTMLInputElement = <HTMLInputElement>document.getElementById('file')
-        this.brServ.validate(this.ud['brand'], this.brands).subscribe( res => vbr = res, err => vbr = err )
-        this.ptServ.validate(this.ud['pattern'], this.patterns).subscribe( res => vpt = res, err => vpt = err )
+        this.brServ.validate(this.ud['brand'], this.brands).subscribe(res => vbr = res, err => vbr = err)
+        this.ptServ.validate(this.ud['pattern'], this.patterns).subscribe(res => vpt = res, err => vpt = err)
         if (typeof vbr == 'object') {
             this.ud['bid'] = vbr['brand_id']
             valid = await true

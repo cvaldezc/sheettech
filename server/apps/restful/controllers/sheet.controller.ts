@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { DocumentQuery, Types } from 'mongoose';
 import path = require('path')
 import fs = require('fs')
+import { UploadedFile } from 'express-fileupload'
 
 import { Sheet, ISheetDocument, setStar } from '../models/sheet.models'
 import { Brand, IBrandDocument } from '../models/brand.models';
@@ -194,6 +195,78 @@ export class SheetController {
         } catch (error) {
             res.status(501).json({ raise: error })
         }
+    }
+
+    /**
+     * updateSheet
+     * @method PUT
+     * @param {string} _sheet - objectid for sheet
+     * @param {string} bid - brand id
+     * @param {string} pid - pattern id
+     * @param {file?optional} file - file replace sheet
+     * @param sheet
+     */
+    public async updateSheet(req: Request, res: Response) {
+        console.log(req.body.bid)
+        console.log(typeof req.body.bid)
+        let brand: any = await Brand.findOne({ bid: req.body['bid'] }, (err, vbrand) => vbrand)
+        let model: any = await Models.findOne({ mid: req.body['pid'] }, (err, vmodel) => model = vmodel)
+        let st: any = await Sheet.findById(req.body._sheet, (err, vst) => vst)
+        if (brand === null) {
+            console.log('create brand');
+            brand = await new BrandController().createBrand(req, res)
+        }
+        if (model === null) {
+            console.log('create model');
+            model = await new ModelController().createModel(req, res)
+        }
+        if (brand == null || model == null) {
+            return res.status(501).json({ raise: 'marca o modelo no se ha registrado' })
+        }
+        let dirsheet: string = path.join(config.SOURCE_LIBRARY, req.body.sheet)
+        // console.log('Exists ', fs.existsSync(dirsheet))
+        if (!fs.existsSync(dirsheet)) {
+            fs.mkdirSync(dirsheet, '0777')
+            fs.chmodSync(dirsheet, '0777')
+        }
+        // console.log('here files', brand)
+        try {
+            if (req.files != null) {
+                let shbinary: any = req.files.file
+                dirsheet = path.join(dirsheet, `${brand.bid}-${model.mid}${path.extname(shbinary.name)}`)
+                console.log(st.dirsheet, dirsheet)
+                if (st.dirsheet === dirsheet)
+                    fs.unlink(dirsheet)
+                shbinary.mv(dirsheet, (err) => {
+                    if (err)
+                        return res.status(500).json({ raise: err })
+                })
+            } else {
+                dirsheet = path.join(dirsheet, `${brand.bid}-${model.mid}.pdf`)
+                console.log(st.dirsheet, dirsheet)
+                if (st.dirsheet != dirsheet)
+                    fs.rename(st.dirsheet, dirsheet, (err) => {
+                        return res.status(500).json({ raise: err })
+                    })
+            }
+        } catch (error) {
+            return res.status(500).json({ raise: error})
+        }
+        Sheet
+            .findByIdAndUpdate(req.body._sheet, {
+                $set: {
+                    brand: brand._id,
+                    pattern: model._id,
+                    dirsheet: dirsheet
+                }
+            },
+            (err, _sheet) => {
+                if (err)
+                    return res.status(500).json({ raise: err })
+                if (!_sheet)
+                    return res.status(404).json({ raise: 'not found sheet' })
+                res.status(200).json(true)
+            })
     }
 
     /**

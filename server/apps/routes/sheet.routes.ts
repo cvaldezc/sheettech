@@ -14,6 +14,8 @@ sheetUrls.post('/encode/:sheet', isAuth, new SheetController().getById)
 sheetUrls.get('/finds', new SheetController().finds);
 // post save sheet in library
 sheetUrls.post('/save', isAuth, new SheetController().saveSheet)
+// update sheet
+sheetUrls.put('/update', isAuth, new SheetController().updateSheet)
 // get sheets related
 sheetUrls.get('/related', isAuth, new SheetController().sheetRelated)
 // set rating by sheet

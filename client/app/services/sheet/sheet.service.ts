@@ -85,6 +85,19 @@ export class SheetService extends FavoriteService implements ISheetService {
     }
 
     /**
+     * updated
+     */
+    public updated(form: FormData): Observable<HttpEvent<object>> {
+        let options = this.httpServ.optionsRequest
+        let headers = this.httpServ.getHeaders()
+        options.params = this.httpServ.setHttpParams()
+        options['reportProgress'] = true
+        options.headers = headers.delete('Content-Type')
+        const req =  new HttpRequest('PUT', '/restful/sheet/update', form, options)
+        return this.http.request(req)
+    }
+
+    /**
      * saveRate
      */
     public saveRate(form: any): Observable<any> {
