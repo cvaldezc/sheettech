@@ -28,7 +28,7 @@
                 <th class="col-3">Model</th>
                 <th class="col-1"></th>
                 <th class="col-1" *ngIf="_permission['write']"></th>
-                <th class="col-1" *ngIf="_permission['delete']"></th>
+                <!-- <th class="col-1" *ngIf="_permission['delete']"></th> -->
             </tr>
         </thead>
         <tbody>
@@ -44,15 +44,15 @@
                     </a>
                 </td>
                 <td *ngIf="_permission['write']">
-                    <a href="#!edit">
+                    <a [routerLink]="['/home', 'library', 'ud', x._id]">
                         <md-icon class="md-18">edit</md-icon>
                     </a>
                 </td>
-                <td *ngIf="_permission['delete']">
+                <!-- <td *ngIf="_permission['delete']">
                     <a href="#!delete">
                         <md-icon class="md-18">delete_forever</md-icon>
                     </a>
-                </td>
+                </td> -->
             </tr>
         </tbody>
     </table>

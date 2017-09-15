@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express'
+import fetch from 'node-fetch'
 
-import { IAuthModel } from '../interfaces/Auth.interface';
-import { Auth } from '../models/auth.models';
-import { TokenServices } from '../services/auth.services';
-import { UtilsService } from '../utils/string.service';
+import { config } from '../../../config.server'
+import { IAuthModel } from '../interfaces/Auth.interface'
+import { Auth } from '../models/auth.models'
+import { TokenServices } from '../services/auth.services'
+import { UtilsService } from '../utils/string.service'
 
 
 export class AuthController {
-
-    // model = Auth;
 
     /**
      * SignIn
@@ -16,68 +16,67 @@ export class AuthController {
     public SignIn(req: Request, res: Response) {
         // console.log(req.body)
         // tslint:disable-next-line:prefer-const
-        let passwd: string = req.body.passwd;
+        let passwd: string = req.body.passwd
         // tslint:disable-next-line:prefer-const
-        let usr: string = req.body.user;
+        let usr: string = req.body.user
         // tslint:disable-next-line:prefer-const
-        let _auth = { passwd, usr };
-        //console.log(_auth);
+        let _auth = { passwd, usr }
+        //console.log(_auth)
         TokenServices.verifyPassword(_auth)
         .then( (response: any) => {
-            // console.log(response);
-            let _status = response.status;
+            // console.log(response)
+            let _status = response.status
             if (_status) {
                 Auth.findOne({ auth: response.auth }, (err, auth) => {
-                    if (err) return res.status(500).json({ status: false, raise: err });
+                    if (err) return res.status(500).json({ status: false, raise: err })
 
                     if (String(response.charge).toLowerCase() === 'administrator' && auth === null) {
-                        let cauth = new Auth();
-                        cauth.auth = response.auth;
-                        cauth.email = response.email;
-                        cauth.charge = response.charge;
-                        cauth.name = UtilsService.strCapitalize(response.names);
-                        cauth.isactive = true;
+                        let cauth = new Auth()
+                        cauth.auth = response.auth
+                        cauth.email = response.email
+                        cauth.charge = response.charge
+                        cauth.name = UtilsService.strCapitalize(response.names)
+                        cauth.isactive = true
                         cauth.lastLogin = Date.now()
                         cauth.save( (err, user) => {
-                            if (err) return res.status(500).json({ status: false, raise: err });
+                            if (err) return res.status(500).json({ status: false, raise: err })
 
-                            return res.status(200).json({ status: true, response, raise: 'Not register', token: TokenServices.createToken(user) });
-                        } );
+                            return res.status(200).json({ status: true, response, raise: 'Not register', token: TokenServices.createToken(user) })
+                        } )
                     } else if (auth === null) {
-                        return res.status(404).json({status: false, raise: 'El usuario no se encuentra registrado.'});
+                        return res.status(404).json({status: false, raise: 'El usuario no se encuentra registrado.'})
                     } else {
-                        let token = TokenServices.createToken(auth); // req.user = auth;
+                        let token = TokenServices.createToken(auth) // req.user = auth
                         auth.lastLogin = Date.now()
                         auth.save()
-                        return res.status(200).json({status: true, token, 'permission': TokenServices.genToken(auth.permission)});
+                        return res.status(200).json({status: true, token, 'permission': TokenServices.genToken(auth.permission)})
                     }
-                });
+                })
             } else {
-                res.status(206).send({status: _status, 'raise': response.raise });
+                res.status(206).send({status: _status, 'raise': response.raise })
             }
         })
         .catch( err => {
-            res.status(401).json({status: false, valid: 'auth fail verify', raise: `${err.code} ${err.raise.message}`});
-        });
+            res.status(401).json({status: false, valid: 'auth fail verify', raise: `${err.code} ${err.raise.message}`})
+        })
     }
-
 
     /**
      * decodeToken
      */
     public decodeToken(req: Request, res: Response) {
-        // console.log(req.body);
+        // console.log(req.body)
         if (!req.body.token) {
-            return res.status(403).json({status: false, raise: 'Controller No tienes Autorización'});
+            return res.status(403).json({status: false, raise: 'Controller No tienes Autorización'})
         }
-        let token = req.body.token.split(' ')[1];
+        let token = req.body.token.split(' ')[1]
         TokenServices.verifyToken(token)
             .then( response => {
-                // req['user'] = response;
-                return res.status(200).json(response);
+                // req['user'] = response
+                return res.status(200).json(response)
             }).catch( error => {
-                return res.status(301).json(error);
-            });
+                return res.status(301).json(error)
+            })
     }
 
     /**
@@ -126,7 +125,7 @@ export class AuthController {
      * getUID
      */
     public getUID(req: Request, res: Response) {
-        // console.log('user auth middleware ', req['user']);
+        // console.log('user auth middleware ', req['user'])
 
         Auth.findOne({ auth: req.body.auth }, { _id: 1 }, (err, rauth) => {
             if (err)
@@ -138,6 +137,36 @@ export class AuthController {
             res.end()
         })
     }
+
+    /**
+     * getUserRemote
+     * @method POST
+     * @param {string} dni
+     * @param {string} names
+     */
+    public getUserRemote(req: Request, res: Response) {
+        try {
+            let params: string = ''
+            if (req.query.hasOwnProperty('dni')) {
+                params = `dni=${req.query.dni}`
+            } else if(req.query.hasOwnProperty('names')) {
+                params = `names=${req.query.names}`
+            }
+            fetch(
+                `${config.remoteservice}services/?${params}`,
+                {
+                    method: 'GET',
+                    compress: true,
+                    // body: params
+                })
+            .then(res => res.json())
+            .then( response => res.status(200).json(response))
+            .catch( reason => res.status(500).json({ raise: reason }))
+        } catch (error) {
+            res.status(500).json({ raise: error })
+        }
+    }
+
 
 }
 

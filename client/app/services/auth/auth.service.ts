@@ -59,6 +59,7 @@ export class AuthServices extends PermissionGuard implements IAuthService {
     public loginService(credentials: any): Observable<any> {
         let options = this.httpService.optionsRequest
         options.headers = this.httpService.getHeaders()
+        options.params = this.httpService.setHttpParams()
         options['observe'] = 'response';
         return this.http.post('/restful/auth/signin', credentials, options);
     }
@@ -84,6 +85,7 @@ export class AuthServices extends PermissionGuard implements IAuthService {
     public getAuthsRegister(): Observable<IAuthModel[]>{
         let options = this.httpService.optionsRequest
         options.headers = this.httpService.getHeaders()
+        options.params = this.httpService.setHttpParams()
         options['responseType'] = 'json'
         return this.http.get<IAuthModel[]>('/restful/auth/all', options)
     }
@@ -96,8 +98,21 @@ export class AuthServices extends PermissionGuard implements IAuthService {
     private getAuthID(auth: string): Observable<string> {
         let options = this.httpService.optionsRequest
         options.headers = this.httpService.getHeaders()
+        options.params = this.httpService.setHttpParams()
         options['responseType'] = 'text'
         return this.http.post<string>('/restful/auth/UID', { auth: auth }, options)
+    }
+
+
+    /**
+     * findUserRemote
+     */
+    public findUserRemote(opt: object): Observable<any> {
+        let options = this.httpService.optionsRequest
+        options.headers = this.httpService.getHeaders()
+        options.params = this.httpService.setHttpParams(opt)
+        options['responseType'] = 'json'
+        return this.http.get('/restful/auth/remote/find', options)
     }
 
 

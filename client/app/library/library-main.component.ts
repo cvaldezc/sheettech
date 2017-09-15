@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 @Component({
     template: '<section><router-outlet></router-outlet></section>'
 })
-export class LibraryMainComponent implements OnInit {
+export class LibraryMainComponent {
 
-    constructor(private router: Router) { }
+    constructor(private router: Router) {
+        this.router.navigate(['/home', 'library', 'sheet'])
+     }
 
-    ngOnInit(): void {
-        // this.router.navigate(['/home', 'library', 'sheet'])
-    }
+    // ngOnInit(): void {
+
+    // }
 
 }

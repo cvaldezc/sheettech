@@ -1,0 +1,42 @@
+<md-card>
+    <md-card-header>
+        <h3 class="no-margin"><md-icon >search</md-icon> Busqueda de Usuarios</h3>
+    </md-card-header>
+    <md-card-content fxLayout.xs="column wrap" fxLayoutGap="10px">
+        <md-input-container floatPlaceholder="auto">
+            <input mdInput #fdni type="search" placeholder="DNI" maxlength="8">
+            <span mdPrefix>
+                <md-icon>fingerprint</md-icon>
+            </span>
+            <md-hint align="end">{{fdni.value.length}} / 8</md-hint>
+        </md-input-container>
+        <md-input-container floatPlaceholder="auto" fxFlex>
+            <input mdInput type="search" placeholder="Nombres">
+            <span mdPrefix>
+                <md-icon>text_format</md-icon>
+            </span>
+        </md-input-container>
+    </md-card-content>
+</md-card>
+<aside>
+    <md-card>
+        <table class="table">
+            <thead class="brown lighten-1 white-text">
+                <tr>
+                    <th class="col-1">#</th>
+                    <th class="col-2">DNI</th>
+                    <th>Nombres</th>
+                    <th class="1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-label="#"></td>
+                    <td data-label="DNI"></td>
+                    <td data-label="Nombres"></td>
+                    <td data-label=""></td>
+                </tr>
+            </tbody>
+        </table>
+    </md-card>
+</aside>

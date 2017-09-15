@@ -30,23 +30,23 @@
                     </button>
                 </p>
                 <p class="center-align">
-                        <strong>Valoración [Puntualición: {{star | number:'1.0-2'}}]</strong>
-                        <br>
-                        <button md-icon-button (click)="saveReting(1)" [ngClass]="{'yellow-text': star >= 1}">
-                            <md-icon class="md-24">{{ ((star >= 1) ? 'star' : 'star_border') }}</md-icon>
-                        </button>
-                        <button md-icon-button (click)="saveReting(2)" [ngClass]="{'yellow-text': star >= 2}">
-                            <md-icon class="md-24">{{ ((star >= 2) ? 'star' : 'star_border') }}</md-icon>
-                        </button>
-                        <button md-icon-button (click)="saveReting(3)" [ngClass]="{'yellow-text': star >= 3}">
-                            <md-icon class="md-24">{{ ((star >= 3) ? 'star' : 'star_border') }}</md-icon>
-                        </button>
-                        <button md-icon-button (click)="saveReting(4)" [ngClass]="{'yellow-text': star >= 4}">
-                            <md-icon class="md-24">{{ ((star >= 4) ? 'star' : 'star_border') }}</md-icon>
-                        </button>
-                        <button md-icon-button (click)="saveReting(5)" [ngClass]="{'yellow-text': star >= 5}">
-                            <md-icon class="md-24">{{ ((star >= 5) ? 'star' : 'star_border') }}</md-icon>
-                        </button>
+                    <strong>Valoración [Puntualición: {{star | number:'1.0-2'}}]</strong>
+                    <br>
+                    <button md-icon-button (click)="saveReting(1)" [ngClass]="{'yellow-text': star >= 1}">
+                        <md-icon class="md-24">{{ ((star >= 1) ? 'star' : 'star_border') }}</md-icon>
+                    </button>
+                    <button md-icon-button (click)="saveReting(2)" [ngClass]="{'yellow-text': star >= 2}">
+                        <md-icon class="md-24">{{ ((star >= 2) ? 'star' : 'star_border') }}</md-icon>
+                    </button>
+                    <button md-icon-button (click)="saveReting(3)" [ngClass]="{'yellow-text': star >= 3}">
+                        <md-icon class="md-24">{{ ((star >= 3) ? 'star' : 'star_border') }}</md-icon>
+                    </button>
+                    <button md-icon-button (click)="saveReting(4)" [ngClass]="{'yellow-text': star >= 4}">
+                        <md-icon class="md-24">{{ ((star >= 4) ? 'star' : 'star_border') }}</md-icon>
+                    </button>
+                    <button md-icon-button (click)="saveReting(5)" [ngClass]="{'yellow-text': star >= 5}">
+                        <md-icon class="md-24">{{ ((star >= 5) ? 'star' : 'star_border') }}</md-icon>
+                    </button>
                 </p>
                 <p
                 fxShow.xs="false"

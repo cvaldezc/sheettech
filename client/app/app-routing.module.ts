@@ -1,14 +1,15 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core'
+import { Routes, RouterModule } from '@angular/router'
 
-import { PageNotFoundComponent } from './utils/not-found.component';
-import { AppComponent } from './app.component';
-import { MainComponent } from './main.component';
-import { AuthGuardLoign } from './services/auth-guard-login.services';
-import { AuthComponent } from './auth/auth.component';
-import { PermissionsComponent } from './permissions/permissions.component';
-import { UsersComponent } from './users/users.component';
-import { UserDetailsComponent } from './users/user-details.component';
+import { PageNotFoundComponent } from './utils/not-found.component'
+import { AppComponent } from './app.component'
+import { MainComponent } from './main.component'
+import { AuthGuardLoign } from './services/auth-guard-login.services'
+import { AuthComponent } from './auth/auth.component'
+import { PermissionsComponent } from './permissions/permissions.component'
+import { UsersComponent } from './users/users.component'
+import { UserDetailsComponent } from './users/user-details.component'
+import { FindComponent } from './auth/findremote/find.component'
 
 
 const appRoutes: Routes = [
@@ -23,7 +24,14 @@ const appRoutes: Routes = [
     canActivate: [AuthGuardLoign],
     children: [
       { path: 'permission/:auth', component: PermissionsComponent },
-      { path: 'users', component: UserDetailsComponent },
+      {
+        path: 'users',
+        children: [
+          { path: '', component: UserDetailsComponent },
+          { path: 'remote', component: FindComponent },
+          { path: '**', component: PageNotFoundComponent }
+        ]
+      },
       { path: '', loadChildren: 'app/library/library.module#LibraryModule' }
     ]
   },
@@ -40,7 +48,7 @@ const appRoutes: Routes = [
   // { path: 'permission/:auth', component: PermissionsComponent, },
   // { path: 'users', component: UserDetailsComponent },
   { path: '**', component: PageNotFoundComponent }
-];
+]
 
 @NgModule({
   imports: [
