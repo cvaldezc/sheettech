@@ -16,6 +16,7 @@ interface ISheetService {
     findSheetRelated(params: object): Observable< ISheet[] >
     saveRate(form: FormData): Observable< any >
     getRatingbySheet(sheet: string): Observable< number >
+    updated(form: FormData): Observable<HttpEvent<object>>
 }
 
 @Injectable()
@@ -95,6 +96,17 @@ export class SheetService extends FavoriteService implements ISheetService {
         options.headers = headers.delete('Content-Type')
         const req =  new HttpRequest('PUT', '/restful/sheet/update', form, options)
         return this.http.request(req)
+    }
+
+    /**
+     * deleted sheet
+     */
+    public deleted(sheet: string): Observable<boolean> {
+        let options = this.httpServ.optionsRequest
+        let headers = this.httpServ.getHeaders()
+        options.params = this.httpServ.setHttpParams()
+        options['body'] = { sheet: sheet }
+        return this.http.delete<boolean>('/restful/sheet/delete', options)
     }
 
     /**

@@ -16,6 +16,8 @@ sheetUrls.get('/finds', new SheetController().finds);
 sheetUrls.post('/save', isAuth, new SheetController().saveSheet)
 // update sheet
 sheetUrls.put('/update', isAuth, new SheetController().updateSheet)
+// remove sheet and file
+sheetUrls.delete('/delete', isAuth, new SheetController().removeSheet)
 // get sheets related
 sheetUrls.get('/related', isAuth, new SheetController().sheetRelated)
 // set rating by sheet

@@ -269,6 +269,27 @@ export class SheetController {
             })
     }
 
+
+    /**
+     * removeSheet
+     * @method POST
+     * @param {string} sheet = objectid
+     * @author Christian Valdez @cvaldezch
+     */
+    public removeSheet(req: Request, res: Response) {
+        Sheet
+            .findByIdAndRemove(req.body.sheet, (err, sheet) => {
+                if (err)
+                    return res.status(500).json(err)
+                if (sheet) {
+                    fs.unlink(sheet.dirsheet, (err) => console.log(err))
+                    res.status(200).json(true)
+                }else{
+                    res.status(404).json({ raise: 'not found sheet for remove' })
+                }
+            })
+    }
+
     /**
      * saveRate
      * @param sheet

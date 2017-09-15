@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Params } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { HttpEventType, HttpResponse, HttpErrorResponse } from '@angular/common/http'
 import { FormControl } from '@angular/forms'
+import { MdSnackBar } from '@angular/material'
 import { Observable } from 'rxjs/Observable'
 import { NotificationsService } from 'angular2-notifications'
 
@@ -31,8 +32,10 @@ export class UDComponent implements OnInit {
     process: boolean = false
 
     constructor(
+        private router: Router,
         private activatedRoute: ActivatedRoute,
         private notify: NotificationsService,
+        private snackbar: MdSnackBar,
         public userServ: AuthServices,
         private brServ: BrandService,
         private ptServ: ModelService,
@@ -53,25 +56,29 @@ export class UDComponent implements OnInit {
     ngOnInit(): void {
         this.brandCtrl = new FormControl()
         this.patternCtrl = new FormControl()
-        this.sheetServ
+        this
+            .sheetServ
             .getByID(this.sheet)
             .subscribe(
-            (observer: any) => {
-                let _ud = observer
-                _ud['brand'] = _ud['brand']['brand']
-                _ud['pattern'] = _ud['pattern']['model']
-                this.ud = _ud
-            },
-            err => console.log(err)
+                (observer: any) => {
+                    let _ud = observer
+                    _ud['brand'] = _ud['brand']['brand']
+                    _ud['pattern'] = _ud['pattern']['model']
+                    this.ud = _ud
+                },
+                err => {
+                    // if (err.error.raise == 'sheet not found')
+                    this.router.navigate(['notfound'])
+                }
             )
         this.sheetServ
             .getAttachment(this.sheet)
             .subscribe(
-            observer => {
-                let preview: HTMLIFrameElement = <HTMLIFrameElement>document.getElementById('preview')
-                preview.setAttribute('src', URL.createObjectURL(observer))
-            },
-            err => console.log(err)
+                observer => {
+                    let preview: HTMLIFrameElement = <HTMLIFrameElement>document.getElementById('preview')
+                    preview.setAttribute('src', URL.createObjectURL(observer))
+                },
+                err => console.log('nothing sheet attachment')
             )
 
         this.brServ.getBrandRemote().subscribe(
@@ -95,6 +102,33 @@ export class UDComponent implements OnInit {
             }
         )
 
+    }
+
+    showDelete(): void {
+        this
+            .snackbar
+            .open('Desea eliminar la hoja técnica?', 'Si, Eliminar!', { duration: 8000 })
+            .onAction().subscribe(
+                result => this.deleteSheet()
+            )
+    }
+
+    deleteSheet(): void {
+        this
+            .sheetServ
+            .deleted(this.sheet)
+            .subscribe(
+                (observer) => {
+                    if (observer)
+                        this.notify.info('INFO', 'Hoja eliminada!', this.opNotify)
+                        setTimeout(() => {
+                            this.router.navigate(['/home', 'library', 'sheet'])
+                        }, 2000);
+                },
+                (err) => {
+                    this.notify.error('Error', err, this.opNotify)
+                }
+            )
     }
 
     performUpdate(): void {

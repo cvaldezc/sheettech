@@ -13,7 +13,8 @@ import {
   MdAutocompleteModule,
   MdButtonModule,
   MdDialogModule,
-  MdProgressBarModule
+  MdProgressBarModule,
+  MdSnackBarModule
  } from '@angular/material'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { SimpleNotificationsModule } from 'angular2-notifications'
@@ -54,6 +55,7 @@ import { ReviewsService } from '../services/sheet/reviews.service'
     ReactiveFormsModule,
     LibraryRoutingModule,
     FlexLayoutModule,
+    MdSnackBarModule,
     SimpleNotificationsModule.forRoot()
   ],
   declarations: [
