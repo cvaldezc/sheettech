@@ -3,7 +3,7 @@
         <h4 fxFlex="80" fxFlex.xs="100">
             Lista de Usuarios Registrados
         </h4>
-        <a fxFlex="20" fxFlex.xs="100" md-icon-button href="" class="right light-green-text">
+        <a *ngIf="userServ.permission.write" fxFlex="20" fxFlex.xs="100" md-icon-button class="right light-green-text" [routerLink]="['/home', 'users', 'remote']">
             <md-icon class="md-24">add_circle_outline</md-icon>
             <span>NUEVO USUARIO</span>
         </a>
@@ -24,10 +24,11 @@
                 <th>Nombres</th>
                 <th class="col-5">Registrado</th>
                 <th class="col-2">Activo</th>
-                <th class="col-2">Permisos</th>
+                <th *ngIf="userServ.permission.write" class="col-2">Permisos</th>
+                <th *ngIf="userServ.permission.delete" class="col-2">Eliminar</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody *ngIf="userServ.permission.reader">
             <tr *ngFor="let auth of auths | filter: {'name': search}; let $index = index">
                 <td data-label="#" class="center-align">{{$index + 1}}</td>
                 <td data-label="ID">{{auth.auth}}</td>
@@ -36,14 +37,20 @@
                 <td data-label="Activo" class="center-align">
                     <md-icon [ngClass]="{'light-green-text': auth.isactive, 'red-text': !auth.isactive}">{{auth.isactive? 'check_circle': 'remove_circle_outline'}}</md-icon>
                 </td>
-                <td data-label="Permisos" class="center-align">
-                    <a [routerLink]="['/home', 'permission', auth.auth]">
+                <td *ngIf="userServ.permission.write" data-label="Permisos" class="center-align">
+                    <a  [routerLink]="['/home', 'permission', auth.auth]">
                         <md-icon>settings_input_component</md-icon>
                     </a>
+                </td>
+                <td *ngIf="userServ.permission.delete">
+                    <button md-icon-button (click)="showAskRemove(auth.auth, auth.name)">
+                        <md-icon class="red-text">delete</md-icon>
+                    </button>
                 </td>
             </tr>
         </tbody>
         <tfoot>
         </tfoot>
     </table>
+    <small *ngIf="!userServ.permission.reader">No tienes permisos</small>
 </article>

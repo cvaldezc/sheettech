@@ -167,6 +167,49 @@ export class AuthController {
         }
     }
 
+    public addUserRemote(req: Request, res: Response) {
+        try {
+            Auth.findOne({ auth: req.body.dni }, (err, _users) => {
+                if (err)
+                    return res.status(500).json({ raise: err })
+                if (!_users) {
+                    let cauth = new Auth()
+                    cauth.auth = req.body.dni
+                    cauth.email = req.body.email
+                    cauth.charge = req.body.charge
+                    cauth.name = UtilsService.strCapitalize(req.body.names)
+                    cauth.isactive = true
+                    // cauth.lastLogin = Date.now()
+                    cauth.save( (err, user) => {
+                        if (err)
+                            return res.status(500).json({ raise: err })
+
+                        return res.status(200).json(true)
+                    })
+                } else {
+                    res.status(409).json({ raise: 'el usuario ya está registrado' })
+                }
+            })
+        } catch (error) {
+            res.status(501).json({ raise: error })
+        }
+    }
+
+
+    /**
+     * deleteUser
+     * @param {string} auth
+     */
+    public deleteUser(req: Request, res: Response) {
+        Auth.findOneAndRemove({ auth: req.body.auth }, (err, _auth) => {
+            if (err)
+                return res.status(500).json(err)
+            if (!_auth)
+                return res.status(404).json({ raise: 'User not found' })
+            res.status(202).json({ msg: 'EL usuario ha sido eliminado' })
+        })
+    }
+
 
 }
 

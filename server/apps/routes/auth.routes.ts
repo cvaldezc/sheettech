@@ -13,6 +13,8 @@ AuthUrls.get('/all', new AuthController().getUsersRegister)
 AuthUrls.post('/gentoken', new AuthController().generateToken)
 AuthUrls.post('/UID', isAuth, new AuthController().getUID)
 AuthUrls.get('/remote/find', isAuth, new AuthController().getUserRemote)
+AuthUrls.post('/create', isAuth, new AuthController().addUserRemote)
+AuthUrls.delete('/remove', isAuth, new AuthController().deleteUser)
 
 // Permissions
 AuthUrls.put('/permission', isAuth, new AuthController().updatePermission)

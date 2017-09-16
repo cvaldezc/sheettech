@@ -26,6 +26,7 @@
                     <th class="col-1">#</th>
                     <th class="col-2">DNI</th>
                     <th>Nombres</th>
+                    <th class="col-3">Cargo</th>
                     <th class="1"></th>
                 </tr>
             </thead>
@@ -34,9 +35,17 @@
                     <td data-label="#">{{$index + 1}}</td>
                     <td data-label="DNI">{{x.empdni_id}}</td>
                     <td data-label="Nombres">{{x.firstname}} {{x.lastname}}</td>
-                    <td data-label=""></td>
+                    <td data-label="Cargo">{{x.charge__cargos}}</td>
+                    <td data-label="">
+                        <button md-icon-button class="light-green-text" (click)="addUser(x)">
+                            <md-icon>person_add</md-icon>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
+        <small>
+            Solo se agregaran los usuarios registrados en "ERPFIRE".
+        </small>
     </md-card>
 </aside>

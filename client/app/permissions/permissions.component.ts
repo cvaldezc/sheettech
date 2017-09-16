@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ParamMap, ActivatedRoute } from '@angular/router';
-// import { NextObserver } from 'rxjs/Observer';
-import { NotificationsService } from 'angular2-notifications';
+import { Component, OnInit } from '@angular/core'
+import { Router, ParamMap, ActivatedRoute } from '@angular/router'
+// import { NextObserver } from 'rxjs/Observer'
+import { NotificationsService } from 'angular2-notifications'
 
-import { IAuthModel } from '../../../server/apps/restful/interfaces/Auth.interface';
-import { IPermission } from '../../../server/apps/restful/interfaces/Permission.interface';
-import { PermissionService } from '../services/main/permission.service';
-import { parseDate } from '../../../server/apps/restful/utils/date.service';
-import { TokenService } from "../services/token.service";
+import { IAuthModel } from '../../../server/apps/restful/interfaces/Auth.interface'
+import { IPermission } from '../../../server/apps/restful/interfaces/Permission.interface'
+import { PermissionService } from '../services/main/permission.service'
+import { parseDate } from '../../../server/apps/restful/utils/date.service'
+import { TokenService } from '../services/token.service'
+import { AuthServices } from '../services/auth/auth.service'
 
 
 @Component({
@@ -31,19 +32,22 @@ export class PermissionsComponent implements OnInit {
     },
     charge: '',
     isactive: false,
-  };
+  }
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private servPermission: PermissionService,
     private notity: NotificationsService,
-    private token: TokenService) { }
+    private token: TokenService,
+    private userServ: AuthServices)
+  { }
 
   permission: IPermission = {
     reader: false,
     write: false,
     delete: false
-  };
+  }
 
   options: object = {
     position: ['top', 'right'],
@@ -52,7 +56,12 @@ export class PermissionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAuth();
+    if (!this.userServ.isAdmin) {
+      // if (this.gAuth.charge.toLowerCase() != 'administrator') {
+        this.router.navigate(['notfound'])
+      // }
+    }
+    this.getAuth()
   }
 
   private getAuth() {
@@ -61,17 +70,17 @@ export class PermissionsComponent implements OnInit {
     this.servPermission.getAuth(auth)
       .subscribe(
         (observer: IAuthModel) => {
-          console.log(observer);
+          console.log(observer)
           if (!observer.hasOwnProperty('status')) {
-            this.gAuth = observer;
-            this.permission = observer.permission;
+            this.gAuth = observer
+            this.permission = observer.permission
           } else {
-            this.notity.alert('Alerta!', `${observer}`);
+            this.notity.alert('Alerta!', `${observer}`)
           }
         },
         err => {
-          console.log(err);
-          this.notity.error('Error', err.message);
+          console.log(err)
+          this.notity.error('Error', err.message)
         }
       )
   }
@@ -109,7 +118,7 @@ export class PermissionsComponent implements OnInit {
   }
 
   test(): void {
-    console.log(this.permission);
+    console.log(this.permission)
     console.log(this.servPermission)
   }
 
