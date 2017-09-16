@@ -4,14 +4,14 @@
     </md-card-header>
     <md-card-content fxLayout.xs="column wrap" fxLayoutGap="10px">
         <md-input-container floatPlaceholder="auto">
-            <input mdInput #fdni type="search" placeholder="DNI" maxlength="8">
+            <input mdInput #fdni type="search" placeholder="DNI" [(ngModel)]="find.code" (keyup)="findByDNI($event)" maxlength="8">
             <span mdPrefix>
                 <md-icon>fingerprint</md-icon>
             </span>
             <md-hint align="end">{{fdni.value.length}} / 8</md-hint>
         </md-input-container>
         <md-input-container floatPlaceholder="auto" fxFlex>
-            <input mdInput type="search" placeholder="Nombres">
+            <input mdInput type="search" placeholder="Nombres" [(ngModel)]="find.names" (keyup)="findByNames($event)">
             <span mdPrefix>
                 <md-icon>text_format</md-icon>
             </span>
@@ -30,10 +30,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td data-label="#"></td>
-                    <td data-label="DNI"></td>
-                    <td data-label="Nombres"></td>
+                <tr *ngFor="let x of (listUsers | async); let $index = index">
+                    <td data-label="#">{{$index + 1}}</td>
+                    <td data-label="DNI">{{x.empdni_id}}</td>
+                    <td data-label="Nombres">{{x.firstname}} {{x.lastname}}</td>
                     <td data-label=""></td>
                 </tr>
             </tbody>

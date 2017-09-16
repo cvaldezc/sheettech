@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 
 import { AuthServices } from '../../services/auth/auth.service'
+import { Observable } from 'rxjs/Observable'
 
 
 @Component({
@@ -8,14 +9,31 @@ import { AuthServices } from '../../services/auth/auth.service'
 })
 export class FindComponent implements OnInit {
 
-    constructor(private userServ: AuthServices){
+    listUsers: Observable<any>
+    find = { code: '', names: '' }
 
-    }
+    constructor(private userServ: AuthServices) {  }
 
     ngOnInit(): void {
 
-        this.userServ.findUserRemote({dni: '70492850'})
-            .subscribe( res => console.log(res))
+    }
+
+    /**
+     * findByName
+     */
+    public findByNames(keyEvent: KeyboardEvent) {
+        if (keyEvent.keyCode === 13) {
+            this.listUsers = this.userServ.findUserRemote({ names: this.find.names })
+        }
+    }
+
+    /**
+     * findByDNI
+     */
+    public findByDNI(keyEvent: KeyboardEvent) {
+        if (keyEvent.keyCode == 13) {
+            this.listUsers = this.userServ.findUserRemote({dni: this.find.code })
+        }
     }
 
 }
