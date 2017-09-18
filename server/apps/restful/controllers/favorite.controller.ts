@@ -41,13 +41,24 @@ export class FavoriteController {
      * @description get all sheet by user
      */
     public getFavorites(req: Request, res: Response) {
+        console.log(req.params)
+        console.log(req.query)
+        console.log(req.body)
+
         Favorite
-        .findOne({ auth: Types.ObjectId(req.params.auth) })
+        .findOne({ auth: Types.ObjectId(req.query.auth) })
+        .populate(
+           {
+               path: 'favorites',
+               select:  { rate: -1 }
+           }
+        )
         .exec( (err, fav) => {
             if (err)
-                return res.status(500).json( { raise: err })
+                return res.status(500).json({ raise: err })
             if (!fav)
-                return res.status(404).json({ raise: 'not found favorites' })
+                return res.status(404).json({ raise: 'favorites not found' })
+            // fav = fav.populate('brand')
             res.status(200).json(fav.favorites)
         })
     }

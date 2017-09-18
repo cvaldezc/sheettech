@@ -180,6 +180,7 @@ export class SheetController {
                             sheet.dirsheet = dirsheet
                             sheet.brand = brand._id
                             sheet.pattern = model._id
+                            sheet.register = Date.now()
                             sheet.auth = req['user']['payload']['user']
                             // console.log('request User', req['user'])
                             sheet.save((err, _st) => {

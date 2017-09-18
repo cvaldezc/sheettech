@@ -11,6 +11,7 @@ interface IFavoriteService {
     getFavorite(auth: string, sheet: string): Observable< boolean >
     favoriteSave(auth: string, sheet: string): Observable< any >
     favoriteRemove(auth: string, sheet: string): Observable< boolean >
+    getFavoritesbyUser(auth: string): Observable<Array<IFavorite>>
 }
 
 @Injectable()
@@ -50,6 +51,17 @@ export class FavoriteService implements IFavoriteService {
         options['responseType'] = 'json'
         return this.http.post<boolean>('/restful/sheet/remove/favorite',
             {auth: auth, sheet: sheet}, options)
+    }
+
+    /**
+     * getFavoritesbyUser
+     */
+    public getFavoritesbyUser(auth: string): Observable<Array<IFavorite>> {
+        let options = this.httpServ.optionsRequest
+        options.params = this.httpServ.setHttpParams({ auth: auth })
+        options.headers = this.httpServ.getHeaders()
+        options['responseType'] = 'json'
+        return this.http.get<Array<IFavorite>>('/restful/sheet/favorite/bookmark', options)
     }
 
 }

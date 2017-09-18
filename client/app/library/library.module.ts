@@ -32,11 +32,12 @@ import { SearchResultComponent } from './search/search-result.component'
 import { SheetDetailsComponent } from './book/details/sheet-details.component'
 import { ReviewsComponent } from './book/reviews/reviews.component'
 import { UDComponent } from './book/ud/ud.component'
-import { MarkBookComponent } from './markbook/markbook.component'
+import { BookMarkComponent } from './bookmark/bookmark.component'
 import { BrandService } from '../services/sheet/brand.service'
 import { MasterService } from '../services/master.service'
 import { SheetService } from '../services/sheet/sheet.service'
 import { ReviewsService } from '../services/sheet/reviews.service'
+import { FavoriteService } from '../services/sheet/favorite.service'
 
 
 
@@ -72,7 +73,7 @@ import { ReviewsService } from '../services/sheet/reviews.service'
     SheetDetailsComponent,
     ReviewsComponent,
     UDComponent,
-    MarkBookComponent
+    BookMarkComponent
   ],
   exports: [FilterPipe],
   bootstrap: [DialogMaterial],
@@ -81,6 +82,8 @@ import { ReviewsService } from '../services/sheet/reviews.service'
     BrandService,
     ModelService,
     MasterService,
-    ReviewsService]
+    ReviewsService,
+    FavoriteService
+  ]
 })
 export class LibraryModule {  }

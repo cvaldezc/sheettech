@@ -32,5 +32,7 @@ sheetUrls.get('/favorite/:auth/:sheet', isAuth, new FavoriteController().verifyF
 sheetUrls.post('/save/favorite', isAuth, new FavoriteController().saveFavorite)
 // remove sheet from list favorites by user
 sheetUrls.post('/remove/favorite', isAuth, new FavoriteController().removeFavorite)
+// get favorites by Users
+sheetUrls.get('/favorite/bookmark', isAuth, new FavoriteController().getFavorites)
 
 export { sheetUrls }
