@@ -1,4 +1,7 @@
-<a md-button [routerLink]="['/home', 'library', 'sheet']"> < REGRESAR </a>
+<a md-raised-button [routerLink]="['/home', 'library', 'sheet']">
+    <md-icon>chevron_left</md-icon>
+    <span>REGRESAR</span>
+</a>
 <md-progress-bar *ngIf="process" mode="buffer" [value]="loadProgress" [bufferValue]="70" color="warn"></md-progress-bar>
 <md-card>
     <md-card-header>

@@ -18,4 +18,19 @@ export class UtilService {
         }
         return form
     }
+
+    /**
+     * parse fragment
+     */
+    public static parserFragment(fragment: string): object {
+        let arrfra: Array<string> = fragment.split(',')
+        let obj: object = {}
+        for (var key in arrfra) {
+            let element = arrfra[key]
+            let fragment = arrfra[key].split('=')
+            obj[fragment[0]] = fragment[1]
+        }
+        return obj
+    }
+
 }

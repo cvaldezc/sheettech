@@ -8,13 +8,13 @@
         <i class="material-icons md-28">account_circle</i>
     </button>
     <md-menu #appMenu="mdMenu" xPosition="before" yPosition="below">
-        <button md-menu-item>
+        <button md-button>
             <md-icon> face </md-icon>
-            <span> Redial </span>
+            <span> {{user.name}} <br> ({{user.charge}}) </span>
         </button>
         <button md-menu-item disabled>
             <md-icon> inbox </md-icon>
-            <span> Check voicemail </span>
+            <span> {{user.email}} </span>
         </button>
         <button md-menu-item (click)="sendLogout()">
             <md-icon>lock_outline</md-icon>

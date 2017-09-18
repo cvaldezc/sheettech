@@ -7,7 +7,9 @@ import { Router } from '@angular/router';
 export class LibraryMainComponent {
 
     constructor(private router: Router) {
-        this.router.navigate(['/home', 'library', 'sheet'])
+        if (this.router.url === '/home/library') {
+            this.router.navigate(['/home', 'library', 'sheet'])
+        }
      }
 
     // ngOnInit(): void {

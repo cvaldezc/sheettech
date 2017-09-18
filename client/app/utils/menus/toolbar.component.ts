@@ -1,5 +1,7 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
+
+import { AuthServices } from '../../services/auth/auth.service'
 
 
 @Component({
@@ -7,14 +9,28 @@ import { Router } from '@angular/router';
     templateUrl: './toolbar.component.html',
     styleUrls: ['./toolbar.component.sass']
 })
-export class ToolBarComponent {
+export class ToolBarComponent implements OnInit {
 
-    constructor(private router: Router) { }
+    user: any = {
+        name: '',
+        email: '',
+        charge: ''
+    }
 
-    @Output() navToggle = new EventEmitter<boolean>();
+    constructor(private router: Router, private userServ: AuthServices) { }
+
+    ngOnInit(): void {
+        // setTimeout(() => {
+        // }, 1200);
+        this.userServ.getAuth(this.userServ._auth)
+            .subscribe(_user => this.user = _user)
+
+    }
+
+    @Output() navToggle = new EventEmitter<boolean>()
     navOpen() {
-        this.navToggle.emit(true);
-      }
+        this.navToggle.emit(true)
+    }
 
     sendLogout(): void {
         this.router.navigate(['/logout'])

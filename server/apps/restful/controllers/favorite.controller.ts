@@ -50,7 +50,9 @@ export class FavoriteController {
         .populate(
            {
                path: 'favorites',
-               select:  { rate: -1 }
+               select:  { rate: 0, dirsheet: 0, auth: 0, register: 0 },
+               model: 'Sheet',
+               populate: [{ path: 'brand', select: { brand: 1, bid: 1 } }, { path: 'pattern', select: { model: 1, mid: 1 } }],
            }
         )
         .exec( (err, fav) => {

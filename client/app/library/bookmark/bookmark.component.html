@@ -1,20 +1,22 @@
-<article fxFlex="grow">
+<article >
     <md-card class="no-padding">
         <md-list fxLayout="column" dense>
             <strong fxLayoutAlign="start center"><md-icon class="">collections_bookmark</md-icon> Mis Favoritos</strong>
             <md-input-container floatPlaceholder="auto" fxFlex="grow">
-                <input mdInput type="search" placeholder="Buscar">
+                <input mdInput [(ngModel)]="search" type="search" placeholder="Buscar">
                 <span mdPrefix>
                     <md-icon>search</md-icon>
                 </span>
             </md-input-container>
-            <md-list-item *ngFor="let x of (favorites|async)">
+            <md-list-item *ngFor="let x of (favorites|async) | filter: { name: search, sheet: search }">
                     <img md-list-icon src="../../../assets/images/pdf.svg" alt="">
-                    <h4 md-line>
-                        <a class="black-text" [routerLink]="['/home']">
-                            {{x.name}}
+                    <p>
+                        <a class="no-underline black-text" [routerLink]="['../', 'details', x._id]">
+                            <p>
+                                {{x.name}} {{x.brand.brand}} {{x.pattern.model}}
+                            </p>
                         </a>
-                    </h4>
+                    </p>
                     <!-- <p md-line>{{x.register}}</p> -->
             </md-list-item>
         </md-list>
