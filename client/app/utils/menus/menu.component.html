@@ -16,7 +16,10 @@
             <md-icon class="md-24">library_books</md-icon>
             <span> Biblioteca</span>
         </a>
-        <!-- <a md-list-item (click)="navmain.toogle()" [routerLink]="">  -->
+        <a md-list-item (click)="navmain.toggle()" [routerLink]="['/home', 'import', 'export']">
+            <md-icon class="md-24">import_export</md-icon>
+            <span> Exportar</span>
+        </a>
     </md-nav-list>
     <!-- block ngModel -->
      <input type="hidden" [(ngModel)]="authPrms">
