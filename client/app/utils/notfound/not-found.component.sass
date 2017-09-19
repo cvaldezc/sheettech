@@ -2,6 +2,7 @@ canvas
     display: block
     background: #132028
     height: 100vh
+    width: 100%
 
 .world
     width: 150px
@@ -77,3 +78,33 @@ canvas
     let: 10%
     position: absolute
     transform: translate(10%, -50%)
+
+.bubble
+    position: absolute
+    background-color: white
+    font-size: 22px
+    padding: 50px 20px
+    margin: 50px
+    color: #000
+    width: 30%
+    text-align: center
+    top: 3%
+    left: 20%
+    transform: translate(-20%, -3%)
+    border-radius: 20px
+
+.down:after
+    position: absolute
+    bottom: -35px
+    left: 5%
+    content: ''
+    height: 35px
+    width: 30px
+    background: transparent
+    border-radius: 0 60px 90px 0
+    box-shadow: 15px -10px 0px 3px white
+
+@media screen and (max-width: 568px)
+    .bubble
+        padding: 10px 20px
+        width: 55%
