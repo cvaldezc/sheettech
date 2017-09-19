@@ -39,12 +39,12 @@
                 <td data-label="Marca">{{x.brand.brand}}</td>
                 <td data-label="Model">{{x.pattern.model}}</td>
                 <td>
-                    <a [routerLink]="['/home', 'library', 'details', x._id]">
+                    <a [routerLink]="['/home', 'library', 'details', x._id]" class="black-text">
                         <md-icon class="md-18">open_in_new</md-icon>
                     </a>
                 </td>
                 <td *ngIf="_permission['write']">
-                    <a [routerLink]="['/home', 'library', 'ud', x._id]">
+                    <a [routerLink]="['/home', 'library', 'ud', x._id]" class="light-blue-text">
                         <md-icon class="md-18">edit</md-icon>
                     </a>
                 </td>

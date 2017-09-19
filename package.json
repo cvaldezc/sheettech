@@ -44,6 +44,7 @@
     "node-fetch": "^1.7.2",
     "normalize.css": "^7.0.0",
     "rxjs": "^5.4.1",
+    "xlsx": "^0.11.3",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {
@@ -60,6 +61,7 @@
     "@types/mongoose": "^4.7.19",
     "@types/node": "~6.0.60",
     "@types/node-fetch": "^1.6.7",
+    "@types/xlsx": "0.0.35",
     "codelyzer": "~3.0.1",
     "concurrently": "^3.5.0",
     "jasmine-core": "~2.6.2",

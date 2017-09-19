@@ -10,6 +10,7 @@ import { PermissionsComponent } from './permissions/permissions.component'
 import { UsersComponent } from './users/users.component'
 import { UserDetailsComponent } from './users/user-details.component'
 import { FindComponent } from './auth/findremote/find.component'
+import { ExportComponent } from './export/export.component'
 
 
 const appRoutes: Routes = [
@@ -31,6 +32,10 @@ const appRoutes: Routes = [
           { path: 'remote', component: FindComponent },
           { path: '**', component: PageNotFoundComponent }
         ]
+      },
+      {
+        path: 'import/export',
+        component: ExportComponent
       },
       { path: '', loadChildren: 'app/library/library.module#LibraryModule' }
     ]

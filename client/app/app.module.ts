@@ -14,6 +14,7 @@ import {
   MdToolbarModule,
   MdMenuModule,
   MdIconModule,
+  MdProgressBarModule,
   MdSlideToggleModule } from '@angular/material'
 import { FlexLayoutModule } from '@angular/flex-layout'
 import { SimpleNotificationsModule } from 'angular2-notifications'
@@ -30,11 +31,13 @@ import { PermissionService } from './services/main/permission.service'
 import { UsersComponent } from './users/users.component'
 import { UserDetailsComponent } from './users/user-details.component'
 import { FindComponent } from './auth/findremote/find.component'
+import { ExportComponent } from './export/export.component'
 
+import { LibraryRoutingModule } from './library/library.routing'
+import { LibraryModule } from './library/library.module'
 import { FilterPipe } from './pipes/filter.pipe'
-import { TokenService } from "./services/token.service"
-import { LibraryRoutingModule } from "./library/library.routing"
-import { LibraryModule } from "./library/library.module"
+import { TokenService } from './services/token.service'
+import { ExportService } from './services/sheet/export.service'
 
 
 @NgModule({
@@ -59,7 +62,8 @@ import { LibraryModule } from "./library/library.module"
     MdToolbarModule,
     MdMenuModule,
     MdIconModule,
-    MdSlideToggleModule
+    MdSlideToggleModule,
+    MdProgressBarModule,
   ],
   declarations: [
     // FilterPipe,
@@ -71,9 +75,14 @@ import { LibraryModule } from "./library/library.module"
     PermissionsComponent,
     UsersComponent,
     UserDetailsComponent,
-    FindComponent
+    FindComponent,
+    ExportComponent
   ],
-  providers: [PermissionService, TokenService],
+  providers: [
+    PermissionService,
+    TokenService,
+    ExportService
+  ],
   // exports: [FilterPipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [ AppComponent ]

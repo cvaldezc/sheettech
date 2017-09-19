@@ -1,0 +1,49 @@
+<md-card fxFlex="grow" fxLayout="row wrap">
+    <header fxFlex="grow">
+        <h3 class="no-margin">
+            <md-icon class="md-24">import_export</md-icon>
+            Exportar Archivos
+        </h3>
+        <br><br>
+    </header>
+    <section fxFlex="grow">
+        <md-input-container floatPlaceholder="auto" fxFlex="grow">
+            <input mdInput #ftext type="text" placeholder="&nbsp;&nbsp;&nbsp;Archivo" readonly
+                value="{{ file.files.length ? file.files[0].name : '' }}">
+            <span mdPrefix>
+                <button md-fab (click)="file.click()">
+                    <md-icon class="md-48">attach_file</md-icon>
+                </button>
+            </span>
+            <span mdSuffix>
+                <button md-raised-button (click)="uploadToServer()">
+                    <md-icon class="md-24">file_upload</md-icon>
+                    Subir
+                </button>
+            </span>
+            <input fxHide="true" type="file" #file id="file" (change)="ftext.click()" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+        </md-input-container>
+    </section>
+    <md-progress-bar
+        fxFlex="grow"
+        color="warn"
+        mode="buffer"
+        value="{{percentUpload}}"
+        bufferValue="0"></md-progress-bar>
+    <md-card fxFlex="grow" fxLayout="row" fxLayoutAlign="center center">
+        <button md-raised-button (click)="test()" class="red white-text" [ngClass]="{ 'lighten-2': process }" [disabled]="process">
+            <md-icon>picture_as_pdf</md-icon>
+            <span>ARCHIVO PDF</span>
+        </button>
+        <span>&nbsp;&nbsp;&nbsp;</span>
+        <button md-raised-button (click)="test()" class="light-blue" [ngClass]="{ 'lighten-2': process }" [disabled]="process">
+            <md-icon>blur_linear</md-icon>
+            <span>ARCHIVO ZIP</span>
+        </button>
+    </md-card>
+    <md-card fxFlex="grow">
+        <strong>
+            Resultado
+        </strong>
+    </md-card>
+</md-card>

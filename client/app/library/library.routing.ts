@@ -17,7 +17,7 @@ const libraryRoutes: Routes = [
             { path: 'sheet', component: LibraryComponent },
             { path: 'new', component: NewBookComponent, canActivate: [AuthGuardLoign] },
             { path: 'details/:sheet', component: SheetDetailsComponent, canActivate: [AuthGuardLoign] },
-            { path: 'ud/:sheet', component: UDComponent }
+            { path: 'ud/:sheet', component: UDComponent, canActivate: [AuthGuardLoign] }
         ]
      }
 ]
