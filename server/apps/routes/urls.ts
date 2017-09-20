@@ -18,6 +18,7 @@ urls.use('/model', modelUrls)
 urls.use('/master', masterUrls)
 urls.use('/reviews', reviewsUrls)
 
-urls.post('/import', isAuth, new ExportController().importFile)
+urls.post('/import', new ExportController().importFile)
+urls.post('/export/reader', new ExportController().readSource)
 
 export { urls }

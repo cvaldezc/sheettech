@@ -22,9 +22,7 @@ export class ExportComponent implements OnInit {
         private exServ: ExportService
     ) {}
 
-    ngOnInit(): void {
-        // this.process = false
-    }
+    ngOnInit(): void { }
 
     uploadToServer(): void {
         let file: HTMLInputElement = <HTMLInputElement>document.getElementById('file')
@@ -99,27 +97,51 @@ export class ExportComponent implements OnInit {
 
     performCopyFiles(): void {
         this.exServ.processCopy(this.ukey)
-        .subscribe(
-            res => {
-                this.percentUpload += 16.6666
-                this.makeFileDownload()
-            },
-            err => {
-                this.percentUpload = 0
-                this.snackBar.open(`Error: ${err.error.raise} ${err.message}`, null, { duration: 3600 })
-                // be remove folder temp
-                this.exServ.removeUKey(this.ukey).subscribe(res => console.log(res), err => console.error(err))
-            }
-        )
+            .subscribe(
+                res => {
+                    this.percentUpload += 16.6666
+                    this.snackBar.open('Seleccione un modo de descarga en ZIP o PDF', null)
+                    this.process = false
+                    // this.selectTypeFile()
+                },
+                err => {
+                    this.percentUpload = 0
+                    this.snackBar.open(`Error: ${err.error.raise} ${err.message}`, null, { duration: 3600 })
+                    // be remove folder temp
+                    this.exServ.removeUKey(this.ukey).subscribe(res => console.log(res), err => console.error(err))
+                }
+            )
     }
 
-    makeFileDownload(): void {
-
+    makeFile(type: number): void {
+        this.snackBar.dismiss()
+        this.snackBar.open('Este proceso puede tardar, espere!', null)
+        this.exServ.makeFileDown(this.ukey, type)
+            .subscribe(
+                res => {
+                    this.percentUpload = 100
+                    console.log('save file');
+                    let blob = new Blob([res], { type: (type == 1) ? 'application/pdf' : 'application/zip' })
+                    window.open(URL.createObjectURL(blob))
+                },
+                err => {
+                    console.log(err)
+                    this.percentUpload = 0
+                    this.snackBar.open(`Error: ${err.error.raise} ${err.message}`, null, { duration: 3600 })
+                    // be remove folder temp
+                    this.exServ.removeUKey(this.ukey).subscribe(res => console.log(res), err => console.error(err))
+                },
+                () => {
+                    this.snackBar.dismiss()
+                }
+            )
     }
+
+
 
     test(): void {
         console.log('it clicked!');
-        this.process = !this.process
+        // this.process = !this.process
     }
 
 

@@ -31,12 +31,12 @@
         value="{{percentUpload}}"
         bufferValue="0"></md-progress-bar>
     <md-card fxFlex="grow" fxLayout="row" fxLayoutAlign="center center">
-        <button md-raised-button (click)="test()" class="red white-text" [ngClass]="{ 'lighten-2': process }" [disabled]="process">
+        <button md-raised-button (click)="makeFile(1)" class="red white-text" [ngClass]="{ 'lighten-2': process }" [disabled]="process">
             <md-icon>picture_as_pdf</md-icon>
             <span>ARCHIVO PDF</span>
         </button>
         <span>&nbsp;&nbsp;&nbsp;</span>
-        <button md-raised-button (click)="test()" class="light-blue" [ngClass]="{ 'lighten-2': process }" [disabled]="process">
+        <button md-raised-button (click)="makeFile(0)" class="light-blue white-text" [ngClass]="{ 'lighten-2': process }" [disabled]="process">
             <md-icon>blur_linear</md-icon>
             <span>ARCHIVO ZIP</span>
         </button>
