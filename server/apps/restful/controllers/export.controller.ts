@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import fs = require('fs')
+import fs = require('fs-extra')
 import os = require('os')
 import path = require('path')
 import xlsx = require('xlsx')
@@ -24,7 +24,7 @@ export class ExportController {
             let binary: any = req.files.file
             let dir: string = path.join(config.SOURCE_LIBRARY, 'tmp', `${key}`)
             if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir, '0777')
+                fs.mkdirsSync(dir)
             }
             let pahtSource: string = path.join(dir, `source${path.extname(binary.name)}`)
             binary.mv(pahtSource, (err) => {
