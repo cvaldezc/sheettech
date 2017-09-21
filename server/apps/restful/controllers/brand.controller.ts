@@ -1,11 +1,12 @@
-import { Request, Response } from 'express';
-import fetch from 'node-fetch';
-import { DocumentQuery } from 'mongoose';
-import { Observable } from 'rxjs/Observable';
+import { Request, Response } from 'express'
+import fetch from 'node-fetch'
+import { DocumentQuery } from 'mongoose'
+import { Observable } from 'rxjs/Observable'
+import { Observer } from 'rxjs/Observer'
 
-import { config } from '../../../config.server';
-import { IBrand } from '../interfaces/Brand.inteface';
-import { Brand, IBrandDocument } from '../models/brand.models';
+import { config } from '../../../config.server'
+import { IBrand } from '../interfaces/Brand.inteface'
+import { Brand, IBrandDocument } from '../models/brand.models'
 
 
 export class BrandController {
@@ -63,6 +64,30 @@ export class BrandController {
         } catch (error) {
             return await { 'raise': error }
         }
+    }
+
+    /**
+     * findByBID
+     */
+    public async findByBID(brand: string): Promise<string> {
+        let fbrand: any = ''
+        try{
+            // await Brand.findOne({ bid: brand }, (err, _brand) => {
+            //     if (err) fbrand = ''
+            //     if (!_brand)
+            //         fbrand = ''
+            //     else
+            //         fbrand = _brand._id
+            // })
+            fbrand = await Brand.findOne({ bid: brand }, (_brand) => _brand)
+            if (typeof fbrand == 'object') {
+                fbrand = await fbrand['_id']
+            }
+        }catch(err) {
+            fbrand = ''
+        }
+
+        return await fbrand
     }
 
 }

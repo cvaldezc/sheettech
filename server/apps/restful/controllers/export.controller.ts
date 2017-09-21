@@ -5,6 +5,10 @@ import path = require('path')
 import xlsx = require('xlsx')
 
 import { config } from '../../../config.server'
+import { Sheet } from '../models/sheet.models'
+import { BrandController } from '../controllers/brand.controller'
+import { ModelController } from '../controllers/model.controller'
+
 
 
 export class ExportController {
@@ -26,10 +30,11 @@ export class ExportController {
             if (!fs.existsSync(dir)) {
                 fs.mkdirsSync(dir)
             }
-            let pahtSource: string = path.join(dir, `source${path.extname(binary.name)}`)
-            binary.mv(pahtSource, (err) => {
+            let pathSource: string = path.join(dir, `source${path.extname(binary.name)}`)
+            binary.mv(pathSource, (err) => {
                 if (err)
                     return res.status(500).json(false)
+                fs.chmodSync(pathSource, 0o777)
                 res.status(202).json({ status: true, ukey: key })
             })
         } else {
@@ -87,7 +92,26 @@ export class ExportController {
                         res.status(501).json({ raise: 'EL formato del archivo es invalido' })
                     }
                 } else if (path.extname(filename) === '.json') {
-                    res.status(201).json(true)
+                    let objar: Array<Object> = fs.readJsonSync(filename, { encoding: 'utf8' })
+                    let fjson: Array<Object> = []
+                    objar.forEach((obj, index) => {
+                        if (obj.hasOwnProperty('idm') && obj.hasOwnProperty('bid') && obj.hasOwnProperty('mid')) {
+                            fjson.push({
+                                idm: obj['idm'],
+                                name: obj['name'],
+                                brand: obj['brand'],
+                                bid: obj['bid'],
+                                pattern: obj['pattern'],
+                                mid: obj['mid']
+                            })
+                        }
+                    })
+                    if (fjson.length) {
+                        fs.writeJsonSync(path.join(dir, 'postsource.json'), fjson, { encoding: 'utf8', mode: 0o777 })
+                        res.status(201).json(true)
+                    } else {
+                        res.status(500).json({ raise: 'Formato invalido' })
+                    }
                 }
             } else {
                 res.status(500).json({ raise: 'Archivo fuente invalido' })
@@ -105,8 +129,58 @@ export class ExportController {
      * @returns {boolean|object} the object are sheet not found in the db
      * @date 2017-09-19 17:43:13
      */
-    public findSheetsByJSON(req: Request, res: Response) {
+    public async findSheetsByJSON(req: Request, res: Response) {
+        if ( req.body.hasOwnProperty('ukey') ) {
+            let dir: string = path.join(config.SOURCE_LIBRARY, 'tmp', req.body.ukey),
+                filename: string = path.join(dir, 'postsource.json'),
+                bjson: Array<Object> = fs.readJsonSync(filename, { encoding: 'utf8' }),
+                process: Array<Object> = [],
+                notfound: Array<Object> = []
+            if (bjson.length) {
+                for (const obj of bjson) {
+                    let _brand: string = null,
+                        _pattern: string  = null,
+                        _sheet: any = null
+                    try {
+                        await new BrandController().findByBID(obj['bid']).then( (res) => _brand = res).catch(err => console.log('ERROR', err))
+                        console.log('brand', obj['bid'], _brand)
+                        await new ModelController().findByPID(obj['mid']).then( res => _pattern = res).catch( err => console.log(err))
+                        console.log('pattern', obj['mid'], _pattern)
+                        _sheet = await Sheet.findOne({ sheet: obj['idm'], brand: _brand, pattern: _pattern}, (err, res) => res)
+                        if (typeof _sheet == 'object') {
+                            console.log(_sheet.dirsheet)
+                            obj['b_id'] = _brand
+                            obj['p_id'] = _pattern
+                            obj['s_id'] = _sheet._id
+                            obj['path'] = _sheet.dirsheet
+                            process.push(obj)
+                        } else {
+                            notfound.push(obj)
+                        }
+                    } catch (error) {
+                        console.log('Occurret an error')
+                    }
+                }
+                // create file with data process
+                if (process.length)
+                    fs.writeJSONSync(path.join(dir, 'process.json'), process, { encoding: 'utf8', mode: 0o777 })
 
+                // bjson.forEach(async (_sobj) => {
+                //     let _brand: string = null
+                //     let _pattern: string  = null
+                //     await new BrandController().findByBID(_sobj['bid']).subscribe(async (res) => await console.log(res))
+                //     new ModelController().findByPID(_sobj['mid']).then(async (res) => _pattern = await res)
+                //     console.log('brand', _sobj['bid'], _brand)
+                //     console.log('pattern', _sobj['mid'], _pattern)
+                //     // Sheet.findOne({ sheet: _sobj['idm'], brand: _brand})
+                // })
+                res.status(200).json({status: true, notfound: notfound, process: process.length })
+            } else {
+                res.status(500).json({ raise: 'Not found object' })
+            }
+        } else {
+            res.status(500).json({ raise: 'key not found' })
+        }
     }
 
     /**
