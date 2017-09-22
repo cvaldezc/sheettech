@@ -66,7 +66,7 @@ export class ExportController {
                     let range: xlsx.Range = xlsx.utils.decode_range(ws['!ref'])
                     let pjson: Array<Object> = []
                     console.log(`ROW ${range.e.r} COLUMN ${range.e.c}`)
-                    for (var x = 1; x < range.e.r; x++) {
+                    for (var x = 1; x <= range.e.r; x++) {
                         let cells: Array<any> = []
                         for (var c = 0; c < 6; c++) {
                             cells.push(ws[xlsx.utils.encode_cell({ c: c, r: x })])
