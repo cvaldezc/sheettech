@@ -81,7 +81,7 @@ export class BrandController {
             // })
             fbrand = await Brand.findOne({ bid: brand }, (_brand) => _brand)
             if (typeof fbrand == 'object') {
-                fbrand = await fbrand['_id']
+                fbrand = await fbrand
             }
         }catch(err) {
             fbrand = ''

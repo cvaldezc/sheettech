@@ -93,7 +93,7 @@ export class ExportService {
         options.headers = this.hSevr.getHeaders()
         options.params = this.hSevr.setHttpParams()
         options.responseType = 'json'
-        return this.http.post<object>('/restful/export/copy/sheet', { ukey: ukey }, options)
+        return this.http.post<object>('/restful/export/copy/files', { ukey: ukey }, options)
     }
 
     /**
@@ -108,7 +108,7 @@ export class ExportService {
         options.headers = this.hSevr.getHeaders()
         options.params = this.hSevr.setHttpParams()
         options.responseType = 'blob'
-        return this.http.post<Blob>('/restful/export/file', { ukey: ukey, type: type }, options)
+        return this.http.post<Blob>('/restful/export/dossier', { ukey: ukey, type: type }, options)
     }
 
 

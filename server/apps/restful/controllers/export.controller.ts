@@ -3,6 +3,8 @@ import fs = require('fs-extra')
 import os = require('os')
 import path = require('path')
 import xlsx = require('xlsx')
+import zip = require('zip-folder')
+import pdfmerge = require('pdf-merge')
 
 import { config } from '../../../config.server'
 import { Sheet } from '../models/sheet.models'
@@ -86,8 +88,11 @@ export class ExportController {
                         // }
                     }
                     if (pjson.length) {
-                        fs.writeJSONSync(path.join(dir, 'postsource.json'), pjson, { encoding: 'utf8', mode: 0o777 })
-                        res.status(201).json(true)
+                        fs.writeJSON(path.join(dir, 'postsource.json'), pjson, { encoding: 'utf8', mode: 0o777 }, (err) => {
+                            if (err)
+                                return res.status(500).json({ raise: err })
+                            res.status(201).json(true)
+                        })
                     } else {
                         res.status(501).json({ raise: 'EL formato del archivo es invalido' })
                     }
@@ -130,29 +135,37 @@ export class ExportController {
      * @date 2017-09-19 17:43:13
      */
     public async findSheetsByJSON(req: Request, res: Response) {
+        console.log(req.body);
         if ( req.body.hasOwnProperty('ukey') ) {
-            let dir: string = path.join(config.SOURCE_LIBRARY, 'tmp', req.body.ukey),
-                filename: string = path.join(dir, 'postsource.json'),
-                bjson: Array<Object> = fs.readJsonSync(filename, { encoding: 'utf8' }),
-                process: Array<Object> = [],
+            let dir: string = await path.join(config.SOURCE_LIBRARY, 'tmp', `${req.body.ukey}`)
+            let filename: string = await path.join(dir, 'postsource.json')
+            let bjson: Array<Object> = await fs.readJsonSync(filename, { encoding: 'utf8' })
+            let process: Array<Object> = [],
                 notfound: Array<Object> = []
+            console.log(dir)
+            console.log(filename)
+            console.log(bjson)
+            console.log('----------------------------')
             if (bjson.length) {
                 for (const obj of bjson) {
-                    let _brand: string = null,
-                        _pattern: string  = null,
+                    let _brand: any = null,
+                        _pattern: any  = null,
                         _sheet: any = null
                     try {
                         await new BrandController().findByBID(obj['bid']).then( (res) => _brand = res).catch(err => console.log('ERROR', err))
                         console.log('brand', obj['bid'], _brand)
                         await new ModelController().findByPID(obj['mid']).then( res => _pattern = res).catch( err => console.log(err))
                         console.log('pattern', obj['mid'], _pattern)
-                        _sheet = await Sheet.findOne({ sheet: obj['idm'], brand: _brand, pattern: _pattern}, (err, res) => res)
+                        _sheet = await Sheet.findOne({ sheet: obj['idm'], brand: _brand['_id'] || '', pattern: _pattern['_id'] || ''}, (err, res) => res)
                         if (typeof _sheet == 'object') {
                             console.log(_sheet.dirsheet)
                             obj['b_id'] = _brand
                             obj['p_id'] = _pattern
                             obj['s_id'] = _sheet._id
                             obj['path'] = _sheet.dirsheet
+                            obj['name'] = _sheet.name
+                            obj['brand'] = _brand['brand']
+                            obj['pattern'] = _pattern['model']
                             process.push(obj)
                         } else {
                             notfound.push(obj)
@@ -163,7 +176,7 @@ export class ExportController {
                 }
                 // create file with data process
                 if (process.length)
-                    fs.writeJSONSync(path.join(dir, 'process.json'), process, { encoding: 'utf8', mode: 0o777 })
+                    await fs.writeJSONSync(path.join(dir, 'process.json'), process, { encoding: 'utf8', mode: 0o777 })
 
                 // bjson.forEach(async (_sobj) => {
                 //     let _brand: string = null
@@ -192,19 +205,94 @@ export class ExportController {
      * @date 2017-09-19 17:44:24
      */
     public copySource(req: Request, res: Response) {
+        if (req.body.hasOwnProperty('ukey')) {
+            try {
+                let dir: string = path.join(config.SOURCE_LIBRARY, 'tmp', `${req.body.ukey}`),
+                    filename: string = path.join(dir, 'process.json'),
+                    bjson: Array<Object> = []
+                // console.log(fs.pathExistsSync(path.join(dir, 'origin')))
+                if (!fs.pathExistsSync(path.join(dir, 'origin'))) {
+                    fs.mkdirSync(path.join(dir, 'origin'), 0o777)
+                }
 
+                bjson = fs.readJsonSync(filename, { encoding: 'utf8' })
+                if (bjson.length) {
+                    for (let obj of bjson) {
+                        let origin: string = path.join(dir, 'origin', `${obj['idm']}-${obj['name']}-${obj['brand']}-${obj['pattern']}.pdf`.replace(/[\%|\"|\Ñ|\ñ|\$|\#|\/]/gi, ''))
+                        origin = origin.replace(/(\ ){1,}/g, '_')
+                        console.log(origin)
+                        fs.copySync(obj['path'], origin, { overwrite: true, errorOnExist: false })
+                        fs.chmodSync(origin, 0o777)
+                        // console.log(obj['path'])
+                    }
+                    res.status(202).json(true)
+                } else {
+                    new Error('Nothing data')
+                }
+            } catch (error) {
+                res.status(500).json({ raise: 'error occurrent ' + error })
+            }
+
+        } else {
+            res.status(501).json({ raise: 'key not found' })
+        }
     }
 
     /**
      * makeFileDownload
-     * @param {string} keysource
+     * @param {string} ukey
+     * @param {number} type
      * @desc make file zip or merged all sheet in format pdf
      * @author @cvaldezch
      * @returns {boolean}
      * @date 2017-09-19 17:46:20
      */
-    public makeFileDownload(req: Request, res: Response) {
-
+    public async makeFileDownload(req: Request, res: Response) {
+        fs.exists
+        if (req.body.hasOwnProperty('ukey')) {
+            let dir: string = await path.join(config.SOURCE_LIBRARY, 'tmp',`${req.body.ukey}`),
+                files: Array<string> = await fs.readdirSync(path.join(dir, 'origin')),
+                zipname: string = ''
+            if (req.body.type == 0) {
+                zip(path.join(dir, 'origin'), path.join(dir, `${req.body.ukey}.zip`), (err) => {
+                    if (err) {
+                        console.log(' Err in create zip ', err)
+                        res.status(500).json({ raise: err })
+                    } else {
+                        console.log('EXCELENTE!')
+                        return res.status(202).download(path.join(dir, `${req.body.ukey}.zip`))
+                    }
+                })
+                // let nzip = new zip()
+                // nzip.addLocalFolder(path.join(dir, 'origin'))
+                // files = await files.map((file) => path.join(dir, 'origin', file))
+                // await files.forEach((file) => {
+                //     nzip.file(path.basename(file), fs.readFileSync(file))
+                // //    nzip.addLocalFile(`${file}`, `${req.body.ukey}`)
+                //    //nzip.addFile(path.basename(file), fs.readFileSync(file), '', 0o644 << 16)
+                // })
+                // zipname = path.join(dir, `${req.body.ukey}.zip`)
+                // await nzip.writeZip(zipname)
+                // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
+                // res.end()
+            } else if (req.body.type == 1) {
+                await pdfmerge(files.map(file => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                    .then( buffer => {
+                        // console.log(buffer)
+                        res.status(202)
+                        res.send(buffer)
+                        res.end()
+                    })
+            }
+            // , (err, files) => {
+            //     if (err)
+            //         return res.status(500).json({ raise: 'not found path' })
+            //     })
+            // })
+            // res.status(400).json(false)
+        } else {
+            res.status(501).json({ raise: 'key not found' })
+        }
     }
 
 

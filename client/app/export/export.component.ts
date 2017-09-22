@@ -39,6 +39,7 @@ export class ExportComponent implements OnInit {
                             this.snackBar.open(`Archivo Cargado completamente`, null, { duration: 2600 })
                             this.ukey = event.body['ukey']
                             this.percentUpload = 0
+                            this.readerSource()
                         }
                     },
                     err => {
@@ -115,7 +116,7 @@ export class ExportComponent implements OnInit {
 
     makeFile(type: number): void {
         this.snackBar.dismiss()
-        this.snackBar.open('Este proceso puede tardar, espere!', null)
+        this.snackBar.open('Este proceso puede tardar varios minutos, espere!', null)
         this.exServ.makeFileDown(this.ukey, type)
             .subscribe(
                 res => {

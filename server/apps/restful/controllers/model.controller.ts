@@ -70,7 +70,7 @@ export class ModelController {
         try {
             _fpattern = await Models.findOne({ mid: pattern }, (err, pattern) => pattern)
             if (typeof _fpattern == 'object')
-                _fpattern = _fpattern._id
+                _fpattern = _fpattern
         } catch (error) {
             _fpattern = ''
         }

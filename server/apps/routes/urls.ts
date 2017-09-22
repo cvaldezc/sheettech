@@ -21,5 +21,7 @@ urls.use('/reviews', reviewsUrls)
 urls.post('/import', new ExportController().importFile)
 urls.post('/export/reader', new ExportController().readSource)
 urls.post('/export/find/path', new ExportController().findSheetsByJSON)
+urls.post('/export/copy/files', new ExportController().copySource)
+urls.post('/export/dossier', new ExportController().makeFileDownload)
 
 export { urls }
