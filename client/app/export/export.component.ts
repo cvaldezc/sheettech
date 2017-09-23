@@ -15,7 +15,7 @@ export class ExportComponent implements OnInit {
     process: boolean = true
     percentUpload: number = 0
     ukey: string = ''
-    resultNotfound: Array<any> = []
+    notfound: Array<any> = []
 
     constructor(
         private snackBar: MdSnackBar,
@@ -60,7 +60,7 @@ export class ExportComponent implements OnInit {
                     res => {
                         this.percentUpload += 16.6666
                         if (res.hasOwnProperty('notfound')) {
-                            this.resultNotfound = res['notfound']
+                            // ns.resultNotfound = res['notfound']
                             this.snackBar.open('No se han encontrado hojas técnicas para todos!', 'Desea continuar?')
                                 .onAction().subscribe( res => this.findPaths() )
                         }else{
@@ -85,6 +85,9 @@ export class ExportComponent implements OnInit {
             .subscribe(
                 res => {
                     this.percentUpload += 16.6666
+                    if (res.hasOwnProperty('notfound')) {
+                        this.notfound = res['notfound']
+                    }
                     this.performCopyFiles()
                 },
                 err => {
