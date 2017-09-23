@@ -25,5 +25,6 @@ urls.post('/export/copy/files', new ExportController().copySource)
 urls.post('/export/dossier', new ExportController().makeFileDownload)
 urls.post('/export/remove', isAuth, new ExportController().removeTmpUKey)
 urls.post('/export/erase', isAuth, new ExportController().removeAllTmp)
+urls.get('/export/format', new ExportController().downloadFormat)
 
 export { urls }

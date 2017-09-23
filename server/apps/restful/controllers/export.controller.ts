@@ -333,4 +333,12 @@ export class ExportController {
     }
 
 
+    /**
+     * downloadFormat
+     */
+    public downloadFormat(req: Request, res: Response) {
+        res.status(200).download(path.join(config.SOURCE_LIBRARY, 'statics', 'FS-DOSSIER.xlsx'))
+    }
+
+
 }

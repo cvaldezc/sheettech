@@ -142,7 +142,6 @@ export class ExportComponent implements OnInit {
     }
 
 
-
     deleteSweep(): void {
         this.snackBar
             .open('Realmente desea eliminar todos los archivos temporales?', 'Si!, eliminar', { duration: 12000 })
@@ -157,6 +156,22 @@ export class ExportComponent implements OnInit {
                             console.log(err)
                         })
             })
+    }
+
+    downFormat(): void {
+        this.exServ.downloadFormat()
+            .subscribe(
+                res => {
+                    let a: HTMLAnchorElement = document.createElement('a')
+                    a.href = URL.createObjectURL(res)
+                    a.download = 'FDOSSIER.xlsx'
+                    a.click()
+                    a.remove()
+                },
+                err => {
+                    console.log(err);
+                }
+            )
     }
 
 

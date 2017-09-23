@@ -112,5 +112,19 @@ export class ExportService {
     }
 
 
+    /**
+     * downloadFormat
+     * @method GET
+     * @return {blob}
+     */
+    public downloadFormat(): Observable<Blob> {
+        let options = this.hSevr.optionsRequest
+        options.headers = this.hSevr.getHeaders()
+        options.params = this.hSevr.setHttpParams()
+        options.responseType = 'blob'
+        return this.http.get<Blob>('/restful/export/format', options)
+    }
+
+
 
 }
