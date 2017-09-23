@@ -2,8 +2,8 @@
     <md-icon class="md-24">chevron_left</md-icon>
     <span>REGRESAR</span>
 </a>
-<article fxLayout="row wrap" fxFlexFill>
-    <aside fxFlex="35">
+<article fxLayout="row wrap" fxLayout.xs="column" fxFlexFill>
+    <aside fxFlex="35" fxFlex.xs="100">
         <md-card>
             <md-card-content>
                 <a *ngIf="authServ.permission.write" class="right" md-mini-fab [routerLink]="['../../', 'ud', _sheet]">
@@ -15,6 +15,12 @@
                 </h1>
                 <h2>Marca: {{ sheetData.brand.brand }}</h2>
                 <h2>Modelo: {{ sheetData.pattern.model }}</h2>
+                <p>
+                    <small><strong>Datos Técnicos</strong></small>
+                    <small>{{sheetData.sheet}}</small>
+                    <small>{{sheetData.brand.bid}}</small>
+                    <small>{{sheetData.pattern.mid}}</small>
+                </p>
                 <p>
                     <span fxLayoutAlign=" center">
                         Marcar como Favorito
@@ -58,15 +64,15 @@
             </md-card-content>
         </md-card>
     </aside>
-    <section fxFlex="65">
-        <iframe frameborder="0" allowfullscreen type="application/pdf" src="" #sheetfile fxFlex></iframe>
+    <section fxFlex="65" fxFlex.xs="1 1 75vh">
+        <iframe frameborder="0" allowfullscreen type="application/pdf" src="" #sheetfile fxFlex="grow"></iframe>
     </section>
-    <aside fxFlex="grow">
+    <aside fxFlex="100">
         <md-card>
             <h4 class="md-20"><md-icon>bubble_chart</md-icon> Relacionados: </h4>
-            <span fxLayout="row nowrap">
+            <span fxLayout="row nowrap" fxLayout.xs="column">
                 <a *ngFor="let item of _related" [routerLink]="['/home', 'library', 'details', item._id]">
-                    <md-card fxFlex="nogrow">
+                    <md-card fxFlex="nogrow" fxFlex="grow">
                             <md-card-header>
                                 <img md-card-avatar src="../../../../assets/images/pdf.svg">
                                 <md-card-title>{{ item.name }}</md-card-title>

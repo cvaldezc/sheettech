@@ -17,6 +17,40 @@ export class ExportController {
 
 
     /**
+     * removeTmpUKey
+     */
+    public removeTmpUKey(req: Request, res: Response) {
+        if (req.body.hasOwnProperty('ukey')) {
+            try {
+                let tmp: string = path.join(config.SOURCE_LIBRARY, 'tmp')
+                fs.remove(tmp, (err) => {
+                    if (err)
+                        return res.status(501).json({ raise: err })
+                    res.status(200).json(true)
+                })
+            } catch (error) {
+                res.status(500).json({ raise: error })
+            }
+        } else {
+            res.status(500).json({ raise: 'key not found' })
+        }
+    }
+
+    /**
+     * removeAllTmp
+     */
+    public removeAllTmp(req: Request, res: Response) {
+        let tmp: string = path.join(config.SOURCE_LIBRARY, 'tmp')
+        fs.remove(tmp, (err) => {
+            if (err)
+                return res.status(501).json({ raise: err })
+            fs.mkdir(tmp)
+            res.status(200).json(true)
+        })
+    }
+
+
+    /**
      * importFile
      * @param {File} file format xlsx | json
      * @desc write file upload in the server and change name source
@@ -248,50 +282,53 @@ export class ExportController {
      * @date 2017-09-19 17:46:20
      */
     public async makeFileDownload(req: Request, res: Response) {
-        fs.exists
-        if (req.body.hasOwnProperty('ukey')) {
-            let dir: string = await path.join(config.SOURCE_LIBRARY, 'tmp',`${req.body.ukey}`),
-                files: Array<string> = await fs.readdirSync(path.join(dir, 'origin')),
-                zipname: string = ''
-            if (req.body.type == 0) {
-                zip(path.join(dir, 'origin'), path.join(dir, `${req.body.ukey}.zip`), (err) => {
-                    if (err) {
-                        console.log(' Err in create zip ', err)
-                        res.status(500).json({ raise: err })
-                    } else {
-                        console.log('EXCELENTE!')
-                        return res.status(202).download(path.join(dir, `${req.body.ukey}.zip`))
-                    }
-                })
-                // let nzip = new zip()
-                // nzip.addLocalFolder(path.join(dir, 'origin'))
-                // files = await files.map((file) => path.join(dir, 'origin', file))
-                // await files.forEach((file) => {
-                //     nzip.file(path.basename(file), fs.readFileSync(file))
-                // //    nzip.addLocalFile(`${file}`, `${req.body.ukey}`)
-                //    //nzip.addFile(path.basename(file), fs.readFileSync(file), '', 0o644 << 16)
-                // })
-                // zipname = path.join(dir, `${req.body.ukey}.zip`)
-                // await nzip.writeZip(zipname)
-                // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
-                // res.end()
-            } else if (req.body.type == 1) {
-                await pdfmerge(files.map(file => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
-                    .then( buffer => {
-                        // console.log(buffer)
-                        res.status(202)
-                        res.send(buffer)
-                        res.end()
+        try {
+            if (req.body.hasOwnProperty('ukey')) {
+                let dir: string = await path.join(config.SOURCE_LIBRARY, 'tmp',`${req.body.ukey}`),
+                    files: Array<string> = await fs.readdirSync(path.join(dir, 'origin')),
+                    zipname: string = ''
+                if (req.body.type == 0) {
+                    zip(path.join(dir, 'origin'), path.join(dir, `${req.body.ukey}.zip`), (err) => {
+                        if (err) {
+                            console.log(' Err in create zip ', err)
+                            res.status(500).json({ raise: err })
+                        } else {
+                            console.log('EXCELENTE!')
+                            return res.status(202).download(path.join(dir, `${req.body.ukey}.zip`))
+                        }
                     })
+                    // let nzip = new zip()
+                    // nzip.addLocalFolder(path.join(dir, 'origin'))
+                    // files = await files.map((file) => path.join(dir, 'origin', file))
+                    // await files.forEach((file) => {
+                    //     nzip.file(path.basename(file), fs.readFileSync(file))
+                    // //    nzip.addLocalFile(`${file}`, `${req.body.ukey}`)
+                    //    //nzip.addFile(path.basename(file), fs.readFileSync(file), '', 0o644 << 16)
+                    // })
+                    // zipname = path.join(dir, `${req.body.ukey}.zip`)
+                    // await nzip.writeZip(zipname)
+                    // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
+                    // res.end()
+                } else if (req.body.type == 1) {
+                    await pdfmerge(files.map(file => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                        .then( buffer => {
+                            // console.log(buffer)
+                            res.status(202)
+                            res.send(buffer)
+                            res.end()
+                        })
+                }
+                // , (err, files) => {
+                //     if (err)
+                //         return res.status(500).json({ raise: 'not found path' })
+                //     })
+                // })
+                // res.status(400).json(false)
+            } else {
+                res.status(501).json({ raise: 'key not found' })
             }
-            // , (err, files) => {
-            //     if (err)
-            //         return res.status(500).json({ raise: 'not found path' })
-            //     })
-            // })
-            // res.status(400).json(false)
-        } else {
-            res.status(501).json({ raise: 'key not found' })
+        } catch (error) {
+            res.status(501).json({ raise: error })
         }
     }
 

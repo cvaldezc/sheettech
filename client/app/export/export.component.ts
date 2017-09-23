@@ -140,9 +140,20 @@ export class ExportComponent implements OnInit {
 
 
 
-    test(): void {
-        console.log('it clicked!');
-        // this.process = !this.process
+    deleteSweep(): void {
+        this.snackBar
+            .open('Realmente desea eliminar todos los archivos temporales?', 'Si!, eliminar', { duration: 12000 })
+            .onAction()
+            .subscribe( res => {
+                this.exServ.eraseTMP()
+                    .subscribe(
+                        response => {
+                            console.log('Status erase ', response)
+                        },
+                        err => {
+                            console.log(err)
+                        })
+            })
     }
 
 
