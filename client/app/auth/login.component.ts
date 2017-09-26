@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
                             {
                                 this.router.navigate(['/home', 'permission', response.body.response.auth])
                                 // location.href = `/home/(data:permission/${response.body.response.auth})`
-                            }, 2600);
+                            }, 1600);
                         // ['/home', { outlets: { 'data': ['permission', response.body.response.auth] } } ]
                         // = `/home(content:main/(data:permission/${response.body.response.auth}))`
                         // {outlets: { data: ['permission', response.body.response.auth ] }}

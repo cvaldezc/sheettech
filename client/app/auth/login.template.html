@@ -7,14 +7,14 @@
                     <br>
                     Biblioteca de Hojas Tecnicas
                 </md-card-title>
-                <md-card-content fxLayout="column">
-                    <md-input-container fxFlex="100">
+                <md-card-content fxFlex="grow" fxLayout="row wrap">
+                    <md-input-container fxFlex="grow">
                         <i mdPrefix class="material-icons">face</i>
                         <span mdPrefix>&nbsp;&nbsp;</span>
                         <input mdInput type="text" placeholder="Username" [(ngModel)]="auth.user" autofocus value="">
                         <!-- <input mdInput type="text" placeholder="Username" value=""> -->
                     </md-input-container>
-                    <md-input-container fxFlex="100">
+                    <md-input-container fxFlex="grow">
                         <i mdPrefix class="material-icons">lock</i>
                         <span mdPrefix>&nbsp;&nbsp;</span>
                         <input mdInput type="password" placeholder="Password" [(ngModel)]="auth.passwd" value="">

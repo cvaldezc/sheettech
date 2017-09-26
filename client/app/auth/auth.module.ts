@@ -2,8 +2,6 @@ import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
-import { FlexLayoutModule } from '@angular/flex-layout'
-import { SimpleNotificationsModule } from 'angular2-notifications'
 import {
   MdCardModule,
   MdButtonModule,
@@ -13,6 +11,8 @@ import {
   MdListModule,
   MdToolbarModule
 } from '@angular/material'
+import { FlexLayoutModule } from '@angular/flex-layout'
+import { SimpleNotificationsModule } from 'angular2-notifications'
 
 import { AuthRoutingModule } from './auth-routing.module'
 import { AuthComponent } from './auth.component'
