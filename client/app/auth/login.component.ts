@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
         private router: Router) {
             // console.log(this.router.url);
             this.authService.decodedTokenLocal().subscribe( (res: any) => {
-                console.log('STATUS OF PROMISES ', res);
+                // console.log('STATUS OF PROMISES ', res);
                 if (res.status) {
                     setTimeout( () => this.router.navigate(['/']), 4600);
                     // setTimeout( () => location.href = '/home', 4600);
@@ -67,7 +67,11 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         // redirect to set permission by auth
                         localStorage.setItem('token', `Bearer ${response.body.token}`);
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
-                        setTimeout( () => location.href = `/home/(data:permission/${response.body.response.auth})`, 2600);
+                        setTimeout( () =>
+                            {
+                                this.router.navigate(['/home', 'permission', response.body.response.auth])
+                                // location.href = `/home/(data:permission/${response.body.response.auth})`
+                            }, 2600);
                         // ['/home', { outlets: { 'data': ['permission', response.body.response.auth] } } ]
                         // = `/home(content:main/(data:permission/${response.body.response.auth}))`
                         // {outlets: { data: ['permission', response.body.response.auth ] }}
@@ -77,7 +81,10 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         localStorage.setItem('permission', `${response.body.permission}`)
                         this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
                         AuthServices.prototype.isLoggedIn = true;
-                        setTimeout( () => location.href = '/home' , 2400);
+                        setTimeout( () => {
+                            this.router.navigate(['/home'])
+                            // location.href = '/home'
+                        } , 2400);
                     }
                 },
                 (err) => {

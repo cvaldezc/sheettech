@@ -1,20 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-// import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AuthServices } from '../services/auth/auth.service';
 
 // interface ILogout { }
 
 @Component({
-    template: '<h1>Hemos terminado la session correctamente</h1>'
+    templateUrl: './logout.component.html',
+    styleUrls: ['./logout.component.sass']
 })
 export class LogoutComponent implements OnInit {
 
-    constructor(private auth: AuthServices) { }
+    constructor(
+        private auth: AuthServices,
+        private router: Router
+    ) { }
 
     ngOnInit(): void {
         this.auth.logoutService();
-        setTimeout( () => location.href = '/login' , 3600);
+        setTimeout( () => {
+            this.router.navigate(['/login'])
+        }, 3600);
     }
 
 }
