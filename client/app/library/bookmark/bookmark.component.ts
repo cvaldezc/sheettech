@@ -16,7 +16,7 @@ import { IFavorite } from '../../../../server/apps/restful/interfaces/Favorite.i
 })
 export class BookMarkComponent implements OnInit {
 
-    favorites: Observable<Array<IFavorite>>
+    favorites: Array<IFavorite> = []
     search: string = ''
 
 
@@ -28,8 +28,13 @@ export class BookMarkComponent implements OnInit {
 
     public ngOnInit(): void {
         setTimeout(() => {
-            this.favorites = this.favServ.getFavoritesbyUser(this.userServ._uid)
+            this.favServ.getFavoritesbyUser(this.userServ._uid)
+                .subscribe( res => {
+                    console.log(res)
+                    this.favorites = res
+                })
         }, 1200)
+        //
         // this.router.fragment.subscribe( f => {
         //     // console.log(f)
         // })

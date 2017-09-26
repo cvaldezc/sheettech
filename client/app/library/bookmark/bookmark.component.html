@@ -8,7 +8,7 @@
                     <md-icon>search</md-icon>
                 </span>
             </md-input-container>
-            <md-list-item *ngFor="let x of (favorites|async) | filter: { name: search, sheet: search }">
+            <md-list-item *ngFor="let x of favorites | filter: { name: search, sheet: search }">
                     <img md-list-icon src="../../../assets/images/pdf.svg" alt="">
                     <p>
                         <a class="no-underline black-text" [routerLink]="['../', 'details', x._id]">

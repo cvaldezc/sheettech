@@ -26,28 +26,28 @@ export class HttpServices {
         responseType: undefined
     };
 
-    constructor() {
-        this.optionsRequest = {
-            headers: this.getHeaders(),
-            params: this.setHttpParams(),
-            responseType: 'json'
-        }
-    }
+    // constructor() {
+    //     this.optionsRequest = {
+    //         headers: this.getHeaders(),
+    //         params: this.setHttpParams(),
+    //         responseType: 'json'
+    //     }
+    // }
 
     /**
      * set
      */
     public getHeaders(): HttpHeaders {
-        let headers: any = null;
-        headers = new HttpHeaders(
+        let headers: HttpHeaders = new HttpHeaders(
             {
                 'authorization': `${localStorage.getItem('token') || ''}`,
-                // 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
                 'Content-Type': 'application/json;charset=utf-8',
-                // 'cenvtype': 'multipart/form-data',
                 'description': ''
             }
         );
+        if (this.optionsRequest.hasOwnProperty('observe')) {
+            delete this.optionsRequest['observe']
+        }
         return headers;
     }
 
