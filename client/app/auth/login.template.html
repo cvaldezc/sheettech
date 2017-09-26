@@ -1,7 +1,7 @@
 <section>
     <div class="effect-opacity">
-        <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="100">
-            <md-card fxFlex.xs="90" fxFlex.sm="60" fxFlex.md="50" fxFlex.lg="33" fxFlex.xlg="33">
+        <div fxLayout="row wrap" fxLayoutAlign="space-around center" fxFlex="100">
+            <md-card fxLayout="row wrap" fxFlex.xs="90" fxFlex.sm="60" fxFlex.md="50" fxFlex.lg="33" fxFlex.xlg="33">
                 <md-card-title class="center-align">
                     <i class="material-icons md-48">account_circle</i>
                     <br>
@@ -21,7 +21,7 @@
                         <!-- <input mdInput type="password" placeholder="Password" value=""> -->
                     </md-input-container>
                 </md-card-content>
-                <md-card-actions>
+                <md-card-actions fxFlex="grow">
                     <i *ngIf="isProcess" class="material-icons md-48 fa-pulse light-green-text">data_usage</i>
                     <!-- <button md-button (click)="submitAuth(event)">Action2</button> -->
                     <button md-raised-button (click)="submitAuth(event)" class="right light-blue white-text">
