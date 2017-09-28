@@ -27,13 +27,13 @@ export class BookMarkComponent implements OnInit {
     ) { }
 
     public ngOnInit(): void {
-        setTimeout(() => {
+        this.userServ.tokenLocal().then(res => {
             this.favServ.getFavoritesbyUser(this.userServ._uid)
                 .subscribe( res => {
-                    console.log(res)
+                    // console.log(res)
                     this.favorites = res
                 })
-        }, 1200)
+        })
         //
         // this.router.fragment.subscribe( f => {
         //     // console.log(f)

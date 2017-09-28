@@ -41,24 +41,30 @@ export class AuthServices extends PermissionGuard implements IAuthService {
         private router: Router
     ) {
             super()
-            this.decodePermission().subscribe(_permission => this.permission = _permission)
-            this.tkServ.decodedTokenLocal().subscribe( res => {
-                if (res.hasOwnProperty('raise')) {
-                    console.log(`Error: ${res['raise']}`)
-                    // this.router.navigate(['/logout'])
-                    // console.log('inside router')
-                } else {
-                    this.isAdmin = res['payload']['isAdmin']
-                    this._auth = res['payload']['auth']
-                    this.getAuthID(this._auth).subscribe( isuid => {
-                        // console.warn(isuid)
-                        this._uid = isuid
-                        // console.log('UID USER', this._uid)
-                    }, err => {
-                        console.error(err)
-                    })
-                }
-            })
+            //console.log(Date.now())
+            //this.tokenLocal().then(res => console.log(Date.now()))
+    }
+
+    public async tokenLocal() {
+        await this.decodePermission().subscribe(_permission => this.permission = _permission)
+        await this.tkServ.decodedTokenLocal().subscribe(async (res) => {
+            // console.log('AUTH SERVICE RESPONSE ', res)
+            if (res.hasOwnProperty('raise')) {
+                console.log(`Error: ${res['raise']}`)
+                // this.router.navigate(['/logout'])
+                // console.log('inside router')
+            } else {
+                this.isAdmin = await res['payload']['isAdmin']
+                this._auth = await res['payload']['auth']
+                this.getAuthID(this._auth).subscribe( isuid => {
+                    // console.warn(isuid)
+                    this._uid = isuid
+                    // console.log('UID USER', this._uid)
+                }, err => {
+                    console.error(err)
+                })
+            }
+        })
     }
 
     public loginService(credentials: any): Observable<any> {

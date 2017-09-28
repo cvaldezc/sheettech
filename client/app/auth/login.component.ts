@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
             this.authService.decodedTokenLocal().subscribe( (res: any) => {
                 // console.log('STATUS OF PROMISES ', res);
                 if (res.status) {
-                    setTimeout( () => this.router.navigate(['/']), 4600);
+                    setTimeout( () => this.router.navigateByUrl('/home'), 4600);
                     // setTimeout( () => location.href = '/home', 4600);
                 }
             });
@@ -69,7 +69,8 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         this.notify.success('Correcto, ingreso por primera vez!', '', {timeOut: 2600});
                         setTimeout( () =>
                             {
-                                this.router.navigate(['/home', 'permission', response.body.response.auth])
+                                // this.router.navigate(['/home', 'permission', response.body.response.auth])
+                                this.router.navigateByUrl(`/home/permission/response.body.response.auth`)
                                 // location.href = `/home/(data:permission/${response.body.response.auth})`
                             }, 1600);
                         // ['/home', { outlets: { 'data': ['permission', response.body.response.auth] } } ]
@@ -79,12 +80,12 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         // redirect to Library
                         localStorage.setItem('token', `Bearer ${response.body.token}`);
                         localStorage.setItem('permission', `${response.body.permission}`)
-                        this.notify.success('Acceso Correcto!', '', { timeOut: 2600 });
-                        AuthServices.prototype.isLoggedIn = true;
+                        this.notify.success('Acceso Correcto!', '', { timeOut: 1600 });
+                        // AuthServices.prototype.isLoggedIn = true;
                         setTimeout( () => {
                             this.router.navigate(['/home'])
-                            // location.href = '/home'
-                        } , 2400);
+                            this.router.navigateByUrl('/home')
+                        } , 1400);
                     }
                 },
                 (err) => {

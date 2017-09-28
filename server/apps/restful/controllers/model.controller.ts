@@ -53,9 +53,14 @@ export class ModelController {
         try {
             let _md: any
             let md:any = new Models()
-            md.mid = req.body.model
-            md.model = req.body.mname
-            _md = await md.save( async (err, _model) => _model)
+            if (req.body.hasOwnProperty('pid')) {
+                md.mid = req.body.pid
+                md.model = req.body.pattern
+            } else {
+                md.mid = req.body.model
+                md.model = req.body.mname
+            }
+            _md = await md.save(async (err, _model) => _model)
             return await _md
         } catch (error) {
             return await { 'raise': error }

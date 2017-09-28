@@ -34,6 +34,8 @@ export class SheetService extends FavoriteService implements ISheetService {
      */
     public getByID(sheet): Observable<ISheet> {
         let options = this.httpServ.optionsRequest
+        options.headers = this.httpServ.getHeaders()
+        options.params = this.httpServ.setHttpParams()
         options['responseType'] = 'json'
         return this.http.post<ISheet>(`/restful/sheet/encode/${sheet}`, null, this.httpServ.optionsRequest)
     }
@@ -45,6 +47,8 @@ export class SheetService extends FavoriteService implements ISheetService {
      */
     public getAttachment(sheet: string): Observable<Blob> {
         let options = this.httpServ.optionsRequest
+        options.headers = this.httpServ.getHeaders()
+        options.params = this.httpServ.setHttpParams()
         options['responseType'] = 'blob'
         return this.http.get<Blob>(`/restful/sheet/attachment/${sheet}`, options)
     }
@@ -65,6 +69,7 @@ export class SheetService extends FavoriteService implements ISheetService {
      */
     public findSheetRelated(params: object): Observable<ISheet[]> {
         let options = this.httpServ.optionsRequest
+        options.headers = this.httpServ.getHeaders()
         options.params = this.httpServ.setHttpParams(params)
         options['responseType'] = 'json'
         return this.http.get<Array<ISheet>>('/restful/sheet/related', options)
@@ -77,6 +82,7 @@ export class SheetService extends FavoriteService implements ISheetService {
         let options = this.httpServ.optionsRequest
         let headers = this.httpServ.getHeaders()
         options['reportProgress'] = true
+        options.params = this.httpServ.setHttpParams()
         options.headers = headers
             .delete('Content-Type')
             // .set('Content-Type', undefined)
@@ -114,6 +120,7 @@ export class SheetService extends FavoriteService implements ISheetService {
      */
     public saveRate(form: any): Observable<any> {
         let options = this.httpServ.optionsRequest
+        options.headers = this.httpServ.getHeaders()
         options.params = this.httpServ.setHttpParams()
         options['responseType'] = 'json'
         return this.http.post<any>('/restful/sheet/rating', form, options)
@@ -124,6 +131,7 @@ export class SheetService extends FavoriteService implements ISheetService {
      */
     public getRatingbySheet(sheet: string): Observable<number> {
         let options = this.httpServ.optionsRequest
+        options.headers = this.httpServ.getHeaders()
         options['responseType'] = 'json'
         options.params = this.httpServ.setHttpParams()
         return this.http.get<number>(`/restful/sheet/rating/${sheet}`, options)

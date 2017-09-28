@@ -17,7 +17,7 @@
         <md-card-content *ngFor="let x of commentList">
             <strong> {{x.auth.name}} </strong>
             <span>{{x.register}}</span>
-            <span *ngIf="x.auth._id == _user">
+            <span *ngIf="x.auth.auth == _user">
                 <button md-icon-button class="right" (click)="remove(x._id)">
                     <md-icon class="md-18 red-text">delete_sweep</md-icon>
                 </button>

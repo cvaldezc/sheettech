@@ -57,9 +57,14 @@ export class BrandController {
             // console.log(req)
             let brd: any
             let br: IBrandDocument = new Brand()
-            br.bid = req.body.brand
-            br.brand = req.body.bname
-            brd = await br.save(async (err, _brand) => _brand )
+            if (req.body.hasOwnProperty('bid')) {
+                br.bid = await req.body.bid
+                br.brand = await req.body.brand
+            } else {
+                br.bid = await req.body.brand
+                br.brand = await req.body.bname
+            }
+            brd = await br.save(async (err, _brand) => _brand)
             return await brd
         } catch (error) {
             return await { 'raise': error }

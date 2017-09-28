@@ -143,10 +143,12 @@ export class SheetController {
             if (brand === null) {
                 console.log('create brand');
                 brand = await new BrandController().createBrand(req, res)
+                console.log('CREATED BRAND ', brand)
             }
             if (model === null) {
                 console.log('create model');
                 model = await new ModelController().createModel(req, res)
+                console.log('CREATED PATTERN ', model)
             }
             if (brand == null || model == null) {
                 return res.status(501).json({ raise: 'marca o modelo no se ha registrado' })
@@ -216,10 +218,12 @@ export class SheetController {
         if (brand === null) {
             console.log('create brand');
             brand = await new BrandController().createBrand(req, res)
+            console.log('CREATED BRAND ', brand)
         }
         if (model === null) {
             console.log('create model');
             model = await new ModelController().createModel(req, res)
+            console.log('CREATED PATTERN ', model)
         }
         if (brand == null || model == null) {
             return res.status(501).json({ raise: 'marca o modelo no se ha registrado' })
@@ -247,7 +251,8 @@ export class SheetController {
                 console.log(st.dirsheet, dirsheet)
                 if (st.dirsheet != dirsheet)
                     fs.rename(st.dirsheet, dirsheet, (err) => {
-                        return res.status(500).json({ raise: err })
+                        if (err)
+                            return res.status(500).json({ raise: err })
                     })
             }
         } catch (error) {

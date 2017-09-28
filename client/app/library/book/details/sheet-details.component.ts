@@ -42,12 +42,15 @@ export class SheetDetailsComponent implements OnInit {
             .activatedRouter.params
             .subscribe( (params: Params) => {
                 this._sheet = params['sheet']
+            })
+        this.authServ.tokenLocal()
+            .then(res => {
                 this.getData()
                 this.getAttachment()
                 this.getRating()
                 setTimeout(() => {
                     this.checkedFavorite()
-                }, 800);
+                }, 800)
             })
     }
 

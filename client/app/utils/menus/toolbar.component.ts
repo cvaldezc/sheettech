@@ -20,10 +20,10 @@ export class ToolBarComponent implements OnInit {
     constructor(private router: Router, private userServ: AuthServices) { }
 
     ngOnInit(): void {
-        // setTimeout(() => {
-        // }, 1200);
-        this.userServ.getAuth(this.userServ._auth)
-            .subscribe(_user => this.user = _user)
+        this.userServ.tokenLocal().then(res => {
+            this.userServ.getAuth(this.userServ._auth)
+                .subscribe(_user => this.user = _user)
+        })
 
     }
 

@@ -13,12 +13,7 @@ import { AuthServices } from '../../../services/auth/auth.service'
 })
 export class ReviewsComponent {
 
-    /* input variable */
-    @Input('sheet')
-    set valSheet(st: string) {
-        this._sheet = st
-        this.onInit()
-    }
+
 
     /* varibles local */
     _sheet: string = ''
@@ -26,6 +21,13 @@ export class ReviewsComponent {
     comment: string = ''
     commentList: Array<IReviews> = []
     _user: string = ''
+
+    /* input variable */
+    @Input('sheet')
+    set valSheet(st: string) {
+        this._sheet = st
+        this.onInit()
+    }
 
     constructor(
         private reviewServ: ReviewsService,
@@ -41,11 +43,12 @@ export class ReviewsComponent {
     }
 
     onInit(): void {
-        // console.log('init reviews', this._sheet)
-        setTimeout(() => {
-            this._user = this.userServ._uid
-            this.getReviews()
-        }, 1200)
+        this.userServ.tokenLocal()
+            .then(res => {
+                this._user = this.userServ._auth
+                console.log('init reviews', this._user)
+                this.getReviews()
+            })
     }
 
     getReviews(): void {
