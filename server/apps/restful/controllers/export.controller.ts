@@ -22,7 +22,7 @@ export class ExportController {
     public removeTmpUKey(req: Request, res: Response) {
         if (req.body.hasOwnProperty('ukey')) {
             try {
-                let tmp: string = path.join(config.SOURCE_LIBRARY, 'tmp')
+                let tmp: string = path.join(config.SOURCE_LIBRARY, 'tmp', `${req.body.ukey}`)
                 fs.remove(tmp, (err) => {
                     if (err)
                         return res.status(501).json({ raise: err })
@@ -310,7 +310,9 @@ export class ExportController {
                     // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
                     // res.end()
                 } else if (req.body.type == 1) {
-                    await pdfmerge(files.map(file => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                    console.log(typeof pdfmerge, pdfmerge );
+
+                    await pdfmerge(files.map(async (file) => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
                         .then( buffer => {
                             // console.log(buffer)
                             res.status(202)
