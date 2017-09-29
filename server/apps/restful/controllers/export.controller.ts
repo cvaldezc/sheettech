@@ -310,30 +310,32 @@ export class ExportController {
                     // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
                     // res.end()
                 } else if (req.body.type == 1) {
-                    console.log(typeof pdfmerge )
-                    let preFiles: Array<string> = await []
-                    await files.forEach(async (file) => await preFiles.push(path.join(dir, 'origin', file)))
-                    console.log(preFiles)
-                    await pdfmerge(preFiles) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
-                        .then( buffer => {
-                            // console.log(buffer)
-                            res.status(202)
-                            res.send(buffer)
-                            res.end()
+                    this.getFiles(files, dir)
+                        .then(arrf => {
+                            console.log(arrf)
+                            pdfmerge(arrf) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                                .then( buffer => {
+                                    res.status(202)
+                                    res.send(buffer)
+                                    res.end()
+                                })
+                                .catch(err => console.log("error pdfmerge", err))
                         })
                 }
-                // , (err, files) => {
-                //     if (err)
-                //         return res.status(500).json({ raise: 'not found path' })
-                //     })
-                // })
-                // res.status(400).json(false)
             } else {
                 res.status(501).json({ raise: 'key not found' })
             }
         } catch (error) {
             res.status(501).json({ raise: error })
         }
+    }
+
+    private async getFiles(base: Array<string>, dir: string) {
+        let preFiles: Array<string> = []
+        await base.forEach(async (file) => {
+            preFiles.push(await path.join(dir, 'origin', file))
+        })
+        return await preFiles
     }
 
 
