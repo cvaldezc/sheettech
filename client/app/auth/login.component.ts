@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit, ILoginComponent {
                         setTimeout( () =>
                             {
                                 // this.router.navigate(['/home', 'permission', response.body.response.auth])
-                                this.router.navigateByUrl(`/home/permission/response.body.response.auth`)
+                                this.router.navigateByUrl(`/home/permission/${response.body.response.auth}`)
                                 // location.href = `/home/(data:permission/${response.body.response.auth})`
                             }, 1600);
                         // ['/home', { outlets: { 'data': ['permission', response.body.response.auth] } } ]
