@@ -111,8 +111,16 @@ export class PermissionsComponent implements OnInit {
         if (observer.payload.auth == this.route.snapshot.params['auth']) {
           this.servPermission.encodePermission(this.permission)
             .subscribe( (observer: any) => {
-              console.log(observer)
+              // console.log(observer)
               localStorage.setItem('permission', observer.token)
+              this.userServ.tokenLocal().then(res => {
+                // setTimeout(function() {
+                //   location.reload()
+                // }, 800);
+              })
+            },
+            err => {
+              console.log(err)
             })
         }
       }
