@@ -311,7 +311,8 @@ export class ExportController {
                     // res.end()
                 } else if (req.body.type == 1) {
                     console.log(typeof pdfmerge )
-                    let preFiles = await files.map(async (file) => path.join(dir, 'origin', file))
+                    let preFiles: Array<string> = await []
+                    await files.forEach(async (file) => await preFiles.push(path.join(dir, 'origin', file)))
                     console.log(preFiles)
                     await pdfmerge(preFiles) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
                         .then( buffer => {
