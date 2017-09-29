@@ -56,12 +56,14 @@ export class PermissionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.userServ.isAdmin) {
-      // if (this.gAuth.charge.toLowerCase() != 'administrator') {
-        this.router.navigate(['notfound'])
-      // }
-    }
-    this.getAuth()
+    this.userServ.tokenLocal().then(res => {
+      if (!this.userServ.isAdmin) {
+        // if (this.gAuth.charge.toLowerCase() != 'administrator') {
+          this.router.navigate(['notfound'])
+        // }
+      }
+      this.getAuth()
+    })
   }
 
   private getAuth() {
