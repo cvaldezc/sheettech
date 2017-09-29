@@ -313,17 +313,13 @@ export class ExportController {
                     if (files.length === 1) {
                         return res.status(500).json({ raise: 'Debe de tener más de un pdf para unirlos'})
                     } else {
-                        this.getFiles(files, dir)
-                            .then(arrf => {
-                                console.log(arrf)
-                                pdfmerge(arrf) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
-                                    .then( buffer => {
-                                        res.status(202)
-                                        res.send(buffer)
-                                        res.end()
-                                    })
-                                    .catch(err => console.log("error pdfmerge", err))
+                        pdfmerge(files.map(file => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                            .then( buffer => {
+                                res.status(202)
+                                res.send(buffer)
+                                res.end()
                             })
+                            .catch(err => console.log("error pdfmerge", err))
                     }
                 }
             } else {
@@ -333,15 +329,6 @@ export class ExportController {
             res.status(501).json({ raise: error })
         }
     }
-
-    private async getFiles(base: Array<string>, dir: string) {
-        let preFiles: Array<string> = []
-        await base.forEach(async (file) => {
-            preFiles.push(await path.join(dir, 'origin', file))
-        })
-        return await preFiles
-    }
-
 
     /**
      * downloadFormat
