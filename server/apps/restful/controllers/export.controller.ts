@@ -310,9 +310,10 @@ export class ExportController {
                     // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
                     // res.end()
                 } else if (req.body.type == 1) {
-                    console.log(typeof pdfmerge, pdfmerge );
-
-                    await pdfmerge(files.map(async (file) => path.join(dir, 'origin', file))) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                    console.log(typeof pdfmerge )
+                    let preFiles = await files.map(async (file) => path.join(dir, 'origin', file))
+                    console.log(preFiles)
+                    await pdfmerge(preFiles) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
                         .then( buffer => {
                             // console.log(buffer)
                             res.status(202)
