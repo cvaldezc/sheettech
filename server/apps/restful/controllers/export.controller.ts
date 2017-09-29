@@ -310,17 +310,21 @@ export class ExportController {
                     // res.send(await nzip.generate({base64:false,compression:'DEFLATE'}))
                     // res.end()
                 } else if (req.body.type == 1) {
-                    this.getFiles(files, dir)
-                        .then(arrf => {
-                            console.log(arrf)
-                            pdfmerge(arrf) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
-                                .then( buffer => {
-                                    res.status(202)
-                                    res.send(buffer)
-                                    res.end()
-                                })
-                                .catch(err => console.log("error pdfmerge", err))
-                        })
+                    if (files.length === 1) {
+                        return res.status(500).json({ raise: 'Debe de tener más de un pdf para unirlos'})
+                    } else {
+                        this.getFiles(files, dir)
+                            .then(arrf => {
+                                console.log(arrf)
+                                pdfmerge(arrf) //, { output: path.join(dir, `${req.body.ukey}.pdf`) }
+                                    .then( buffer => {
+                                        res.status(202)
+                                        res.send(buffer)
+                                        res.end()
+                                    })
+                                    .catch(err => console.log("error pdfmerge", err))
+                            })
+                    }
                 }
             } else {
                 res.status(501).json({ raise: 'key not found' })
